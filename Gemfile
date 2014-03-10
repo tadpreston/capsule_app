@@ -29,10 +29,15 @@ gem 'spring',        group: :development
 
 group :development, :test do
   gem "rspec-rails", "2.14.1"
+  gem "guard-rspec", "4.2.8"
+  gem "spork-rails", "4.0.0"
+  gem "guard-spork", "1.5.1"
+  gem "childprocess", "0.5.1"
 end
 
 group :test do
   gem 'capybara', '2.2.1'
+  gem "growl", "1.0.3"
 end
 
 # Use ActiveModel has_secure_password
