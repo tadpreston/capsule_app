@@ -5,6 +5,9 @@ ruby '2.1.1'
 gem 'rails', '4.1.0.rc1'
 gem 'pg', '0.17.1'
 gem "unicorn", "4.8.2"
+gem "haml-rails", "~> 0.5.3"
+gem "bootstrap-sass", "3.1.1.0"
+gem "devise", "3.2.3"
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.1'
