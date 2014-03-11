@@ -7,7 +7,6 @@ gem 'pg', '0.17.1'
 gem "unicorn", "4.8.2"
 gem "haml-rails", "~> 0.5.3"
 gem "bootstrap-sass", "3.1.1.0"
-gem "devise", "3.2.3"
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.1'
@@ -44,13 +43,7 @@ group :test do
 end
 
 # Use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.1.2'
-
-# Use unicorn as the app server
-# gem 'unicorn'
-
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
+gem 'bcrypt-ruby', '~> 3.1.5'
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
