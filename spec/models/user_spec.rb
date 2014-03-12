@@ -1,7 +1,20 @@
+# == Schema Information
+#
+# Table name: users
+#
+#  id              :integer          not null, primary key
+#  email           :string(255)
+#  first_name      :string(255)
+#  last_name       :string(255)
+#  password_digest :string(255)
+#  created_at      :datetime
+#  updated_at      :datetime
+#
+
 require 'spec_helper'
 
 describe User do
-  before { @user = User.new(first_name: "Example", last_name: "User", email: "user@example.com", password: "foobar", password_confirmation: "foobar") }
+  before { @user = FactoryGirl.build(:user) }
 
   subject { @user }
 
@@ -12,6 +25,8 @@ describe User do
   it { should respond_to(:password) }
   it { should respond_to(:password_confirmation) }
   it { should respond_to(:authenticate) }
+
+  it { should have_many(:devices) }
 
   it { should be_valid }
 

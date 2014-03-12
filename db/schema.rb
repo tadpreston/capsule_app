@@ -11,10 +11,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140311155824) do
+ActiveRecord::Schema.define(version: 20140311184545) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "devices", force: true do |t|
+    t.integer  "user_id"
+    t.string   "remote_ip"
+    t.string   "user_agent"
+    t.string   "auth_token"
+    t.datetime "last_sign_in_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "devices", ["auth_token"], name: "index_devices_on_auth_token", using: :btree
+  add_index "devices", ["user_id"], name: "index_devices_on_user_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email"
