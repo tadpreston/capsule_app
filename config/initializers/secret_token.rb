@@ -11,4 +11,4 @@ def secure_token
   end
 end
 
-Capsule::Application.config.secret_key_base = secure_token
+CapsuleApp::Application.config.secret_key_base = secure_token
