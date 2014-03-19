@@ -45,7 +45,7 @@ class Device < ActiveRecord::Base
 
     def generate_auth_token
       begin
-        self.auth_token = SecureRandom.urlsafe_base64
+        self.auth_token = SecureRandom.urlsafe_base64(64)
       end while Device.exists?(auth_token: self.auth_token)
     end
 end
