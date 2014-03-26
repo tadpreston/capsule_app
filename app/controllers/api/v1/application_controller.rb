@@ -1,4 +1,4 @@
-class Api::V1::ApplicationController < ActionController::Base
+class API::V1::ApplicationController < ActionController::Base
   before_action :authorize_auth_token
 
   private
@@ -13,6 +13,6 @@ class Api::V1::ApplicationController < ActionController::Base
     end
 
     def authorize_auth_token
-      render json: { status: 300, message: 'Invalid Authentication Token' } if current_device.nil?
+      head :unauthorized unless current_device
     end
 end

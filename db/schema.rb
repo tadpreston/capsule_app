@@ -15,29 +15,42 @@ ActiveRecord::Schema.define(version: 20140311184545) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "hstore"
+  enable_extension "uuid-ossp"
 
   create_table "devices", force: true do |t|
     t.integer  "user_id"
     t.string   "remote_ip"
     t.string   "user_agent"
     t.string   "auth_token"
+    t.datetime "auth_expires_at"
     t.datetime "last_sign_in_at"
+    t.hstore   "session"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "devices", ["auth_token"], name: "index_devices_on_auth_token", using: :btree
+  add_index "devices", ["auth_token"], name: "index_devices_on_auth_token", unique: true, using: :btree
   add_index "devices", ["user_id"], name: "index_devices_on_user_id", using: :btree
 
   create_table "users", force: true do |t|
+    t.uuid     "public_id",       default: "uuid_generate_v4()"
     t.string   "email"
     t.string   "first_name"
     t.string   "last_name"
     t.string   "password_digest"
+    t.string   "provider"
+    t.string   "uid"
+    t.datetime "authorized_at"
+    t.string   "locale"
+    t.string   "time_zone"
+    t.hstore   "settings"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["public_id"], name: "index_users_on_public_id", unique: true, using: :btree
+  add_index "users", ["uid"], name: "index_users_on_uid", unique: true, using: :btree
 
 end
