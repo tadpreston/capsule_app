@@ -20,9 +20,7 @@ module API
       end
 
       def update
-        if @user.update_attributes(user_params)
-        else
-        end
+        @user.update_attributes(user_params)
       end
 
       private

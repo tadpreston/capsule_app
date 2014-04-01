@@ -71,6 +71,11 @@ describe API::V1::UsersController do
       get 'show', id: @user.public_id
       expect(response).to be_success
     end
+
+    it 'assigns user to @user' do
+      get 'show', id: @user.public_id
+      expect(assigns(:user)).to eq(@user)
+    end
   end
 
   describe "POST 'create'" do
@@ -79,32 +84,76 @@ describe API::V1::UsersController do
       @request.env["CONTENT_TYPE"] = "application/json"
     end
 
-    it 'creates a new user' do
-      expect {
+    describe 'with valid params' do
+      it 'creates a new user' do
+        expect {
+          post 'create', { user: valid_attributes }
+        }.to change(User, :count).by(1)
+      end
+
+      it 'creates a new user with oauth' do
+        expect {
+          post 'create', { user: valid_attributes.merge(oauth: oauth_attributes) }
+        }.to change(User, :count).by(1)
+      end
+
+      it 'assigns a newly created user as @user' do
         post 'create', { user: valid_attributes }
-      }.to change(User, :count).by(1)
+        assigns(:user).should be_a(User)
+        assigns(:user).should be_persisted
+      end
+
+      it 'creates a new device record' do
+        expect {
+          post 'create', { user: valid_attributes }
+        }.to change(Device, :count).by(1)
+      end
     end
 
-    it 'creates a new user with oauth' do
-      expect {
-        post 'create', { user: valid_attributes.merge(oauth: oauth_attributes) }
-      }.to change(User, :count).by(1)
-    end
+    describe 'with invalid params' do
+      before do
+        User.any_instance.stub(:save).and_return(false)
+        post 'create', { :user => { :email => '', :username => '' } }
+      end
 
-    it 'assigns a newly created user as @user' do
-      post 'create', { user: valid_attributes }
-      assigns(:user).should be_a(User)
-      assigns(:user).should be_persisted
-    end
+      it "assigns a newly created but unsaved user as @user" do
+        assigns(:user).should be_a_new(User)
+      end
 
-    it 'creates a new device record' do
-      expect {
-        post 'create', { user: valid_attributes }
-      }.to change(Device, :count).by(1)
+      it "does not create a device record" do
+        expect {
+          post 'create', { :user => { :email => '', :username => '' } }
+        }.to_not change(Device, :count).by(1)
+      end
     end
   end
 
   describe "PATCH 'update'" do
-    # It doesn't do anything yet
+    before do
+      @user = FactoryGirl.create(:user)
+      @user.reload
+      @request.env['HTTP_AUTHORIZATION'] = 'Token token="H4F3AHOB2jm873ESQ5KQOzQH9joWXiG00CwWqCh8fRCl33Qjq2PsW5fZ7nrN-3uW1gjBlOkxaQmxOqAiPtGO_g"'
+      @request.env["CONTENT_TYPE"] = "application/json"
+    end
+
+    describe "with valid params" do
+      it "updates the requested user" do
+        User.any_instance.should_receive(:update_attributes)
+        patch :update, id: @user.public_id, user: { first_name: '' }
+      end
+
+      it "assigns the requested user as @user" do
+        patch :update, id: @user.public_id, user: { first_name: '' }
+        assigns(:user).should eq(@user)
+      end
+    end
+
+    describe "with invalid params" do
+      it "assigns the use as @user" do
+        User.any_instance.stub(:update_attributes).and_return(false)
+        patch :update, id: @user.public_id, user: { first_name: '' }
+        assigns(:user).should eq(@user)
+      end
+    end
   end
 end
