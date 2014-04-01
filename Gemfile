@@ -44,7 +44,7 @@ end
 gem 'bcrypt-ruby', '~> 3.1.5'
 
 # Use debugger
-# gem 'debugger', group: [:development, :test]
+gem 'debugger', group: [:development, :test]
 
 group :production do
   gem 'rails_12factor', '0.0.2'

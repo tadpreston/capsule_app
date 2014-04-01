@@ -36,21 +36,25 @@ ActiveRecord::Schema.define(version: 20140311184545) do
   create_table "users", force: true do |t|
     t.uuid     "public_id",       default: "uuid_generate_v4()"
     t.string   "email"
+    t.string   "username"
     t.string   "first_name"
     t.string   "last_name"
     t.string   "password_digest"
+    t.string   "location"
     t.string   "provider"
     t.string   "uid"
     t.datetime "authorized_at"
     t.string   "locale"
     t.string   "time_zone"
     t.hstore   "settings"
+    t.hstore   "oauth"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["provider", "uid"], name: "index_users_on_provider_and_uid", unique: true, using: :btree
   add_index "users", ["public_id"], name: "index_users_on_public_id", unique: true, using: :btree
-  add_index "users", ["uid"], name: "index_users_on_uid", unique: true, using: :btree
+  add_index "users", ["username"], name: "index_users_on_username", using: :btree
 
 end

@@ -7,7 +7,9 @@
 #  remote_ip       :string(255)
 #  user_agent      :string(255)
 #  auth_token      :string(255)
+#  auth_expires_at :datetime
 #  last_sign_in_at :datetime
+#  session         :hstore
 #  created_at      :datetime
 #  updated_at      :datetime
 #

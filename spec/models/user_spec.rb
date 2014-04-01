@@ -3,10 +3,20 @@
 # Table name: users
 #
 #  id              :integer          not null, primary key
+#  public_id       :uuid
 #  email           :string(255)
+#  username        :string(255)
 #  first_name      :string(255)
 #  last_name       :string(255)
 #  password_digest :string(255)
+#  location        :string(255)
+#  provider        :string(255)
+#  uid             :string(255)
+#  authorized_at   :datetime
+#  locale          :string(255)
+#  time_zone       :string(255)
+#  settings        :hstore
+#  oauth           :hstore
 #  created_at      :datetime
 #  updated_at      :datetime
 #
@@ -15,6 +25,46 @@ require 'spec_helper'
 
 describe User do
   before { @user = FactoryGirl.build(:user) }
+
+  let(:oauth_attributes) do
+    {
+      provider: 'facebook',
+      uid: '1234567',
+      info: {
+        nickname: 'jbloggs',
+        email: 'joe@bloggs.com',
+        name: 'Joe Bloggs',
+        first_name: 'Joe',
+        last_name: 'Bloggs',
+        image: 'http://graph.facebook.com/1234567/picture?type=square',
+        urls: { facebook: 'http://www.facebook.com/jbloggs' },
+        location: 'Frisco, Texas',
+        verified: 'true'
+      },
+      credentials: {
+        token: 'UsMu-C1OO_ExEqKqaR47TEdAyb',
+        expirec_at: 1321747205,
+        expires: true
+      },
+      extra: {
+        raw_info: {
+          id: '1234567',
+          name: 'Joe Bloggs',
+          first_name: 'Joe',
+          last_name: 'Bloggs',
+          link: 'http://www.facebook.com/jbloggs',
+          username: 'jbloggs',
+          location: { id: '123456789', name: 'Fricso, Texas' },
+          gender: 'male',
+          email: 'joe@bloggs.com',
+          timezone: -6,
+          locale: 'en_US',
+          verified: true,
+          updated_time: '2011-11-11T06:21:03+0000'
+        }
+      }
+    }
+  end
 
   subject { @user }
 
@@ -72,6 +122,26 @@ describe User do
       @user.email = mixed_case_email
       @user.save
       expect(@user.reload.email).to eq mixed_case_email.downcase
+    end
+  end
+
+  describe "with oauth" do
+    describe "email should not be validated" do
+      before do
+        oauth = oauth_attributes
+        oauth[:info][:email] = ''
+        @user.oauth = oauth
+      end
+
+      it { should be_valid }
+    end
+
+    describe "when uid and provider already exist" do
+      before do
+        FactoryGirl.create(:user, oauth: oauth_attributes)
+        @user.oauth = oauth_attributes
+      end
+      it { should_not be_valid }
     end
   end
 
