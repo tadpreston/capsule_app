@@ -18,6 +18,7 @@ class CreateUsers < ActiveRecord::Migration
       t.hstore    :settings
       t.string    :locale
       t.string    :time_zone
+      t.hstore    :settings
       t.hstore    :oauth
 
       t.timestamps
