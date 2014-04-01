@@ -2,8 +2,6 @@ module API
   module V1
 
     class UsersController < API::V1::ApplicationController
-      skip_before_action :verify_authenticity_token
-      skip_before_action :authorize_auth_token, only: :create
       before_action :set_user, only: [:show, :update]
 
       def index
@@ -34,7 +32,13 @@ module API
         end
 
         def user_params
-          params.required(:user).permit(:email, :first_name, :last_name, :password, :password_confirmation)
+          params.required(:user).permit(:email, :username, :first_name, :last_name, :location, :password, :password_confirmation, :time_zone,
+                                        oauth: [
+                                          :provider, :uid,
+                                            info: [:nickname, :email, :name, :first_name, :last_name, :image, :urls, :location, :verified],
+                                            credentials: [:token, :expires_at, :expires],
+                                            extra: [raw_info: [:id, :name, :first_name, :last_name, :link, :username, :location, :gender, :email, :timezone, :locale, :verified, :updated_time]]
+                                          ])
         end
     end
   end

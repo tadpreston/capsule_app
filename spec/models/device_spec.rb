@@ -7,7 +7,9 @@
 #  remote_ip       :string(255)
 #  user_agent      :string(255)
 #  auth_token      :string(255)
+#  auth_expires_at :datetime
 #  last_sign_in_at :datetime
+#  session         :hstore
 #  created_at      :datetime
 #  updated_at      :datetime
 #
@@ -23,7 +25,9 @@ describe Device do
   it { should respond_to(:remote_ip) }
   it { should respond_to(:user_agent) }
   it { should respond_to(:auth_token) }
+  it { should respond_to(:auth_expires_at) }
   it { should respond_to(:last_sign_in_at) }
+  it { should respond_to(:session) }
 
   it { should belong_to(:user) }
 
