@@ -178,19 +178,35 @@ describe User do
     end
   end
 
-  describe "return value of authenticate method" do
-    before { @user.save }
-    let(:found_user) { User.find_by(email: @user.email) }
+  describe "return value of authenticate method with oauth" do
+    before do
+      @user.oauth = oauth_attributes
+      @user.save
+    end
+    let(:found_user) { User.find_by(provider: 'facebook', uid: '1234567') }
 
-    describe "with valid password" do
-      it { should eq found_user.authenticate(@user.password) }
+    describe 'return value of authenticate method' do
+      it { should eq found_user.authenticate }
+    end
+  end
+
+  describe "find_or_create_by_oauth method" do
+    it 'finds an existing user' do
+      user = FactoryGirl.create(:user, oauth: oauth_attributes)
+      expect(User.find_or_create_by_oauth(oauth_attributes)).to eq(user)
     end
 
-    describe "with invalid password" do
-      let(:user_for_invalid_password) { found_user.authenticate("invalid") }
+    it 'creates a new user' do
+      expect {
+        User.find_or_create_by_oauth(oauth_attributes)
+      }.to change(User, :count).by(1)
+    end
 
-      it { should_not eq user_for_invalid_password }
-      specify { expect(user_for_invalid_password).to be_false }
+    it 'returns the new user' do
+      user = User.find_or_create_by_oauth(oauth_attributes)
+      expect(user).to_not be_nil
+      expect(user.provider).to eq(oauth_attributes[:provider])
+      expect(user.uid).to eq(oauth_attributes[:uid])
     end
   end
 end
