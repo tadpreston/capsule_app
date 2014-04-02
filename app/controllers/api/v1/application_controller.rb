@@ -1,7 +1,7 @@
 class API::V1::ApplicationController < ActionController::Base
   skip_before_action :verify_authenticity_token
   before_action :verify_api_token
-# before_action :authorize_auth_token
+  before_action :authorize_auth_token
 
   private
 
@@ -11,7 +11,7 @@ class API::V1::ApplicationController < ActionController::Base
 
     def authorize_api_token
       authenticate_or_request_with_http_token do |token, options|
-        CapsuleApp::Application.config.api_secret_key_base == api_token(token)
+        CapsuleApp::Application.config.api_secret_key_base == token
       end
     end
 
@@ -26,7 +26,7 @@ class API::V1::ApplicationController < ActionController::Base
     helper_method :current_device
 
     def current_device
-      @current_device ||= Device.find_by(auth_token: params[:auth_token]) if params[:auth_token]
+      @current_device ||= Device.find_by(auth_token: request.headers['HTTP_CAPSULE_AUTH_TOKEN']) if request.headers['HTTP_CAPSULE_AUTH_TOKEN']
     end
 
     def authorize_auth_token

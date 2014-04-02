@@ -136,23 +136,38 @@ describe API::V1::UsersController do
       @request.env["CONTENT_TYPE"] = "application/json"
     end
 
-    describe "with valid params" do
-      it "updates the requested user" do
-        User.any_instance.should_receive(:update_attributes)
+    describe 'without authentication token' do
+      it 'returns unauthenticated' do
         patch :update, id: @user.public_id, user: { first_name: '' }
-      end
-
-      it "assigns the requested user as @user" do
-        patch :update, id: @user.public_id, user: { first_name: '' }
-        assigns(:user).should eq(@user)
+        expect(response).to_not be_success
+        expect(response.status).to eq(401)
       end
     end
 
-    describe "with invalid params" do
-      it "assigns the use as @user" do
-        User.any_instance.stub(:update_attributes).and_return(false)
-        patch :update, id: @user.public_id, user: { first_name: '' }
-        assigns(:user).should eq(@user)
+    describe 'with authentication token' do
+      before(:each) do
+        device = FactoryGirl.create(:device, user: @user)
+        @request.env['HTTP_CAPSULE_AUTH_TOKEN'] = device.auth_token
+      end
+
+      describe "with valid params" do
+        it "updates the requested user" do
+          User.any_instance.should_receive(:update_attributes)
+          patch :update, id: @user.public_id, user: { first_name: '' }
+        end
+
+        it "assigns the requested user as @user" do
+          patch :update, id: @user.public_id, user: { first_name: '' }
+          assigns(:user).should eq(@user)
+        end
+      end
+
+      describe "with invalid params" do
+        it "assigns the use as @user" do
+          User.any_instance.stub(:update_attributes).and_return(false)
+          patch :update, id: @user.public_id, user: { first_name: '' }
+          assigns(:user).should eq(@user)
+        end
       end
     end
   end
