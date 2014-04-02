@@ -33,6 +33,22 @@ class User < ActiveRecord::Base
 
   has_many :devices
 
+  def self.find_or_create_by_oauth(oauth)
+    User.find_or_create_by(provider: oauth[:provider], uid: oauth[:uid]) do |user|
+      user.oauth = oauth
+    end
+  end
+
+  def authenticate(password = nil)
+    if password
+      super(password)
+    elsif oauth
+      self
+    else
+      false
+    end
+  end
+
   protected
 
     def uid_and_provider_are_unique

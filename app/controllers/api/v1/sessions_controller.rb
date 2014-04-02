@@ -1,12 +1,12 @@
 module API
   module V1
 
-    class SessionsController < ::ApplicationController
-      skip_before_action :verify_authenticity_token
+    class SessionsController < API::V1::ApplicationController
 
       def create
-        @user = User.find_by(email: params[:email])
+        @user = get_user
         if @user && @user.authenticate(params[:password])
+          @user.reload
           @device = @user.devices.current_device(request.remote_ip, request.user_agent)
           if @device
             @device.last_sign_in_at = Time.now
@@ -22,17 +22,26 @@ module API
       def destroy
         if @device = Device.find_by(auth_token: params[:id])
           @device.expire_auth_token!
-          render :json => { message: "Successfully logged out" }
+          render :json => { status: 'Successfully logged out' }
         else
-          render :json => { message: 'Session not found' }, status: 404
+          render :json => { status: 'Session not found' }, status: 404
         end
-      end
+     end
 
       private
 
         def invalid_login_attempt
           render :json => { message: "Invalid email or password" }, status: 401
         end
+
+        def get_user
+          if params[:email]
+            User.find_by(email: params[:email])
+          elsif params[:oauth]
+            User.find_or_create_by_oauth(params[:oauth])
+          end
+        end
+
     end
   end
 end
