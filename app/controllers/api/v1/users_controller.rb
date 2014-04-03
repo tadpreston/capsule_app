@@ -3,6 +3,7 @@ module API
 
     class UsersController < API::V1::ApplicationController
       before_action :set_user, only: [:show, :update]
+      skip_before_action :authorize_auth_token, only: [:index, :show, :create]
 
       def index
         @users = User.all.order(:last_name)
