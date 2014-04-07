@@ -11,12 +11,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140311184545) do
+ActiveRecord::Schema.define(version: 20140407173825) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
   enable_extension "uuid-ossp"
+
+  create_table "capsules", force: true do |t|
+    t.integer  "user_id"
+    t.string   "title"
+    t.string   "hash_tags"
+    t.hstore   "location"
+    t.string   "status"
+    t.string   "payload_type"
+    t.string   "promotional_state"
+    t.string   "passcode"
+    t.string   "visibility"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "capsules", ["location"], name: "capsules_location", using: :gin
+  add_index "capsules", ["user_id"], name: "index_capsules_on_user_id", using: :btree
 
   create_table "devices", force: true do |t|
     t.integer  "user_id"

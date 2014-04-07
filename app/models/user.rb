@@ -8,14 +8,15 @@
 #  username        :string(255)
 #  first_name      :string(255)
 #  last_name       :string(255)
+#  phone_number    :string(255)
 #  password_digest :string(255)
 #  location        :string(255)
 #  provider        :string(255)
 #  uid             :string(255)
 #  authorized_at   :datetime
+#  settings        :hstore
 #  locale          :string(255)
 #  time_zone       :string(255)
-#  settings        :hstore
 #  oauth           :hstore
 #  created_at      :datetime
 #  updated_at      :datetime
