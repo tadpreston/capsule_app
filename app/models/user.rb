@@ -30,6 +30,7 @@ class User < ActiveRecord::Base
   validate :uid_and_provider_are_unique, if: "oauth"
   has_secure_password
   validates :password, length: { minimum: 6 }
+  validates :username, presence: true, uniqueness: true
 
   has_many :devices
 

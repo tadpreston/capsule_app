@@ -80,6 +80,9 @@ describe User do
 
   it { should be_valid }
 
+  it { should validate_presence_of(:username) }
+  it { should validate_uniqueness_of(:username) }
+
   describe "when email is not present" do
     before { @user.email = "" }
     it { should_not be_valid }

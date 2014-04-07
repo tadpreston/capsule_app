@@ -9,14 +9,15 @@ class CreateUsers < ActiveRecord::Migration
       t.string    :username
       t.string    :first_name
       t.string    :last_name
+      t.string    :phone_number
       t.string    :password_digest
       t.string    :location
       t.string    :provider
       t.string    :uid
       t.datetime  :authorized_at
+      t.hstore    :settings
       t.string    :locale
       t.string    :time_zone
-      t.hstore    :settings
       t.hstore    :oauth
 
       t.timestamps
