@@ -36,7 +36,7 @@ class User < ActiveRecord::Base
   has_many :devices
   has_many :capsules
   has_many :favorites
-  has_many :favorite_capsules, through: :favorites
+  has_many :favorite_capsules, through: :favorites, source: :capsule
 
   def self.find_or_create_by_oauth(oauth)
     User.find_or_create_by(provider: oauth[:provider], uid: oauth[:uid]) do |user|

@@ -5,6 +5,11 @@ module API
       before_action :set_capsule, only: [:show, :update]
 
       def index
+        @capsules = current_user.capsules.by_updated_at
+      end
+
+      def watched
+        @capsules = current_user.favorite_capsules.by_updated_at
       end
 
       def show

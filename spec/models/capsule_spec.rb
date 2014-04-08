@@ -57,7 +57,7 @@ describe Capsule do
       @capsule.update_columns(updated_at: 2.days.ago)
       @capsule3.update_columns(updated_at: 1.day.ago)
 
-      expect(Capsule.by_updated_at).to eq([@capsule, @capsule3, @capsule2])
+      expect(Capsule.by_updated_at).to eq([@capsule2, @capsule3, @capsule])
     end
   end
 

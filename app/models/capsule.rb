@@ -23,9 +23,9 @@ class Capsule < ActiveRecord::Base
 
   belongs_to :user
   has_many :favorites
-  has_many :favorite_users, through: :favorites
+  has_many :favorite_users, through: :favorites, source: :user
 
-  scope :by_updated_at, -> { order(:updated_at) }
+  scope :by_updated_at, -> { order(updated_at: :desc) }
 
   def purged_title
     title.slice(/^[^#]*\b/)

@@ -14,7 +14,11 @@ Rails.application.routes.draw do
 
       resources :sessions, only: [:create, :destroy, :show]
       resources :users, only: [:index, :create, :update, :show]
-      resources :capsules
+      resources :capsules do
+        collection do
+          get 'watched'
+        end
+      end
     end
   end
 end

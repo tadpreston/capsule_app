@@ -35,6 +35,55 @@ describe API::V1::CapsulesController do
     end
   end
 
+  describe 'GET "index"' do
+    before do
+      @capsule1 = FactoryGirl.create(:capsule, user: @user)
+      @capsule2 = FactoryGirl.create(:capsule, user: @user)
+      @capsule3 = FactoryGirl.create(:capsule, user: @user)
+      @capsule4 = FactoryGirl.create(:capsule)
+
+      @capsule1.update_columns(updated_at: 2.days.ago)
+      @capsule3.update_columns(updated_at: 3.days.ago)
+    end
+
+    it 'returns http success' do
+      get :index
+      expect(response).to be_success
+      expect(response.status).to eq(200)
+    end
+
+    it 'returns an ordered collection of capsules in @capsules' do
+      get :index
+      expect(assigns(:capsules)).to_not be_nil
+      expect(assigns(:capsules)).to eq([@capsule2, @capsule1, @capsule3])
+      expect(assigns(:capsules)).to_not include(@capsule4)
+    end
+  end
+
+  describe 'GET "watched"' do
+    before do
+      @capsule1 = FactoryGirl.create(:capsule)
+      @capsule2 = FactoryGirl.create(:capsule)
+      @capsule3 = FactoryGirl.create(:capsule)
+      @capsule4 = FactoryGirl.create(:capsule)
+
+      @capsule1.update_columns(updated_at: 2.days.ago)
+      @capsule3.update_columns(updated_at: 3.days.ago)
+      @capsule4.update_columns(updated_at: 1.days.ago)
+
+      @user.favorite_capsules << @capsule1
+      @user.favorite_capsules << @capsule3
+      @user.favorite_capsules << @capsule4
+    end
+
+    it 'returns a collection of watched capsules for the current user' do
+      get :watched
+      expect(assigns(:capsules)).to_not be_nil
+      expect(assigns(:capsules)).to eq([@capsule4, @capsule1, @capsule3])
+      expect(assigns(:capsules)).to_not include(@capsule2)
+    end
+  end
+
   describe 'GET "show"' do
     before do
       @capsule = FactoryGirl.create(:capsule, user: @user)
