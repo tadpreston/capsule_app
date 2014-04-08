@@ -3,7 +3,6 @@ require 'spec_helper'
 describe 'Sessions API' do
   before(:each) do
     @user = FactoryGirl.create(:user, email: 'test@email.com', password: 'supersecret', password_confirmation: 'supersecret')
-#   @request.env['HTTP_AUTHORIZATION'] = 'Token token="H4F3AHOB2jm873ESQ5KQOzQH9joWXiG00CwWqCh8fRCl33Qjq2PsW5fZ7nrN-3uW1gjBlOkxaQmxOqAiPtGO_g"'
   end
   let(:token) { 'Token token="H4F3AHOB2jm873ESQ5KQOzQH9joWXiG00CwWqCh8fRCl33Qjq2PsW5fZ7nrN-3uW1gjBlOkxaQmxOqAiPtGO_g"' }
 

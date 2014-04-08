@@ -8,14 +8,15 @@
 #  username        :string(255)
 #  first_name      :string(255)
 #  last_name       :string(255)
+#  phone_number    :string(255)
 #  password_digest :string(255)
 #  location        :string(255)
 #  provider        :string(255)
 #  uid             :string(255)
 #  authorized_at   :datetime
+#  settings        :hstore
 #  locale          :string(255)
 #  time_zone       :string(255)
-#  settings        :hstore
 #  oauth           :hstore
 #  created_at      :datetime
 #  updated_at      :datetime
@@ -77,8 +78,16 @@ describe User do
   it { should respond_to(:authenticate) }
 
   it { should have_many(:devices) }
+  it { should have_many(:capsules) }
+  it { should have_many(:favorites) }
+  it { should have_many(:favorite_capsules).through(:favorites) }
 
   it { should be_valid }
+
+  it { should validate_presence_of(:username) }
+  it { should validate_uniqueness_of(:username) }
+
+  # Validations
 
   describe "when email is not present" do
     before { @user.email = "" }
@@ -178,6 +187,9 @@ describe User do
     end
   end
 
+  # Scopes
+
+  # instance methods
   describe "return value of authenticate method with oauth" do
     before do
       @user.oauth = oauth_attributes

@@ -11,4 +11,4 @@ def api_secure_token
   end
 end
 
-CapsuleApp::Application.config.api_secret_key_base = api_secure_token
+CapsuleApp::Application.config.api_secret_key_base = ENV['API_SECRET']

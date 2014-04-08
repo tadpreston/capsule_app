@@ -8,14 +8,15 @@
 #  username        :string(255)
 #  first_name      :string(255)
 #  last_name       :string(255)
+#  phone_number    :string(255)
 #  password_digest :string(255)
 #  location        :string(255)
 #  provider        :string(255)
 #  uid             :string(255)
 #  authorized_at   :datetime
+#  settings        :hstore
 #  locale          :string(255)
 #  time_zone       :string(255)
-#  settings        :hstore
 #  oauth           :hstore
 #  created_at      :datetime
 #  updated_at      :datetime
@@ -30,8 +31,12 @@ class User < ActiveRecord::Base
   validate :uid_and_provider_are_unique, if: "oauth"
   has_secure_password
   validates :password, length: { minimum: 6 }
+  validates :username, presence: true, uniqueness: true
 
   has_many :devices
+  has_many :capsules
+  has_many :favorites
+  has_many :favorite_capsules, through: :favorites, source: :capsule
 
   def self.find_or_create_by_oauth(oauth)
     User.find_or_create_by(provider: oauth[:provider], uid: oauth[:uid]) do |user|

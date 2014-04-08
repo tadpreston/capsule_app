@@ -11,12 +11,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140311184545) do
+ActiveRecord::Schema.define(version: 20140408164517) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
   enable_extension "uuid-ossp"
+
+  create_table "capsules", force: true do |t|
+    t.integer  "user_id"
+    t.string   "title"
+    t.string   "hash_tags"
+    t.hstore   "location"
+    t.string   "status"
+    t.string   "payload_type"
+    t.string   "promotional_state"
+    t.string   "passcode"
+    t.string   "visibility"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "capsules", ["location"], name: "capsules_location", using: :gin
+  add_index "capsules", ["user_id"], name: "index_capsules_on_user_id", using: :btree
 
   create_table "devices", force: true do |t|
     t.integer  "user_id"
@@ -33,20 +50,31 @@ ActiveRecord::Schema.define(version: 20140311184545) do
   add_index "devices", ["auth_token"], name: "index_devices_on_auth_token", unique: true, using: :btree
   add_index "devices", ["user_id"], name: "index_devices_on_user_id", using: :btree
 
+  create_table "favorites", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "capsule_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "favorites", ["capsule_id"], name: "index_favorites_on_capsule_id", using: :btree
+  add_index "favorites", ["user_id"], name: "index_favorites_on_user_id", using: :btree
+
   create_table "users", force: true do |t|
     t.uuid     "public_id",       default: "uuid_generate_v4()"
     t.string   "email"
     t.string   "username"
     t.string   "first_name"
     t.string   "last_name"
+    t.string   "phone_number"
     t.string   "password_digest"
     t.string   "location"
     t.string   "provider"
     t.string   "uid"
     t.datetime "authorized_at"
+    t.hstore   "settings"
     t.string   "locale"
     t.string   "time_zone"
-    t.hstore   "settings"
     t.hstore   "oauth"
     t.datetime "created_at"
     t.datetime "updated_at"
