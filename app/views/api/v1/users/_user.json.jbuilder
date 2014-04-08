@@ -10,13 +10,7 @@ json.user do
     json.provider user.provider || ''
     json.uid user.uid || ''
     if user.oauth
-      json.set! :oauth do
-        json.provider user.oauth[:provider]
-        json.uid user.oauth[:uid]
-        json.info eval(user.oauth["info"])
-        json.credentials eval(user.oauth["credentials"])
-        json.extra eval(user.oauth["extra"])
-      end
+      json.oauth user.oauth
     end
   end
 end
