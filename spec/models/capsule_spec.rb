@@ -24,6 +24,8 @@ describe Capsule do
   subject { @capsule }
 
   it { should belong_to(:user) }
+  it { should have_many(:favorites) }
+  it { should have_many(:favorite_users).through(:favorites) }
 
   it { should validate_presence_of(:title) }
 
@@ -44,6 +46,18 @@ describe Capsule do
         @capsule.save
         expect(@capsule.hash_tags).to be_blank
       end
+    end
+  end
+
+  describe 'by_updated_at scope' do
+    it 'returns capsules ordered by updated_at' do
+      @capsule.save
+      @capsule2 = FactoryGirl.create(:capsule)
+      @capsule3 = FactoryGirl.create(:capsule)
+      @capsule.update_columns(updated_at: 2.days.ago)
+      @capsule3.update_columns(updated_at: 1.day.ago)
+
+      expect(Capsule.by_updated_at).to eq([@capsule, @capsule3, @capsule2])
     end
   end
 

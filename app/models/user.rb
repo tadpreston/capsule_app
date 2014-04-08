@@ -34,6 +34,9 @@ class User < ActiveRecord::Base
   validates :username, presence: true, uniqueness: true
 
   has_many :devices
+  has_many :capsules
+  has_many :favorites
+  has_many :favorite_capsules, through: :favorites
 
   def self.find_or_create_by_oauth(oauth)
     User.find_or_create_by(provider: oauth[:provider], uid: oauth[:uid]) do |user|

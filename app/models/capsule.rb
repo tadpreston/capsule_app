@@ -22,6 +22,10 @@ class Capsule < ActiveRecord::Base
   validates :title, presence: true
 
   belongs_to :user
+  has_many :favorites
+  has_many :favorite_users, through: :favorites
+
+  scope :by_updated_at, -> { order(:updated_at) }
 
   def purged_title
     title.slice(/^[^#]*\b/)

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140407173825) do
+ActiveRecord::Schema.define(version: 20140408164517) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,6 +49,16 @@ ActiveRecord::Schema.define(version: 20140407173825) do
 
   add_index "devices", ["auth_token"], name: "index_devices_on_auth_token", unique: true, using: :btree
   add_index "devices", ["user_id"], name: "index_devices_on_user_id", using: :btree
+
+  create_table "favorites", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "capsule_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "favorites", ["capsule_id"], name: "index_favorites_on_capsule_id", using: :btree
+  add_index "favorites", ["user_id"], name: "index_favorites_on_user_id", using: :btree
 
   create_table "users", force: true do |t|
     t.uuid     "public_id",       default: "uuid_generate_v4()"

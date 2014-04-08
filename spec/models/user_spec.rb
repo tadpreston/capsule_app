@@ -78,11 +78,16 @@ describe User do
   it { should respond_to(:authenticate) }
 
   it { should have_many(:devices) }
+  it { should have_many(:capsules) }
+  it { should have_many(:favorites) }
+  it { should have_many(:favorite_capsules).through(:favorites) }
 
   it { should be_valid }
 
   it { should validate_presence_of(:username) }
   it { should validate_uniqueness_of(:username) }
+
+  # Validations
 
   describe "when email is not present" do
     before { @user.email = "" }
@@ -182,6 +187,9 @@ describe User do
     end
   end
 
+  # Scopes
+
+  # instance methods
   describe "return value of authenticate method with oauth" do
     before do
       @user.oauth = oauth_attributes
