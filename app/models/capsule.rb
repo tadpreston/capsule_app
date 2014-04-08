@@ -22,4 +22,8 @@ class Capsule < ActiveRecord::Base
   validates :title, presence: true
 
   belongs_to :user
+
+  def purged_title
+    title.slice(/^[^#]*\b/)
+  end
 end

@@ -47,4 +47,12 @@ describe Capsule do
     end
   end
 
+  describe 'purged_title method' do
+    it 'returns the title with no hash tags' do
+      @capsule.title = "A title with hash tags #hashtagone #hashtagtwo"
+      @capsule.save
+      expect(@capsule.purged_title).to eq('A title with hash tags')
+    end
+  end
+
 end
