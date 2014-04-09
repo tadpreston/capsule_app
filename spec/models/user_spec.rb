@@ -20,6 +20,7 @@
 #  oauth           :hstore
 #  created_at      :datetime
 #  updated_at      :datetime
+#  image           :string(255)
 #
 
 require 'spec_helper'
