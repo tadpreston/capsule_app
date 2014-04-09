@@ -78,7 +78,7 @@ ActiveRecord::Schema.define(version: 20140409170817) do
     t.hstore   "oauth"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "image"
+    t.string   "profile_image"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
