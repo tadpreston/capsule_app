@@ -55,6 +55,10 @@ class User < ActiveRecord::Base
     end
   end
 
+  def full_name
+    "#{first_name} #{last_name}"
+  end
+
   protected
 
     def uid_and_provider_are_unique

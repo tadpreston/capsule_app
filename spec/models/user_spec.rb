@@ -242,4 +242,11 @@ describe User do
       expect(user.uid).to eq(oauth_attributes[:uid])
     end
   end
+
+  describe "full_name method" do
+    it "returns the first and last name as one string" do
+      user = FactoryGirl.create(:user, first_name: 'Russell', last_name: 'Wilson')
+      expect(user.full_name).to eq('Russell Wilson')
+    end
+  end
 end
