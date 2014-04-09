@@ -29,41 +29,28 @@ describe User do
 
   let(:oauth_attributes) do
     {
+      location: {
+        id: '113407485335936',
+        name: 'Frisco, Texas'
+      },
+      timezone: -5,
+      updated_time: '2014-03-02T16:01:04+0000',
+      name: 'Joe Bloggs',
+      email: 'joe@bloggs.com',
+      birthday: '06\/14\/1978',
+      locale: 'en_US',
+      first_name: 'Joe',
+      username: 'jbloggs',
+      id: '1234567',
       provider: 'facebook',
       uid: '1234567',
-      info: {
-        nickname: 'jbloggs',
-        email: 'joe@bloggs.com',
-        name: 'Joe Bloggs',
-        first_name: 'Joe',
-        last_name: 'Bloggs',
-        image: 'http://graph.facebook.com/1234567/picture?type=square',
-        urls: { facebook: 'http://www.facebook.com/jbloggs' },
-        location: 'Frisco, Texas',
-        verified: 'true'
+      gender: 'male',
+      last_name: 'Bloggs',
+      hometown: {
+        id: '987654321',
+        name: 'Frisco, Texas'
       },
-      credentials: {
-        token: 'UsMu-C1OO_ExEqKqaR47TEdAyb',
-        expirec_at: 1321747205,
-        expires: true
-      },
-      extra: {
-        raw_info: {
-          id: '1234567',
-          name: 'Joe Bloggs',
-          first_name: 'Joe',
-          last_name: 'Bloggs',
-          link: 'http://www.facebook.com/jbloggs',
-          username: 'jbloggs',
-          location: { id: '123456789', name: 'Fricso, Texas' },
-          gender: 'male',
-          email: 'joe@bloggs.com',
-          timezone: -6,
-          locale: 'en_US',
-          verified: true,
-          updated_time: '2011-11-11T06:21:03+0000'
-        }
-      }
+      link: 'https:\/\/www.facebook.com\/steelyb',
     }
   end
 
@@ -138,7 +125,7 @@ describe User do
     describe "email should not be validated" do
       before do
         oauth = oauth_attributes
-        oauth[:info][:email] = ''
+        oauth[:email] = ''
         @user.oauth = oauth
       end
 

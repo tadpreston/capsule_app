@@ -3,7 +3,7 @@ require 'spec_helper'
 describe API::V1::SessionsController do
 
   before do
-    @request.env['HTTP_AUTHORIZATION'] = 'Token token="H4F3AHOB2jm873ESQ5KQOzQH9joWXiG00CwWqCh8fRCl33Qjq2PsW5fZ7nrN-3uW1gjBlOkxaQmxOqAiPtGO_g"'
+    @request.env['HTTP_AUTHORIZATION'] = 'Token token="yd18uk_gsB7xYByZ03CX_TkgYjfGdxPRNhNswXjNLajw9itey64rlt9A-m7K4yQSC_-DHkicd9oVUvErRav48w"'
     @request.env["CONTENT_TYPE"] = "application/json"
   end
 
@@ -61,41 +61,28 @@ describe API::V1::SessionsController do
     describe "with oauth params" do
       let(:oauth_attributes) do
         {
+          location: {
+            id: '113407485335936',
+            name: 'Frisco, Texas'
+          },
+          timezone: -5,
+          updated_time: '2014-03-02T16:01:04+0000',
+          name: 'Joe Bloggs',
+          email: 'joe@bloggs.com',
+          birthday: '06\/14\/1978',
+          locale: 'en_US',
+          first_name: 'Joe',
+          username: 'jbloggs',
+          id: '1234567',
           provider: 'facebook',
           uid: '1234567',
-          info: {
-            nickname: 'jbloggs',
-            email: 'joe@bloggs.com',
-            name: 'Joe Bloggs',
-            first_name: 'Joe',
-            last_name: 'Bloggs',
-            image: 'http://graph.facebook.com/1234567/picture?type=square',
-            urls: { facebook: 'http://www.facebook.com/jbloggs' },
-            location: 'Frisco, Texas',
-            verified: 'true'
+          gender: 'male',
+          last_name: 'Bloggs',
+          hometown: {
+            id: '987654321',
+            name: 'Frisco, Texas'
           },
-          credentials: {
-            token: 'UsMu-C1OO_ExEqKqaR47TEdAyb',
-            expirec_at: 1321747205,
-            expires: true
-          },
-          extra: {
-            raw_info: {
-              id: '1234567',
-              name: 'Joe Bloggs',
-              first_name: 'Joe',
-              last_name: 'Bloggs',
-              link: 'http://www.facebook.com/jbloggs',
-              username: 'jbloggs',
-              location: { id: '123456789', name: 'Fricso, Texas' },
-              gender: 'male',
-              email: 'joe@bloggs.com',
-              timezone: -6,
-              locale: 'en_US',
-              verified: true,
-              updated_time: '2011-11-11T06:21:03+0000'
-            }
-          }
+          link: 'https:\/\/www.facebook.com\/steelyb',
         }
       end
 

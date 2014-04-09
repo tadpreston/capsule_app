@@ -33,11 +33,12 @@ module API
         def user_params
           params.required(:user).permit(:email, :username, :first_name, :last_name, :location, :password, :password_confirmation, :time_zone,
                                         oauth: [
-                                          :provider, :uid,
-                                            info: [:nickname, :email, :name, :first_name, :last_name, :image, :urls, :location, :verified],
-                                            credentials: [:token, :expires_at, :expires],
-                                            extra: [raw_info: [:id, :name, :first_name, :last_name, :link, :username, :location, :gender, :email, :timezone, :locale, :verified, :updated_time]]
-                                          ])
+                                          { location: [:id, :name] },
+                                          :timezone, :updated_time, :name, :email, :birthdate, :locale, :first_name, :username, :id, :provider, :uid,
+                                          :gender, :last_name, { hometown: [:id, :name] }, :link
+                                        ]
+                                       )
+
         end
     end
   end
