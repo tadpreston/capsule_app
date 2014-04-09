@@ -56,12 +56,12 @@ describe API::V1::UsersController do
     end
 
     it "returns http success" do
-      get 'show', id: @user.public_id
+      get 'show', id: @user.to_param
       expect(response).to be_success
     end
 
     it 'assigns user to @user' do
-      get 'show', id: @user.public_id
+      get 'show', id: @user.to_param
       expect(assigns(:user)).to eq(@user)
     end
   end
@@ -126,7 +126,7 @@ describe API::V1::UsersController do
 
     describe 'without authentication token' do
       it 'returns unauthenticated' do
-        patch :update, id: @user.public_id, user: { first_name: '' }
+        patch :update, id: @user.to_param, user: { first_name: '' }
         expect(response).to_not be_success
         expect(response.status).to eq(401)
       end
@@ -141,11 +141,11 @@ describe API::V1::UsersController do
       describe "with valid params" do
         it "updates the requested user" do
           User.any_instance.should_receive(:update_attributes)
-          patch :update, id: @user.public_id, user: { first_name: '' }
+          patch :update, id: @user.to_param, user: { first_name: '' }
         end
 
         it "assigns the requested user as @user" do
-          patch :update, id: @user.public_id, user: { first_name: '' }
+          patch :update, id: @user.to_param, user: { first_name: '' }
           assigns(:user).should eq(@user)
         end
       end
@@ -153,7 +153,7 @@ describe API::V1::UsersController do
       describe "with invalid params" do
         it "assigns the use as @user" do
           User.any_instance.stub(:update_attributes).and_return(false)
-          patch :update, id: @user.public_id, user: { first_name: '' }
+          patch :update, id: @user.to_param, user: { first_name: '' }
           assigns(:user).should eq(@user)
         end
       end

@@ -27,7 +27,7 @@ module API
       private
 
         def set_user
-          @user = User.find_by(public_id: params[:id])
+          @user = User.find(params[:id])
         end
 
         def user_params
