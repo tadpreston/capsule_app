@@ -51,7 +51,21 @@ describe User do
         id: '987654321',
         name: 'Frisco, Texas'
       },
-      link: 'https:\/\/www.facebook.com\/steelyb',
+      link: 'https:\/\/www.facebook.com\/steelyb'
+    }
+  end
+  let(:twitter_oauth) do
+    {
+        uid: 18554325,
+        id: 18554325,
+        lang: "en",
+        geo_enabled: false,
+        time_zone: "Mountain Time (US & Canada)",
+        profile_image_url: "http:\/\/pbs.twimg.com\/profile_images\/69339932\/P1000115_normal.jpg",
+        location: "Denton, TX",
+        name: "Burton Lee",
+        provider: "twitter",
+        screen_name: "Bokojo",
     }
   end
 
@@ -137,6 +151,25 @@ describe User do
       before do
         FactoryGirl.create(:user, oauth: oauth_attributes)
         @user.oauth = oauth_attributes
+      end
+      it { should_not be_valid }
+    end
+  end
+
+  describe "with twitter oauth" do
+    describe "email should not be validated" do
+      before do
+        oauth = twitter_oauth
+        @user.oauth = oauth
+      end
+
+      it { should be_valid }
+    end
+
+    describe "when uid and provider already exist" do
+      before do
+        FactoryGirl.create(:user, oauth: twitter_oauth)
+        @user.oauth = twitter_oauth
       end
       it { should_not be_valid }
     end

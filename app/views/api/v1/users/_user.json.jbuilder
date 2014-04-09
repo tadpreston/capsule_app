@@ -10,4 +10,5 @@ json.user do
   json.timezone user.time_zone || ''
   json.provider user.provider || ''
   json.uid user.uid || ''
+  json.profile_image user.profile_image || ''
 end

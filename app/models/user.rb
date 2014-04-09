@@ -40,7 +40,7 @@ class User < ActiveRecord::Base
   has_many :favorite_capsules, through: :favorites, source: :capsule
 
   def self.find_or_create_by_oauth(oauth)
-    User.find_or_create_by(provider: oauth[:provider], uid: oauth[:uid]) do |user|
+    User.find_or_create_by(provider: oauth[:provider], uid: oauth[:uid].to_s) do |user|
       user.oauth = oauth
     end
   end

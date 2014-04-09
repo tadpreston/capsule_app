@@ -5,18 +5,21 @@ class UserCallbacks
 
   def self.before_validation(user)
     if user.oauth
-      user.provider = user.oauth["provider"]
+      oauth_hash = OauthHash.new(user.oauth).to_json
+
+      user.provider = oauth_hash["provider"]
       user.uid = user.oauth["uid"]
-      user.email = user.oauth["email"]
-      user.username = user.oauth["username"]
-      user.first_name = user.oauth["first_name"]
-      user.last_name = user.oauth["last_name"]
-      user.location = eval(user.oauth["location"])["name"]
+      user.email = oauth_hash["email"]
+      user.username = oauth_hash["username"]
+      user.first_name = oauth_hash["first_name"]
+      user.last_name = oauth_hash["last_name"]
+      user.location = oauth_hash["location"]
+      user.time_zone = oauth_hash["timezone"]
+      user.locale = oauth_hash["locale"]
+      user.profile_image = oauth_hash["profile_image"]
       tmp_pwd = SecureRandom.hex
       user.password = tmp_pwd
       user.password_confirmation = tmp_pwd
-      user.time_zone = user.oauth["timezone"]
-      user.locale = user.oauth["locale"]
     else
       user.provider = "capsule"
     end
