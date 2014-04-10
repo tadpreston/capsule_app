@@ -34,9 +34,9 @@ class User < ActiveRecord::Base
   validates :password, length: { minimum: 6 }
   validates :username, presence: true, uniqueness: true
 
-  has_many :devices
-  has_many :capsules
-  has_many :favorites
+  has_many :devices, dependent: :destroy
+  has_many :capsules, dependent: :destroy
+  has_many :favorites, dependent: :destroy
   has_many :favorite_capsules, through: :favorites, source: :capsule
 
   def self.find_or_create_by_oauth(oauth)

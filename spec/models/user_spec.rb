@@ -194,25 +194,6 @@ describe User do
     end
   end
 
-  describe "with google oauth" do
-    describe "email should not be validated" do
-      before do
-        oauth = google_oauth
-        @user.oauth = oauth
-      end
-
-      it { should be_valid }
-    end
-
-    describe "when uid and provider already exist" do
-      before do
-        FactoryGirl.create(:user, oauth: google_oauth)
-        @user.oauth = google_oauth
-      end
-      it { should_not be_valid }
-    end
-  end
-
   describe "when password is not present" do
     before do
       @user = User.new(first_name: "Example", last_name: "User", email: "user@example.com", password: "", password_confirmation: "")
