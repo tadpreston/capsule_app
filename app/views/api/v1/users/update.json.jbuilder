@@ -3,7 +3,7 @@ if @user.errors.messages.any?
     json.partial! 'api/v1/users/user', user: @user
   end
 else
-  envelope(json, :created) do
+  envelope(json, :updated) do
     json.partial! 'api/v1/users/user', user: @user
   end
 end
