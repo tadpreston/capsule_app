@@ -9,8 +9,9 @@ class OauthHash
       facebook
     when "twitter"
       twitter
-    when "gplus"
-      gplus
+    when "google"
+      puts "<<<<< HI THERE >>>>"
+      google
     end
   end
 
@@ -51,7 +52,23 @@ class OauthHash
       }.with_indifferent_access
     end
 
-    def gplus
+    def google
+      emails = eval(@orig_hash["emails"])
+      email = emails[0]["value"]
+      name = eval(@orig_hash["name"])
+      image = eval(@orig_hash["image"])
 
+      {
+        provider: "google",
+        uid: @orig_hash["uid"],
+        email: email,
+        username: email,
+        first_name: name["givenName"],
+        last_name: name["familyName"],
+        location: '',
+        timezone: '',
+        locale: @orig_hash["language"],
+        profile_image: image["url"]
+      }.with_indifferent_access
     end
 end
