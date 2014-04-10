@@ -78,8 +78,10 @@ class User < ActiveRecord::Base
   protected
 
     def uid_and_provider_are_unique
-      if User.exists?(provider: self.provider, uid: self.uid)
-        errors.add(:uid, "already exists")
+      unless self.persisted?
+        if User.exists?(provider: self.provider, uid: self.uid)
+          errors.add(:uid, "already exists")
+        end
       end
     end
 end
