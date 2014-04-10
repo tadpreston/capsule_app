@@ -68,6 +68,25 @@ describe User do
         screen_name: "Bokojo",
     }
   end
+  let(:google_oauth) do
+    {
+      id: "1819526800765",
+      displayName: "Hank Williams",
+      circledByCount: 0,
+      uid: "1819526800765",
+      isPlusUser: true,
+      etag: "\"TTbz3xy1I5OVJNV4ylIvI-QbXF4\/666AlFaurvQoOoZoAXBUayCKUms\"",
+      image: { url: "https:\/\/lh4.googleusercontent.com\/-fH8zP14_9Ps\/AAAAAAAAAAI\/AAAAAAAAABk\/-r4buFIy4As\/photo.jpg?sz=50" },
+      language: "en",
+      url: "https:\/\/plus.google.com\/113526695819526800765",
+      provider: "google",
+      emails: [
+        { value: "hankwilliams@google.com", type: "account" }
+      ],
+      name: { familyName: "Williams", givenName: "Hank" },
+      domain: "capsuleapp.com"
+    }
+  end
 
   subject { @user }
 
@@ -170,6 +189,25 @@ describe User do
       before do
         FactoryGirl.create(:user, oauth: twitter_oauth)
         @user.oauth = twitter_oauth
+      end
+      it { should_not be_valid }
+    end
+  end
+
+  describe "with google oauth" do
+    describe "email should not be validated" do
+      before do
+        oauth = google_oauth
+        @user.oauth = oauth
+      end
+
+      it { should be_valid }
+    end
+
+    describe "when uid and provider already exist" do
+      before do
+        FactoryGirl.create(:user, oauth: google_oauth)
+        @user.oauth = google_oauth
       end
       it { should_not be_valid }
     end
