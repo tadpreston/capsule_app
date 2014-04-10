@@ -10,7 +10,6 @@ class OauthHash
     when "twitter"
       twitter
     when "google"
-      puts "<<<<< HI THERE >>>>"
       google
     end
   end
