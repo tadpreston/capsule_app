@@ -31,7 +31,7 @@ class User < ActiveRecord::Base
   validates :email, presence: true, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }, if: "oauth.nil?"
   validate :uid_and_provider_are_unique, if: "oauth"
   has_secure_password
-  validates :password, length: { minimum: 6 }
+  validates :password, confirmation: true, length: { minimum: 6 }, unless: Proc.new { |u| u.password.blank? && u.password_confirmation.blank? }
   validates :username, presence: true, uniqueness: true
 
   has_many :devices, dependent: :destroy
