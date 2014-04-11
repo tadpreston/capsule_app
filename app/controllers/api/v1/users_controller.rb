@@ -2,8 +2,8 @@ module API
   module V1
 
     class UsersController < API::V1::ApplicationController
-      before_action :set_user, only: [:show, :update]
-      skip_before_action :authorize_auth_token, only: [:index, :show, :create]
+      before_action :set_user, only: [:show, :update, :following, :followers]
+      skip_before_action :authorize_auth_token, only: [:index, :show, :create, :following, :followers]
 
       def index
         @users = User.all.order(:last_name)
@@ -22,6 +22,14 @@ module API
 
       def update
         @user.update_attributes(user_params)
+      end
+
+      def following
+        @users = @user.followed_users
+      end
+
+      def followers
+        @users = @user.followers
       end
 
       private

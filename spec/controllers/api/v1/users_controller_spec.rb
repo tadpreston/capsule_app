@@ -159,4 +159,38 @@ describe API::V1::UsersController do
       end
     end
   end
+
+  describe "GET 'following'" do
+    let(:other_user) { FactoryGirl.create(:user) }
+    before do
+      @user = FactoryGirl.create(:user)
+      @user.reload
+      @request.env['HTTP_AUTHORIZATION'] = token
+      @request.env["CONTENT_TYPE"] = "application/json"
+      @user.follow! other_user
+    end
+
+    it 'assigns the following users to @users' do
+      get :following, id: @user.to_param
+      expect(assigns(:users)).to_not be_nil
+      expect(assigns(:users)).to include(other_user)
+    end
+  end
+
+  describe "GET 'followers'" do
+    let(:other_user) { FactoryGirl.create(:user) }
+    before do
+      @user = FactoryGirl.create(:user)
+      @user.reload
+      @request.env['HTTP_AUTHORIZATION'] = token
+      @request.env["CONTENT_TYPE"] = "application/json"
+      other_user.follow! @user
+    end
+
+    it 'assigns the following users to @users' do
+      get :followers, id: @user.to_param
+      expect(assigns(:users)).to_not be_nil
+      expect(assigns(:users)).to include(other_user)
+    end
+  end
 end
