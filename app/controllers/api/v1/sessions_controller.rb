@@ -23,16 +23,16 @@ module API
       def destroy
         if @device = Device.find_by(auth_token: params[:id])
           @device.expire_auth_token!
-          render :json => { status: 'Successfully logged out' }
+          render json: { status: 'Successfully logged out' }
         else
-          render :json => { status: 'Session not found' }, status: 404
+          render json: { status: 'Not Found', response: { errors: [ { session: [ "Not found with id: #{params[:id]}" ] } ] } }, status: 404
         end
      end
 
       private
 
         def invalid_login_attempt
-          render :json => { message: "Invalid email or password" }, status: 401
+          render json: { status: 'Invalid email or password' }, status: 401
         end
 
         def get_user

@@ -17,17 +17,25 @@ module API
 
       def create
         @capsule = Capsule.new(capsule_params)
-        @capsule.save
+        unless @capsule.save
+          render :create, status: 422
+        end
       end
 
       def update
-        @capsule.update_attributes(capsule_params)
+        unless @capsule.update_attributes(capsule_params)
+          render :update, status: 422
+        end
       end
 
       private
 
         def set_capsule
-          @capsule = Capsule.find params[:id]
+          begin
+            @capsule = Capsule.find params[:id]
+          rescue
+            render json: { status: 'Not Found', response: { errors: [ { capsule: [ "Not found with id: #{params[:id]}" ] } ] } }, status: 404
+          end
         end
 
         def capsule_params
