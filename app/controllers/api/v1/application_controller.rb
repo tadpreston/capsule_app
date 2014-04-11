@@ -10,14 +10,12 @@ class API::V1::ApplicationController < ActionController::Base
     end
 
     def authorize_api_token
-      authenticate_or_request_with_http_token do |token, options|
-        CapsuleApp::Application.config.api_secret_key_base == token
-      end
+      authenticate_with_http_token { |token, options| CapsuleApp::Application.config.api_secret_key_base == token }
     end
 
     def render_api_unauthorized
       self.headers['WWW-Authenticate'] = 'Token realm="Application"'
-      render json: 'Bad API Key', status: 401
+      render json: { status: 'Bad API Key' }, status: 401
     end
 
     def current_user
@@ -30,18 +28,6 @@ class API::V1::ApplicationController < ActionController::Base
     end
 
     def authorize_auth_token
-      head :unauthorized unless current_device
-    end
-
-    def api_token(token)
-      split_token(token)[1]
-    end
-
-    def authentication_token(token)
-      split_token(token)[2]
-    end
-
-    def split_token(token)
-      token.split(/^([^:]+):*(.*)/)
+      render json: { status: 'Not authenticated' }, status: 403 unless current_device
     end
 end
