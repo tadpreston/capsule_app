@@ -17,11 +17,15 @@ module API
         if @user.save
           @user.reload
           @device = @user.devices.create(remote_ip: request.remote_ip, user_agent: request.user_agent, last_sign_in_at: Time.now)
+        else
+          render :create, status: 422
         end
       end
 
       def update
-        @user.update_attributes(user_params)
+        unless @user.update_attributes(user_params)
+          render :update, status: 422
+        end
       end
 
       def following
@@ -35,7 +39,11 @@ module API
       private
 
         def set_user
-          @user = User.find(params[:id])
+          begin
+            @user = User.find(params[:id])
+          rescue
+            render json: { status: 'Not Found', response: { errors: [ { user: [ "Not found with id: #{params[:id]}" ] } ] } }, status: 404
+          end
         end
 
         def user_params
