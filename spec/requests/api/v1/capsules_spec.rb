@@ -29,7 +29,7 @@ describe 'Capsules API' do
       it 'returns unauthorized' do
         get '/api/v1/capsules', nil, { 'HTTP_AUTHORIZATION' => token }
         expect(response).to_not be_success
-        expect(response.status).to eq(401)
+        expect(response.status).to eq(403)
       end
     end
   end

@@ -128,7 +128,7 @@ describe API::V1::UsersController do
       it 'returns unauthenticated' do
         patch :update, id: @user.to_param, user: { first_name: '' }
         expect(response).to_not be_success
-        expect(response.status).to eq(401)
+        expect(response.status).to eq(403)
       end
     end
 
