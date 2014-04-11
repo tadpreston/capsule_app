@@ -20,7 +20,7 @@
 #  oauth           :hstore
 #  created_at      :datetime
 #  updated_at      :datetime
-#  image           :string(255)
+#  profile_image   :string(255)
 #
 
 require 'spec_helper'
@@ -102,6 +102,10 @@ describe User do
   it { should have_many(:capsules) }
   it { should have_many(:favorites) }
   it { should have_many(:favorite_capsules).through(:favorites) }
+  it { should have_many(:relationships) }
+  it { should have_many(:followed_users).through(:relationships) }
+  it { should have_many(:reverse_relationships) }
+  it { should have_many(:followers).through(:reverse_relationships) }
 
   it { should be_valid }
 
@@ -266,6 +270,29 @@ describe User do
     it "returns the first and last name as one string" do
       user = FactoryGirl.create(:user, first_name: 'Russell', last_name: 'Wilson')
       expect(user.full_name).to eq('Russell Wilson')
+    end
+  end
+
+  describe "following" do
+    let(:other_user) { FactoryGirl.create(:user) }
+    before do
+      @user.save
+      @user.follow!(other_user)
+    end
+
+    it { should be_following(other_user) }
+    its(:followed_users) { should include(other_user) }
+
+    describe "and unfollowing" do
+      before { @user.unfollow!(other_user) }
+
+      it { should_not be_following(other_user) }
+      its(:followed_users) { should_not include(other_user) }
+    end
+
+    describe "followed user" do
+      subject { other_user }
+      its(:followers) { should include(@user) }
     end
   end
 end

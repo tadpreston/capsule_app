@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  get 'relationships/create'
+
+  get 'relationships/destroy'
+
   get 'home/index'
 
   root 'home#index'
@@ -13,12 +17,17 @@ Rails.application.routes.draw do
       get 'config', to: 'configs#index'
 
       resources :sessions, only: [:create, :destroy, :show]
-      resources :users, only: [:index, :create, :update, :show]
+      resources :users, only: [:index, :create, :update, :show] do
+        member do
+          get :following, :followers
+        end
+      end
       resources :capsules do
         collection do
           get 'watched'
         end
       end
+      resources :relationships, only: [:create, :destroy]
     end
   end
 end
