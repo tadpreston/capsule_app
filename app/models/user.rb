@@ -32,7 +32,7 @@ class User < ActiveRecord::Base
   validate :uid_and_provider_are_unique, if: "oauth"
   has_secure_password
   validates :password, confirmation: true, length: { minimum: 6 }, unless: Proc.new { |u| u.password.blank? && u.password_confirmation.blank? }
-  validates :username, presence: true, uniqueness: true
+# validates :username, presence: true, uniqueness: true
 
   has_many :devices, dependent: :destroy
   has_many :capsules, dependent: :destroy
