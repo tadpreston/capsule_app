@@ -51,7 +51,7 @@ describe 'Sessions API' do
     it 'cannot find the session' do
       delete "/api/v1/sessions/1234", nil, { format: :json, 'HTTP_AUTHORIZATION' => token }
       expect(response.status).to eq(404)
-      expect(json['status']).to eq('Session not found')
+      expect(json['status']).to eq('Not Found')
     end
   end
 end
