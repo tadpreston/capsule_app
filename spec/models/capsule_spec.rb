@@ -10,10 +10,11 @@
 #  status            :string(255)
 #  payload_type      :string(255)
 #  promotional_state :string(255)
-#  passcode          :string(255)
 #  visibility        :string(255)
 #  created_at        :datetime
 #  updated_at        :datetime
+#  lock_question     :string(255)
+#  lock_answer       :string(255)
 #
 
 require 'spec_helper'
