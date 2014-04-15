@@ -15,6 +15,8 @@
 #  updated_at        :datetime
 #  lock_question     :string(255)
 #  lock_answer       :string(255)
+#  latitude          :decimal(, )
+#  longitude         :decimal(, )
 #
 
 class Capsule < ActiveRecord::Base
@@ -27,6 +29,12 @@ class Capsule < ActiveRecord::Base
   has_many :favorite_users, through: :favorites, source: :user
 
   scope :by_updated_at, -> { order(updated_at: :desc) }
+
+  def self.find_in_rec(origin, span)
+    east_bound = Vincenty.destination(origin[:lat], origin[:long], 90, span[:lat])
+    south_bound = Vincenty.destination(origin[:lat], origin[:long], 180, span[:long])
+    where(longitude: (origin[:long]..east_bound[:lon]), latitude: (south_bound[:lat]..origin[:lat]))
+  end
 
   def purged_title
     title.slice(/^[^#]*\b/)

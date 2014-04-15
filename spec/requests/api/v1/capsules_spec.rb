@@ -38,7 +38,7 @@ describe 'Capsules API' do
     describe 'with valid params' do
       it 'creates a new capsule and returns it' do
         expect {
-          post '/api/v1/capsules', { capsule: { title: 'A title #title' } }, { format: :json, 'HTTP_AUTHORIZATION' => token, 'HTTP_CAPSULE_AUTH_TOKEN' => auth_token }
+          post '/api/v1/capsules', { capsule: { title: 'A title #title', location: { latitude: '33.189', longitude: '-96.7718', radius: '25000' } } }, { format: :json, 'HTTP_AUTHORIZATION' => token, 'HTTP_CAPSULE_AUTH_TOKEN' => auth_token }
         }.to change(Capsule, :count).by(1)
         expect(json['response']['capsule']).not_to be_blank
         expect(json['response']['capsule']['id']).to eq(assigns(:capsule).id)
