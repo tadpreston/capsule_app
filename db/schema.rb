@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140410175640) do
+ActiveRecord::Schema.define(version: 20140415155125) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,13 +26,17 @@ ActiveRecord::Schema.define(version: 20140410175640) do
     t.string   "status"
     t.string   "payload_type"
     t.string   "promotional_state"
-    t.string   "passcode"
     t.string   "visibility"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "lock_question"
+    t.string   "lock_answer"
+    t.decimal  "latitude"
+    t.decimal  "longitude"
   end
 
-  add_index "capsules", ["location"], name: "capsules_location", using: :gin
+  add_index "capsules", ["latitude"], name: "index_capsules_on_latitude", using: :btree
+  add_index "capsules", ["longitude"], name: "index_capsules_on_longitude", using: :btree
   add_index "capsules", ["user_id"], name: "index_capsules_on_user_id", using: :btree
 
   create_table "devices", force: true do |t|

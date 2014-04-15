@@ -10,10 +10,13 @@
 #  status            :string(255)
 #  payload_type      :string(255)
 #  promotional_state :string(255)
-#  passcode          :string(255)
 #  visibility        :string(255)
 #  created_at        :datetime
 #  updated_at        :datetime
+#  lock_question     :string(255)
+#  lock_answer       :string(255)
+#  latitude          :decimal(, )
+#  longitude         :decimal(, )
 #
 
 require 'spec_helper'
@@ -30,7 +33,7 @@ describe Capsule do
   it { should validate_presence_of(:title) }
 
   describe 'before_save callback' do
-    describe 'with has_tags in the title' do
+    describe 'with hash_tags in the title' do
       it 'pulls hash tags out of the title and stores them in the has_tags field' do
         @capsule.save
         expect(@capsule.hash_tags).to_not be_blank
@@ -45,6 +48,28 @@ describe Capsule do
         @capsule.title = 'A title with no hash tags'
         @capsule.save
         expect(@capsule.hash_tags).to be_blank
+      end
+    end
+
+    describe 'when a location is provided' do
+      before do
+        @capsule.latitude = nil
+        @capsule.longitude = nil
+      end
+
+      it 'stores the location in the latitude and longitude fields' do
+        @capsule.save
+        expect(@capsule.latitude).to_not be_blank
+        expect(@capsule.latitude.to_s).to eq(@capsule.location["latitude"])
+        expect(@capsule.longitude).to_not be_blank
+        expect(@capsule.longitude.to_s).to eq(@capsule.location["longitude"])
+      end
+
+      it 'does not store values if location is not provided' do
+        @capsule.location = ''
+        @capsule.save
+        expect(@capsule.latitude).to be_blank
+        expect(@capsule.longitude).to be_blank
       end
     end
   end
@@ -66,6 +91,24 @@ describe Capsule do
       @capsule.title = "A title with hash tags #hashtagone #hashtagtwo"
       @capsule.save
       expect(@capsule.purged_title).to eq('A title with hash tags')
+    end
+  end
+
+  describe 'find_in_rec class method' do
+    before do
+      @origin = { lat: 33.190, long: -96.8915 }
+      @span = { lat: 40233.6, long: 40233.6 }
+      @capsule1 = FactoryGirl.create(:capsule, location: { latitude: '33.167111', longitude: '-96.663793', radius: '20000' })
+      @capsule2 = FactoryGirl.create(:capsule, location: { latitude: '33.013300', longitude: '-96.823046', radius: '20000' })
+      @capsule3 = FactoryGirl.create(:capsule, location: { latitude: '32.989326', longitude: '-96.231873', radius: '20000' })
+    end
+
+    it 'gets the correct capsules in the rectangle' do
+      expect(Capsule.find_in_rec(@origin, @span)).to eq([@capsule2, @capsule1])
+    end
+
+    it 'does not include capsules outside of the rectangle' do
+      expect(Capsule.find_in_rec(@origin, @span)).to_not include(@capsule3)
     end
   end
 

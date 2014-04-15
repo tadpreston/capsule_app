@@ -5,7 +5,7 @@ module API
       before_action :set_capsule, only: [:show, :update]
 
       def index
-        @capsules = current_user.capsules.by_updated_at
+        @capsules = Capsule.find_in_rec({ lat: params[:lat].to_f, long: params[:long].to_f }, { lat: params[:latSpan].to_f, long: params[:longSpan].to_f } )
       end
 
       def watched
@@ -39,7 +39,7 @@ module API
         end
 
         def capsule_params
-          params.required(:capsule).permit(:user_id, :title, :location, :status, :payload_type, :promotional_state, :passcode, :visibility)
+          params.required(:capsule).permit(:user_id, :title, { location: [:latitude, :longitude, :radius] }, :status, :payload_type, :promotional_state, :passcode, :visibility)
         end
     end
   end
