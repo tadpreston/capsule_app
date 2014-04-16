@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140415155125) do
+ActiveRecord::Schema.define(version: 20140416175716) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,6 +38,17 @@ ActiveRecord::Schema.define(version: 20140415155125) do
   add_index "capsules", ["latitude"], name: "index_capsules_on_latitude", using: :btree
   add_index "capsules", ["longitude"], name: "index_capsules_on_longitude", using: :btree
   add_index "capsules", ["user_id"], name: "index_capsules_on_user_id", using: :btree
+
+  create_table "comments", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "capsule_id"
+    t.text     "body"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "comments", ["capsule_id"], name: "index_comments_on_capsule_id", using: :btree
+  add_index "comments", ["user_id"], name: "index_comments_on_user_id", using: :btree
 
   create_table "devices", force: true do |t|
     t.integer  "user_id"

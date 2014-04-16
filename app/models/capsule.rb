@@ -27,6 +27,7 @@ class Capsule < ActiveRecord::Base
   belongs_to :user
   has_many :favorites
   has_many :favorite_users, through: :favorites, source: :user
+  has_many :comments, dependent: :destroy
 
   scope :by_updated_at, -> { order(updated_at: :desc) }
 

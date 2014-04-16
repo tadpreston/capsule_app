@@ -25,13 +25,14 @@ describe 'Capsules API' do
       end
     end
 
-    describe 'Not authenticated' do
-      it 'returns unauthorized' do
-        get '/api/v1/capsules', nil, { 'HTTP_AUTHORIZATION' => token }
-        expect(response).to_not be_success
-        expect(response.status).to eq(403)
-      end
-    end
+    # Commented out because for right now authentication is not required for the index
+   # describe 'Not authenticated' do
+   #   it 'returns unauthorized' do
+   #     get '/api/v1/capsules', nil, { 'HTTP_AUTHORIZATION' => token }
+   #     expect(response).to_not be_success
+   #     expect(response.status).to eq(403)
+   #   end
+   # end
   end
 
   describe "POST 'create'" do
