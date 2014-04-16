@@ -40,7 +40,8 @@ module API
         end
 
         def capsule_params
-          params.required(:capsule).permit(:user_id, :title, { location: [:latitude, :longitude, :radius] }, :status, :payload_type, :promotional_state, :passcode, :visibility)
+          params.required(:capsule).permit(:user_id, :title, { location: [:latitude, :longitude, :radius] }, :status, :payload_type, :promotional_state, :passcode, :visibility,
+                                           comments_attributes: [:user_id, :body])
         end
     end
   end

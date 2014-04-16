@@ -31,6 +31,8 @@ class Capsule < ActiveRecord::Base
 
   scope :by_updated_at, -> { order(updated_at: :desc) }
 
+  accepts_nested_attributes_for :comments, allow_destroy: true
+
   def self.find_in_rec(origin, span)
     east_bound = Vincenty.destination(origin[:lat], origin[:long], 90, span[:lat])
     south_bound = Vincenty.destination(origin[:lat], origin[:long], 180, span[:long])
