@@ -26,6 +26,7 @@ Rails.application.routes.draw do
         collection do
           get 'watched'
         end
+        resource :comments, only: [:create, :destroy]
       end
       resources :relationships, only: [:create, :destroy]
     end

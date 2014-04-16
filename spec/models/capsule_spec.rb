@@ -29,6 +29,7 @@ describe Capsule do
   it { should belong_to(:user) }
   it { should have_many(:favorites) }
   it { should have_many(:favorite_users).through(:favorites) }
+  it { should have_many(:comments) }
 
   it { should validate_presence_of(:title) }
 

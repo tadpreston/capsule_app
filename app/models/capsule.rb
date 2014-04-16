@@ -27,8 +27,11 @@ class Capsule < ActiveRecord::Base
   belongs_to :user
   has_many :favorites
   has_many :favorite_users, through: :favorites, source: :user
+  has_many :comments, dependent: :destroy
 
   scope :by_updated_at, -> { order(updated_at: :desc) }
+
+  accepts_nested_attributes_for :comments, allow_destroy: true
 
   def self.find_in_rec(origin, span)
     east_bound = Vincenty.destination(origin[:lat], origin[:long], 90, span[:lat])
