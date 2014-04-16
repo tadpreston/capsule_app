@@ -1,5 +1,8 @@
 envelope(json, :success) do
-  jason.array! @capsules do |capsule|
-    json.(capsule, :id, :user_id, :title, :purged_title, :hash_tags, :location, :payload_type, :status, :promotional_state, :passcode, :visibility, :created_at, :updated_at)
+  json.capsule_count @capsules.size
+  json.set! :capsules do
+    json.array! @capsules do |capsule|
+      json.partial! 'api/v1/capsules/capsule', capsule: capsule
+    end
   end
 end
