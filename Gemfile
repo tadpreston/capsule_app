@@ -20,6 +20,8 @@ gem 'turbolinks', '~> 2.2.2'
 gem 'jbuilder', '~> 2.0.6'
 gem 'sdoc', '~> 0.4.0',          group: :doc
 
+gem 'faker', '~> 1.3.0'
+
 group :development do
   gem 'spring', '~> 1.1.2'
   gem "annotate", "2.6.3"
