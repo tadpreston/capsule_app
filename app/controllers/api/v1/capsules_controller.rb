@@ -6,7 +6,7 @@ module API
       skip_before_action :authorize_auth_token, only: [:index]
 
       def index
-        @capsules = Capsule.find_in_rec({ lat: params[:lat].to_f, long: params[:long].to_f }, { lat: params[:latSpan].to_f, long: params[:longSpan].to_f } )
+        @capsules = Capsule.find_in_rec({ lat: params[:lat].to_f, long: params[:long].to_f }, { lat: params[:latSpan].to_f, long: params[:longSpan].to_f } ).includes(:user)
       end
 
       def watched
