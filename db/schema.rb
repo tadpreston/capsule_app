@@ -11,12 +11,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140417170747) do
+ActiveRecord::Schema.define(version: 20140417195900) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
   enable_extension "uuid-ossp"
+
+  create_table "assets", force: true do |t|
+    t.integer  "capsule_id"
+    t.string   "media_type"
+    t.string   "resource"
+    t.hstore   "metadata"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "assets", ["capsule_id"], name: "index_assets_on_capsule_id", using: :btree
 
   create_table "capsules", force: true do |t|
     t.integer  "user_id"
