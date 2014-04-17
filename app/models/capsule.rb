@@ -28,10 +28,12 @@ class Capsule < ActiveRecord::Base
   has_many :favorites
   has_many :favorite_users, through: :favorites, source: :user
   has_many :comments, dependent: :destroy
+  has_many :assets, dependent: :destroy
 
   scope :by_updated_at, -> { order(updated_at: :desc) }
 
   accepts_nested_attributes_for :comments, allow_destroy: true
+  accepts_nested_attributes_for :assets, allow_destroy: true
 
   PAYLOAD_TYPES = [NO_VALUE_TYPE = 'NoValue', AUDIO_TYPE = 'Audio', VIDEO_TYPE = 'Video', PICTURE_TYPE = 'Picture', TEXT_TYPE = 'Text']
   PROMOTIONAL_STATES = ["NoValue", "Promo State One", "Promo State Two", "Promo State Three", "Promo State Four"]

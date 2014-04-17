@@ -30,8 +30,12 @@ describe Capsule do
   it { should have_many(:favorites) }
   it { should have_many(:favorite_users).through(:favorites) }
   it { should have_many(:comments) }
+  it { should have_many(:assets) }
 
   it { should validate_presence_of(:title) }
+
+  it { should accept_nested_attributes_for(:comments).allow_destroy(true) }
+  it { should accept_nested_attributes_for(:assets).allow_destroy(true) }
 
   describe 'before_save callback' do
     describe 'with hash_tags in the title' do
