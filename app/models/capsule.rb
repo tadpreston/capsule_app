@@ -8,8 +8,6 @@
 #  hash_tags         :string(255)
 #  location          :hstore
 #  status            :string(255)
-#  payload_type      :string(255)
-#  promotional_state :string(255)
 #  visibility        :string(255)
 #  created_at        :datetime
 #  updated_at        :datetime
@@ -17,6 +15,8 @@
 #  lock_answer       :string(255)
 #  latitude          :decimal(, )
 #  longitude         :decimal(, )
+#  payload_type      :integer
+#  promotional_state :integer
 #
 
 class Capsule < ActiveRecord::Base
@@ -32,6 +32,9 @@ class Capsule < ActiveRecord::Base
   scope :by_updated_at, -> { order(updated_at: :desc) }
 
   accepts_nested_attributes_for :comments, allow_destroy: true
+
+  PAYLOAD_TYPES = [NO_VALUE_TYPE = 'NoValue', AUDIO_TYPE = 'Audio', VIDEO_TYPE = 'Video', PICTURE_TYPE = 'Picture', TEXT_TYPE = 'Text']
+  PROMOTIONAL_STATES = ["NoValue", "Promo State One", "Promo State Two", "Promo State Three", "Promo State Four"]
 
   def self.find_in_rec(origin, span)
     east_bound = Vincenty.destination(origin[:lat], origin[:long], 90, span[:lat])

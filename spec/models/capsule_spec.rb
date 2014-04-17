@@ -8,8 +8,6 @@
 #  hash_tags         :string(255)
 #  location          :hstore
 #  status            :string(255)
-#  payload_type      :string(255)
-#  promotional_state :string(255)
 #  visibility        :string(255)
 #  created_at        :datetime
 #  updated_at        :datetime
@@ -17,6 +15,8 @@
 #  lock_answer       :string(255)
 #  latitude          :decimal(, )
 #  longitude         :decimal(, )
+#  payload_type      :integer
+#  promotional_state :integer
 #
 
 require 'spec_helper'
