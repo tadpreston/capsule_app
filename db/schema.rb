@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140417151703) do
+ActiveRecord::Schema.define(version: 20140417170747) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,8 +24,6 @@ ActiveRecord::Schema.define(version: 20140417151703) do
     t.string   "hash_tags"
     t.hstore   "location"
     t.string   "status"
-    t.string   "payload_type"
-    t.string   "promotional_state"
     t.string   "visibility"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -33,6 +31,8 @@ ActiveRecord::Schema.define(version: 20140417151703) do
     t.string   "lock_answer"
     t.decimal  "latitude"
     t.decimal  "longitude"
+    t.integer  "payload_type"
+    t.integer  "promotional_state"
   end
 
   add_index "capsules", ["latitude", "longitude"], name: "index_capsules_on_latitude_and_longitude", using: :btree
