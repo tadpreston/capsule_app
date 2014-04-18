@@ -39,9 +39,6 @@ class Capsule < ActiveRecord::Base
   PROMOTIONAL_STATES = ["NoValue", "Promo State One", "Promo State Two", "Promo State Three", "Promo State Four"]
 
   def self.find_in_rec(origin, span)
-#    east_bound = Vincenty.destination(origin[:lat], origin[:long], 90, span[:lat])
-#    south_bound = Vincenty.destination(origin[:lat], origin[:long], 180, span[:long])
-
     east_bound = origin[:long] + span[:long]
     south_bound = origin[:lat] - span[:lat]
     where(longitude: (origin[:long]..east_bound), latitude: (south_bound..origin[:lat]))
@@ -49,5 +46,9 @@ class Capsule < ActiveRecord::Base
 
   def purged_title
     title.slice(/^[^#]*\b/)
+  end
+
+  def thumbnail
+    "http://res.cloudinary.com/demo/image/upload/w_100,h_100,c_thumb,g_face/butterfly.jpg"
   end
 end
