@@ -1,3 +1,5 @@
 envelope(json, :success) do
-  json.partial! 'api/v1/capsules/capsule', capsule: @capsule
+  json.capsule
+    json.partial! 'api/v1/capsules/capsule', capsule: @capsule
+  end
 end
