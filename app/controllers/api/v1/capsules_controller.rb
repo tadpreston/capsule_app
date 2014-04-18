@@ -36,7 +36,10 @@ module API
       end
 
       def explorer
-        @capsules = Capsule.find_in_rec({ lat: params[:latOrigin].to_f, long: params[:longOrigin].to_f }, { lat: params[:latSpan].to_f, long: params[:longSpan].to_f } ).includes(:user)
+        latSpan = params[:latSpan].to_f * 1000  # Converting to meters, assuming kilometers
+        longSpan = params[:longSpan].to_f * 1000 # Converting to meters, assuming kilometers
+
+        @capsules = Capsule.find_in_rec({ lat: params[:latOrigin].to_f, long: params[:longOrigin].to_f }, { lat: latSpan, long: longSpan } ).includes(:user)
       end
 
       private
