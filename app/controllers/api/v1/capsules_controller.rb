@@ -2,11 +2,12 @@ module API
   module V1
 
     class CapsulesController < API::V1::ApplicationController
-      before_action :set_capsule, only: [:show, :update]
+      before_action :set_capsule, only: [:show, :update, :destroy]
       skip_before_action :authorize_auth_token, only: [:index]
 
       def index
-        @capsules = Capsule.find_in_rec({ lat: params[:lat].to_f, long: params[:long].to_f }, { lat: params[:latSpan].to_f, long: params[:longSpan].to_f } ).includes(:user)
+        @user = User.find params[:user_id]
+        @capsules = @user.capsules
       end
 
       def watched
@@ -27,6 +28,15 @@ module API
         unless @capsule.update_attributes(capsule_params)
           render :update, status: 422
         end
+      end
+
+      def destroy
+        @capsule.destroy
+        render json: { status: 'Deleted' }
+      end
+
+      def explorer
+        @capsules = Capsule.find_in_rec({ lat: params[:lat].to_f, long: params[:long].to_f }, { lat: params[:latSpan].to_f, long: params[:longSpan].to_f } ).includes(:user)
       end
 
       private

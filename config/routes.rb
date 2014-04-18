@@ -21,9 +21,11 @@ Rails.application.routes.draw do
         member do
           get :following, :followers
         end
+        resources :capsules, only: [:index]
       end
       resources :capsules do
         collection do
+          get 'explorer'
           get 'watched'
         end
         resource :comments, only: [:create, :destroy]
