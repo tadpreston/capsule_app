@@ -39,9 +39,12 @@ class Capsule < ActiveRecord::Base
   PROMOTIONAL_STATES = ["NoValue", "Promo State One", "Promo State Two", "Promo State Three", "Promo State Four"]
 
   def self.find_in_rec(origin, span)
-    east_bound = Vincenty.destination(origin[:lat], origin[:long], 90, span[:lat])
-    south_bound = Vincenty.destination(origin[:lat], origin[:long], 180, span[:long])
-    where(longitude: (origin[:long]..east_bound[:lon]), latitude: (south_bound[:lat]..origin[:lat]))
+#    east_bound = Vincenty.destination(origin[:lat], origin[:long], 90, span[:lat])
+#    south_bound = Vincenty.destination(origin[:lat], origin[:long], 180, span[:long])
+
+    east_bound = origin[:long] + span[:long]
+    south_bound = origin[:lat] - span[:lat]
+    where(longitude: (origin[:long]..east_bound), latitude: (south_bound..origin[:lat]))
   end
 
   def purged_title
