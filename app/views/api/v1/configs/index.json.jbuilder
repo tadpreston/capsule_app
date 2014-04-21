@@ -1,6 +1,6 @@
 envelope(json, :success) do
   json.config do
-    json.cloudinary do
+    json.image_post_url do
       json.url ENV['CLOUDINARY_URL']
     end
     json.redis do
