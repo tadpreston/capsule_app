@@ -18,9 +18,9 @@ json.title capsule.title || ''
 json.set! :hash_tags, capsule.hash_tags.split(' ')
 json.purged_title capsule.purged_title || ''
 json.location capsule.location || ''
-json.payload_type capsule.payload_type || ''
+json.payload_type capsule.payload_type || 0
 json.status capsule.status || ''
-json.promotional_state capsule.promotional_state || ''
+json.promotional_state capsule.promotional_state || 0
 json.thumbnail capsule.thumbnail || ''
 json.set! :assets, capsule.assets
 json.set! :time_conditions do
