@@ -126,6 +126,10 @@ GEM
     nokogiri (1.6.1)
       mini_portile (~> 0.5.0)
     pg (0.17.1)
+    pg_search (0.7.3)
+      activerecord (>= 3.1)
+      activesupport (>= 3.1)
+      arel
     polyglot (0.3.4)
     pry (0.9.12.6)
       coderay (~> 1.0)
@@ -245,6 +249,7 @@ DEPENDENCIES
   jquery-rails (~> 3.1.0)
   minitest (~> 5.3.2)
   pg (~> 0.17.1)
+  pg_search (~> 0.7.3)
   rails (= 4.1.0)
   rails_12factor (= 0.0.2)
   rspec-rails (~> 2.14.1)

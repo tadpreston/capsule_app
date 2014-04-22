@@ -3,7 +3,7 @@ module API
 
     class CapsulesController < API::V1::ApplicationController
       before_action :set_capsule, only: [:show, :update, :destroy]
-      skip_before_action :authorize_auth_token, only: [:explorer]
+      skip_before_action :authorize_auth_token, only: [:explorer, :locationtags]
 
       def index
         @user = User.find params[:user_id]
@@ -37,6 +37,11 @@ module API
 
       def explorer
         @capsules = Capsule.find_in_rec({ lat: params[:latOrigin].to_f, long: params[:longOrigin].to_f }, { lat: params[:latSpan].to_f, long: params[:longSpan].to_f } ).includes(:user)
+      end
+
+      def locationtags
+        @capsules = Capsule.find_location_hash_tags({ lat: params[:latOrigin].to_f, long: params[:longOrigin].to_f }, { lat: params[:latSpan].to_f, long: params[:longSpan].to_f }, params[:hashtags].gsub(/[|]/,' '))
+        @capsule_count = @capsules.count(:all)
       end
 
       private

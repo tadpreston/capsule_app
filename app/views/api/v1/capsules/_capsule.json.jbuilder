@@ -23,22 +23,7 @@ json.status capsule.status
 json.promotional_state capsule.promotional_state || 0
 json.thumbnail capsule.thumbnail
 json.set! :assets, capsule.assets
-json.set! :time_conditions do
-  json.start_date '2014-04-02T11:12:13'
-  json.set! :week_matrix do
-    json.set! :monday, [{start: "8:00:00", end: "10:00:00"},{start: "12:00:00", end: "13:00:00"}]
-    json.set! :tuesday, []
-    json.set! :wednesday, []
-    json.set! :thursday, [{start: "00:00:00", end: "23:59:59"}]
-    json.set! :friday, []
-    json.set! :satdurday, []
-    json.set! :sunday, []
-  end
-  json.set! :repeat_pattern do
-    json.interval 0
-    json.count 0
-  end
-end
+json.start_date '2014-04-02T11:12:13'
 json.lock_question capsule.lock_question
 json.lock_answer capsule.lock_answer
 json.set! :recipients, []

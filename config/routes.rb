@@ -26,6 +26,7 @@ Rails.application.routes.draw do
       resources :capsules do
         collection do
           get 'explorer'
+          get 'locationtags'
           get 'watched'
         end
         resource :comments, only: [:create, :destroy]

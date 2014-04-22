@@ -1,8 +1,6 @@
 envelope(json, :success) do
   json.config do
-    json.image_post_url do
-      json.url ENV['CLOUDINARY_URL']
-    end
+    json.image_post_url ENV['CLOUDINARY_URL']
     json.redis do
       json.url ENV['REDISTOGO_URL']
     end
