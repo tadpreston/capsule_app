@@ -57,7 +57,8 @@ module API
         def capsule_params
           params.required(:capsule).permit(:user_id, :title, { location: [:latitude, :longitude, :radius] }, :status, :payload_type, :promotional_state, :passcode, :visibility,
                                            comments_attributes: [:user_id, :body],
-                                           assets_attributes: [:media_type, :resource, :metadata])
+                                           assets_attributes: [:media_type, :resource, :metadata],
+                                           recipients_attributes: [:phone_number, :email, :first_name, :last_name])
         end
     end
   end

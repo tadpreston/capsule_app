@@ -20,9 +20,12 @@
 #
 
 class Capsule < ActiveRecord::Base
+  attr_reader :recipients_attributes
+
   include PgSearch
 
   before_save CapsuleCallbacks
+  after_save CapsuleCallbacks
 
   validates :title, presence: true
 
@@ -68,5 +71,9 @@ class Capsule < ActiveRecord::Base
 
   def thumbnail
     "http://res.cloudinary.com/demo/image/upload/w_100,h_100,c_thumb,g_face/butterfly.jpg"
+  end
+
+  def recipients_attributes=(recipients)
+    @recipients_attributes = recipients
   end
 end

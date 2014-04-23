@@ -119,4 +119,54 @@ describe Capsule do
     end
   end
 
+  describe 'after_save callback' do
+    before do
+      @user1 = FactoryGirl.create(:user, phone_number: '9725551212')
+      @user2 = FactoryGirl.create(:user, phone_number: '2145551212')
+    end
+
+    it 'adds recipients to the capsule' do
+      @capsule.recipients_attributes = [{phone_number: @user1.phone_number},{phone_number: @user2.phone_number}]
+      expect {
+        @capsule.save
+      }.to change(RecipientUser, :count).by(2)
+    end
+
+    it 'removes recipients not listed in the recipients_attributes' do
+      @capsule.recipients_attributes = [{phone_number: @user2.phone_number}]
+      @capsule.save
+      expect(@capsule.recipients).not_to exist(@user1)
+    end
+
+    it 'creates a user record for a new recipient' do
+      @capsule.recipients_attributes = [{phone_number: '2145787422', email: 'bobdylan@gmail.com', first_name: 'Bob', last_name: 'Dylan'}]
+      expect {
+        @capsule.save
+      }.to change(User, :count).by(1)
+    end
+
+    it 'does not create a record for an existing recipient' do
+      @capsule.recipients_attributes = [{phone_number: @user1.phone_number, email: @user1.email, first_name: @user1.first_name, last_name: @user1.last_name}]
+      expect {
+        @capsule.save
+      }.to_not change(User, :count).by(1)
+    end
+
+    it 'adds the contact to the capsule creator' do
+      recipient = {phone_number: '2145787422', email: 'bobdylan@gmail.com', first_name: 'Bob', last_name: 'Dylan'}
+      @capsule.recipients_attributes = [recipient]
+      expect {
+        @capsule.save
+      }.to change(ContactUser, :count).by(1)
+    end
+
+    it 'does not add the contact to the capsule creator because it already exists' do
+      recipient = {phone_number: @user1.phone_number, email: @user1.email, first_name: @user1.first_name, last_name: @user1.last_name}
+      @capsule.user.contacts << @user1
+      @capsule.recipients_attributes = [recipient]
+      expect {
+        @capsule.save
+      }.to_not change(ContactUser, :count).by(1)
+    end
+  end
 end
