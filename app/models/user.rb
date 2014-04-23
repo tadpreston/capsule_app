@@ -45,6 +45,8 @@ class User < ActiveRecord::Base
   has_many :comments, dependent: :destroy
   has_many :recipient_users, dependent: :destroy
   has_many :received_capsules, through: :recipient_users, source: :capsule
+  has_many :contact_users
+  has_many :contacts, through: :contact_users
 
   def self.find_or_create_by_oauth(oauth)
     User.find_or_create_by(provider: oauth[:provider], uid: oauth[:uid].to_s) do |user|
