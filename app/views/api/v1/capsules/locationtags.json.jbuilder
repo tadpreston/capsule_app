@@ -1,5 +1,5 @@
 envelope(json, :success) do
-  json.capsule_count @capsule_count
+  json.capsule_count @capsules.count(:all)
   json.set! :capsules do
     json.array! @capsules do |capsule|
       json.cache! ['v1', capsule], expires_in: 10.minutes do

@@ -102,10 +102,10 @@ describe Capsule do
   describe 'find_in_rec class method' do
     before do
       @origin = { lat: 33.190, long: -96.8915 }
-      @span = { lat: 40233.6, long: 40233.6 }
+      @span = { lat: 2.5359475904, long: 1.7578124096 }
       @capsule1 = FactoryGirl.create(:capsule, location: { latitude: '33.167111', longitude: '-96.663793', radius: '20000' })
       @capsule2 = FactoryGirl.create(:capsule, location: { latitude: '33.013300', longitude: '-96.823046', radius: '20000' })
-      @capsule3 = FactoryGirl.create(:capsule, location: { latitude: '32.989326', longitude: '-96.231873', radius: '20000' })
+      @capsule3 = FactoryGirl.create(:capsule, location: { latitude: '30.089326', longitude: '-96.231873', radius: '20000' })
     end
 
     it 'gets the correct capsules in the rectangle' do
