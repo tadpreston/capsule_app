@@ -31,6 +31,8 @@ describe Capsule do
   it { should have_many(:favorite_users).through(:favorites) }
   it { should have_many(:comments) }
   it { should have_many(:assets) }
+  it { should have_many(:recipient_users) }
+  it { should have_many(:recipients).through(:recipient_users) }
 
   it { should validate_presence_of(:title) }
 

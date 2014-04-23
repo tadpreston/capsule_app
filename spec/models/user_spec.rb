@@ -107,6 +107,8 @@ describe User do
   it { should have_many(:reverse_relationships) }
   it { should have_many(:followers).through(:reverse_relationships) }
   it { should have_many(:comments) }
+  it { should have_many(:recipient_users) }
+  it { should have_many(:received_capsules).through(:recipient_users) }
 
   it { should be_valid }
 

@@ -43,6 +43,8 @@ class User < ActiveRecord::Base
   has_many :reverse_relationships, foreign_key: "followed_id", class_name: "Relationship", dependent: :destroy
   has_many :followers, through: :reverse_relationships
   has_many :comments, dependent: :destroy
+  has_many :recipient_users, dependent: :destroy
+  has_many :received_capsules, through: :recipient_users, source: :capsule
 
   def self.find_or_create_by_oauth(oauth)
     User.find_or_create_by(provider: oauth[:provider], uid: oauth[:uid].to_s) do |user|
