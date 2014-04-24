@@ -169,4 +169,38 @@ describe Capsule do
       }.to_not change(ContactUser, :count).by(1)
     end
   end
+
+  describe "add_as_recipient method" do
+    before do
+      @capsule.save
+      @recipient = FactoryGirl.create(:user)
+    end
+
+    it 'adds a user as a recipient' do
+      @capsule.add_as_recipient(@recipient)
+      expect(@capsule.recipients).to include(@recipient)
+    end
+
+    it 'does not add a recipient if it is already a recipient' do
+      @capsule.recipients << @recipient
+      @capsule.add_as_recipient(@recipient)
+      expect(@capsule.recipients.size).to eq(1)
+    end
+  end
+
+  describe "is_a_recipient? method" do
+    before do
+      @capsule.save
+      @recipient = FactoryGirl.create(:user)
+    end
+
+    it "returns false" do
+      expect(@capsule.is_a_recipient?(@recipient)).to be_false
+    end
+
+    it "returns true" do
+      @capsule.recipients << @recipient
+      expect(@capsule.is_a_recipient?(@recipient)).to be_true
+    end
+  end
 end

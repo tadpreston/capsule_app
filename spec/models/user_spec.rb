@@ -112,12 +112,8 @@ describe User do
   it { should have_many(:contact_users) }
   it { should have_many(:contacts).through(:contact_users) }
 
-  it { should be_valid }
-
-#  it { should validate_presence_of(:username) }
-#  it { should validate_uniqueness_of(:username) }
-
   # Validations
+  it { should be_valid }
 
   describe "when email is not present" do
     before { @user.email = "" }
@@ -251,7 +247,7 @@ describe User do
     end
   end
 
-  describe "find_or_create_by_oauth method" do
+  describe "find_or_create_by_oauth class method" do
     it 'finds an existing user' do
       user = FactoryGirl.create(:user, oauth: oauth_attributes)
       expect(User.find_or_create_by_oauth(oauth_attributes)).to eq(user)
@@ -268,6 +264,27 @@ describe User do
       expect(user).to_not be_nil
       expect(user.provider).to eq(oauth_attributes[:provider])
       expect(user.uid).to eq(oauth_attributes[:uid])
+    end
+  end
+
+  describe "find_or_create_by_phone_number class method" do
+    it "finds an existing user" do
+      FactoryGirl.create(:user, phone_number: '2145551212')
+      user = User.find_or_create_by_phone_number('2145551212')
+      expect(user).to_not be_nil
+      expect(user).to be_a(User)
+    end
+
+    it "creates a user if not found" do
+      expect {
+        User.find_or_create_by_phone_number('2145551212', {email: 'bobdylan@gmail.com', first_name: 'Bob', last_name: 'Dylan'})
+      }.to change(User, :count).by(1)
+    end
+
+    it "persists a user object" do
+      user = User.find_or_create_by_phone_number('2145551212', {email: 'bobdylan@gmail.com', first_name: 'Bob', last_name: 'Dylan'})
+      expect(user).to be_persisted
+      expect(user).to be_a(User)
     end
   end
 
@@ -298,6 +315,40 @@ describe User do
     describe "followed user" do
       subject { other_user }
       its(:followers) { should include(@user) }
+    end
+  end
+
+  describe "add as contact method" do
+    before do
+      @user.save
+      @contact = FactoryGirl.create(:user)
+    end
+
+    it "adds a user as a contact" do
+      @user.add_as_contact(@contact)
+      expect(@user.contacts).to include(@contact)
+    end
+
+    it "does not add a contact if it is already a contact" do
+      @user.contacts << @contact
+      @user.add_as_contact(@contact)
+      expect(@user.contacts.size).to eq(1)
+    end
+  end
+
+  describe "is_a_contact? method" do
+    before do
+      @user.save
+      @contact = FactoryGirl.create(:user)
+    end
+
+    it "returns false" do
+      expect(@user.is_a_contact?(@contact)).to be_false
+    end
+
+    it "returns true" do
+      @user.contacts << @contact
+      expect(@user.is_a_contact?(@contact)).to be_true
     end
   end
 end

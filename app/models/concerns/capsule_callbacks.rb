@@ -13,18 +13,9 @@ class CapsuleCallbacks
       recipients = capsule.recipients_attributes
 
       recipients.each do |recipient|
-        user = User.find_or_create_by(phone_number: recipient[:phone_number]) do |user|
-          user.email = recipient[:email]
-          user.first_name = recipient[:first_name]
-          user.last_name = recipient[:last_name]
-          tmp_pwd = SecureRandom.hex
-          user.password = tmp_pwd
-          user.password_confirmation = tmp_pwd
-        end
-        capsule.recipients << user
-
-        creator = capsule.user
-        creator.contacts << user unless creator.contacts.exists?(user)
+        user = User.find_or_create_by_phone_number(recipient[:phone_number], recipient)
+        capsule.add_as_recipient user
+        capsule.user.add_as_contact user
       end
     end
   end

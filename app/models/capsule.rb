@@ -76,4 +76,12 @@ class Capsule < ActiveRecord::Base
   def recipients_attributes=(recipients)
     @recipients_attributes = recipients
   end
+
+  def add_as_recipient(recipient)
+    recipients << recipient unless is_a_recipient?(recipient)
+  end
+
+  def is_a_recipient?(recipient)
+    recipients.exists?(recipient)
+  end
 end

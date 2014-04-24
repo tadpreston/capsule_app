@@ -32,7 +32,6 @@ class User < ActiveRecord::Base
   validate :uid_and_provider_are_unique, if: "oauth"
   has_secure_password
   validates :password, confirmation: true, length: { minimum: 6 }, unless: Proc.new { |u| u.password.blank? && u.password_confirmation.blank? }
-# validates :username, presence: true, uniqueness: true
 
   has_many :devices, dependent: :destroy
   has_many :capsules, dependent: :destroy
@@ -51,6 +50,17 @@ class User < ActiveRecord::Base
   def self.find_or_create_by_oauth(oauth)
     User.find_or_create_by(provider: oauth[:provider], uid: oauth[:uid].to_s) do |user|
       user.oauth = oauth
+    end
+  end
+
+  def self.find_or_create_by_phone_number(phone_number, user_attributes = {})
+    User.find_or_create_by(phone_number: phone_number) do |user|
+      user.email = user_attributes[:email]
+      user.first_name = user_attributes[:first_name]
+      user.last_name = user_attributes[:last_name]
+      tmp_pwd = SecureRandom.hex
+      user.password = tmp_pwd
+      user.password_confirmation = tmp_pwd
     end
   end
 
@@ -78,6 +88,14 @@ class User < ActiveRecord::Base
 
   def unfollow!(other_user)
     relationships.find_by(followed_id: other_user.id).destroy
+  end
+
+  def add_as_contact(contact)
+    contacts << contact unless is_a_contact?(contact)
+  end
+
+  def is_a_contact?(contact)
+    contacts.exists?(contact)
   end
 
   protected
