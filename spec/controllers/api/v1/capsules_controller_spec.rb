@@ -33,6 +33,25 @@ describe API::V1::CapsulesController do
         expect(assigns(:capsule)).to be_a_new(Capsule)
       end
     end
+
+    describe 'with recipients' do
+      before do
+        recipients_attributes = [{ phone_number: '2145551212', email: 'bobdylan@gmail.com' }]
+        post :create, { capsule: valid_attributes.merge({user_id: @user.id, recipients_attributes: recipients_attributes}) }
+      end
+
+      it "creates a user" do
+        expect(User.exists?(phone_number: '2145551212')).to be_true
+      end
+
+      it "adds user as a contact" do
+        expect(@user.contacts.exists?(phone_number: '2145551212')).to be_true
+      end
+
+      it "adds user as a recipient" do
+        expect(assigns(:capsule).recipients.exists?(phone_number: '2145551212')).to be_true
+      end
+    end
   end
 
   describe 'GET "explorer"' do
