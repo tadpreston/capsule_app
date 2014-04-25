@@ -193,4 +193,22 @@ describe API::V1::UsersController do
       expect(assigns(:users)).to include(other_user)
     end
   end
+
+  describe "GET 'contacts'" do
+    before do
+      @user = FactoryGirl.create(:user)
+      @device = FactoryGirl.create(:device, user: @user)
+      @contact = FactoryGirl.create(:user)
+      @user.contacts << @contact
+      @request.env['HTTP_AUTHORIZATION'] = token
+      @request.env["CONTENT_TYPE"] = "application/json"
+      @request.env['HTTP_CAPSULE_AUTH_TOKEN'] = @device.auth_token
+    end
+
+    it "assigns contacts to @contacts" do
+      get :contacts
+      expect(assigns(:contacts)).to_not be_nil
+      expect(assigns(:contacts)).to_not be_empty
+    end
+  end
 end

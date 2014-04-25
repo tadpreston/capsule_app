@@ -18,7 +18,7 @@ module API
       end
 
       def create
-        @capsule = Capsule.new(capsule_params)
+        @capsule = current_user.capsules.build(capsule_params)
         unless @capsule.save
           render :create, status: 422
         end
@@ -55,7 +55,7 @@ module API
         end
 
         def capsule_params
-          params.required(:capsule).permit(:user_id, :title, { location: [:latitude, :longitude, :radius] }, :status, :payload_type, :promotional_state, :passcode, :visibility,
+          params.required(:capsule).permit(:user_id, :title, { location: [:latitude, :longitude, :radius] }, :status, :payload_type, :promotional_state, :passcode, :visibility, :thumbnail,
                                            comments_attributes: [:user_id, :body],
                                            assets_attributes: [:media_type, :resource, :metadata],
                                            recipients_attributes: [:phone_number, :email, :first_name, :last_name])

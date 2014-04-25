@@ -36,6 +36,10 @@ module API
         @users = @user.followers
       end
 
+      def contacts
+        @contacts = current_user.contacts
+      end
+
       private
 
         def set_user

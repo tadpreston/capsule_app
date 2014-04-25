@@ -21,6 +21,9 @@ Rails.application.routes.draw do
         member do
           get :following, :followers
         end
+        collection do
+          get :contacts
+        end
         resources :capsules, only: [:index]
       end
       resources :capsules do
