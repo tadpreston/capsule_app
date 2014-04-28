@@ -2,7 +2,7 @@ module API
   module V1
 
     class UsersController < API::V1::ApplicationController
-      before_action :set_user, only: [:show, :update, :following, :followers]
+      before_action :set_user, only: [:show, :update, :following, :followers, :contacts]
       skip_before_action :authorize_auth_token, only: [:index, :show, :create, :following, :followers]
 
       def index
@@ -37,7 +37,7 @@ module API
       end
 
       def contacts
-        @contacts = current_user.contacts
+        @contacts = @user.contacts
       end
 
       private

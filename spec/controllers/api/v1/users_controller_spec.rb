@@ -206,7 +206,7 @@ describe API::V1::UsersController do
     end
 
     it "assigns contacts to @contacts" do
-      get :contacts
+      get :contacts, id: @user.to_param
       expect(assigns(:contacts)).to_not be_nil
       expect(assigns(:contacts)).to_not be_empty
     end
