@@ -4,7 +4,7 @@ module API
     class RelationshipsController < API::V1::ApplicationController
 
       def create
-        @follow_user = User.find(params[:relationship][:followed_id])
+        @follow_user = User.find(params[:relationship][:follow_id])
         current_user.follow!(@follow_user)
       end
 

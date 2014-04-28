@@ -13,7 +13,7 @@ describe API::V1::RelationshipsController do
   describe "POST 'create'" do
     it 'creates a relationship record' do
       expect {
-        post :create, { relationship: { followed_id: @other_user.id } }
+        post :create, { relationship: { follow_id: @other_user.id } }
       }.to change(Relationship, :count).by(1)
       expect(@user).to be_following(@other_user)
     end
