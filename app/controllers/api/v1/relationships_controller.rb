@@ -11,6 +11,7 @@ module API
       def destroy
         @follow_user = User.find(params[:id])
         current_user.unfollow!(@follow_user)
+        render json: { status: 'Success' }
       end
     end
   end
