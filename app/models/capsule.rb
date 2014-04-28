@@ -17,6 +17,7 @@
 #  longitude         :decimal(, )
 #  payload_type      :integer
 #  promotional_state :integer
+#  relative_location :hstore
 #
 
 class Capsule < ActiveRecord::Base

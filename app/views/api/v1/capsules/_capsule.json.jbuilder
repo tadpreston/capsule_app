@@ -17,6 +17,7 @@ end
 json.title capsule.title
 json.set! :hash_tags, capsule.hash_tags.split(' ')
 json.location capsule.location
+json.relative_location capsule.relative_location
 json.payload_type capsule.payload_type || 0
 json.status capsule.status
 json.promotional_state capsule.promotional_state || 0
