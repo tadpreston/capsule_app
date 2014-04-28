@@ -8,6 +8,7 @@ gem "unicorn", "~> 4.8.2"
 gem "haml-rails", "~> 0.5.3"
 gem "bootstrap-sass", "~> 3.1.1.0"
 gem 'pg_search', '~> 0.7.3'
+gem 'sidekiq', '~> 3.0.0'
 
 gem 'sass-rails', '~> 4.0.3'
 #gem 'uglifier', '>= 1.3.0'
@@ -15,6 +16,8 @@ gem 'uglifier', '~> 2.5.0'
 gem 'coffee-rails', '~> 4.0.1'
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer',  platforms: :ruby
+
+gem 'sinatra', '~> 1.4.5'
 
 gem 'jquery-rails', '~> 3.1.0'
 gem 'turbolinks', '~> 2.2.2'

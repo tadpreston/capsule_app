@@ -26,6 +26,7 @@
 class User < ActiveRecord::Base
   before_save UserCallbacks
   before_validation UserCallbacks
+  after_commit UserCallbacks
 
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   validates :email, presence: true, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }, if: "oauth.nil?"

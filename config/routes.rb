@@ -1,13 +1,9 @@
 Rails.application.routes.draw do
-  get 'relationships/create'
-
-  get 'relationships/destroy'
+  require 'sidekiq/web'
+  mount Sidekiq::Web => '/sidekiq'
 
   get 'home/index'
-
   root 'home#index'
-
-
   resources :users
 
 # API Routes

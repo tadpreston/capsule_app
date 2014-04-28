@@ -21,9 +21,14 @@ class UserCallbacks
         tmp_pwd = SecureRandom.hex
         user.password = tmp_pwd
         user.password_confirmation = tmp_pwd
+
       else
         user.provider = "capsule"
       end
     end
+  end
+
+  def self.after_commit(user)
+    FriendsWorker.perform_async(user.id)
   end
 end
