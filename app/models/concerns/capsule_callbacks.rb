@@ -10,7 +10,7 @@ class CapsuleCallbacks
     capsule.recipients.clear if capsule.recipients.empty?
 
     unless capsule.recipients_attributes.nil?
-      recipients = capsule.recipients_attributes
+#     recipients = capsule.recipients_attributes
 
       recipients.each do |recipient|
         user = User.find_or_create_by_phone_number(recipient[:phone_number], recipient)
