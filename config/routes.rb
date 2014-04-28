@@ -17,10 +17,8 @@ Rails.application.routes.draw do
         member do
           get :following, :followers
         end
-        collection do
-          get :contacts
-        end
         resources :capsules, only: [:index]
+        resources :contacts, only: [:index, :create, :update, :destroy]
       end
       resources :capsules do
         collection do
@@ -28,7 +26,7 @@ Rails.application.routes.draw do
           get 'locationtags'
           get 'watched'
         end
-        resource :comments, only: [:create, :destroy]
+        resources :comments, only: [:create, :destroy]
       end
       resources :relationships, only: [:create, :destroy]
     end

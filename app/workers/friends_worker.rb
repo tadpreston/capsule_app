@@ -5,7 +5,7 @@ class FriendsWorker
     begin
       user = User.find user_id
 
-      if user.oauth["friends"]
+      if user.oauth && user.oauth["friends"]
         friends = eval(user.oauth["friends"])
         ids = friends.collect { |f| f["id"] }.sort
         User.where(uid: ids).find_each do |u|
