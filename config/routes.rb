@@ -18,7 +18,7 @@ Rails.application.routes.draw do
           get :following, :followers
         end
         resources :capsules, only: [:index]
-        resources :contacts, only: [:index, :create, :update, :destroy]
+        resources :contacts, only: [:index, :create, :destroy]
       end
       resources :capsules do
         collection do

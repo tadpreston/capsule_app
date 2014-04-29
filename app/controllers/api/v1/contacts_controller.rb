@@ -10,19 +10,12 @@ module API
       end
 
       def create
-        @contact = User.new(contact_params)
-        tmp_pwd = SecureRandom.hex
-        @contact.password = tmp_pwd
-        @contact.password_confirmation = tmp_pwd
-        if @contact.save
-          @user.contacts << @contact
+        @contact = User.find_or_create_by_phone_number(contact_params[:phone_number], contact_params)
+        if @contact.persisted?
+          @user.add_as_contact(@contact)
         else
           render :create, status: 422
         end
-      end
-
-      def update
-        render :update, status: 422 unless @contact.update_attributes(contact_params)
       end
 
       def destroy
@@ -41,7 +34,7 @@ module API
         end
 
         def contact_params
-          params.required(:contact).permit(:email, :username, :first_name, :last_name, :phone_number, :location)
+          params.required(:contact).permit(:id, :email, :username, :first_name, :last_name, :phone_number, :location, :uid)
         end
     end
 
