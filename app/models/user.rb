@@ -104,10 +104,10 @@ class User < ActiveRecord::Base
   end
 
   def send_confirmation_email
-    generate_column(:confirmation_token)
-    confirmation_sent_at = Time.now
+    generate_token(:confirmation_token)
+    self.confirmation_sent_at = Time.now
     save!
-#   UserMailer.email_confirmation(self).deliver
+    UserMailer.email_confirmation(self).deliver
   end
 
   protected
@@ -122,8 +122,8 @@ class User < ActiveRecord::Base
 
     def generate_token(column)
       begin
-        self[column] = SecureRandom.urlsafe_base64(32)
-      end while User.exists?(column => self[:column])
+        self[column] = SecureRandom.urlsafe_base64
+      end while User.exists?(column => self[column])
     end
 
 end

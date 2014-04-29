@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   require 'sidekiq/web'
   mount Sidekiq::Web => '/sidekiq'
 
+  get 'confirmations', to: 'confirmations#email', as: :confirmation
   get 'home/index'
   root 'home#index'
   resources :users

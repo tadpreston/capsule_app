@@ -355,4 +355,20 @@ describe User do
       expect(@user.is_a_contact?(@contact)).to be_true
     end
   end
+
+  describe "send_confirmation_email method" do
+    before { @user.save }
+
+    it "generates a confirmation token" do
+      UserMailer.stub(:email_confirmation).and_return(double("Mailer", deliver: true))
+      @user.send_confirmation_email
+      expect(@user.confirmation_token).to_not be_nil
+      expect(@user.confirmation_sent_at).to_not be_nil
+    end
+
+    it "sends an email" do
+      UserMailer.should_receive(:email_confirmation).and_return(double("Mailer", deliver: true))
+      @user.send_confirmation_email
+    end
+  end
 end
