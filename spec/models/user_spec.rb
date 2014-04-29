@@ -2,25 +2,29 @@
 #
 # Table name: users
 #
-#  id              :integer          not null, primary key
-#  public_id       :uuid
-#  email           :string(255)
-#  username        :string(255)
-#  first_name      :string(255)
-#  last_name       :string(255)
-#  phone_number    :string(255)
-#  password_digest :string(255)
-#  location        :string(255)
-#  provider        :string(255)
-#  uid             :string(255)
-#  authorized_at   :datetime
-#  settings        :hstore
-#  locale          :string(255)
-#  time_zone       :string(255)
-#  oauth           :hstore
-#  created_at      :datetime
-#  updated_at      :datetime
-#  profile_image   :string(255)
+#  id                   :integer          not null, primary key
+#  public_id            :uuid
+#  email                :string(255)
+#  username             :string(255)
+#  first_name           :string(255)
+#  last_name            :string(255)
+#  phone_number         :string(255)
+#  password_digest      :string(255)
+#  location             :string(255)
+#  provider             :string(255)
+#  uid                  :string(255)
+#  authorized_at        :datetime
+#  settings             :hstore
+#  locale               :string(255)
+#  time_zone            :string(255)
+#  oauth                :hstore
+#  created_at           :datetime
+#  updated_at           :datetime
+#  profile_image        :string(255)
+#  confirmation_token   :string(255)
+#  confirmed_at         :datetime
+#  confirmation_sent_at :datetime
+#  unconfirmed_email    :string(255)
 #
 
 require 'spec_helper'
