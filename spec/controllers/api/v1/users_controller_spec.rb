@@ -97,10 +97,6 @@ describe API::V1::UsersController do
         }.to change(Device, :count).by(1)
       end
 
-      it 'sends out a confirmation email' do
-        UserMailer.should_receive(:email_confirmation).and_return(double("Mailer", deliver: true))
-        post 'create', { user: valid_attributes }
-      end
     end
 
     describe 'with invalid params' do
@@ -160,6 +156,35 @@ describe API::V1::UsersController do
           User.any_instance.stub(:update_attributes).and_return(false)
           patch :update, id: @user.to_param, user: { first_name: '' }
           assigns(:user).should eq(@user)
+        end
+      end
+
+      describe "with a different email" do
+        it "updates the unconfirmed_email and the email columns" do
+          User.any_instance.stub(:send_confirmation_email)
+          original_email = @user.email
+          patch :update, id: @user.to_param, user: { email: 'anew@email.com' }
+          expect(assigns(:user).unconfirmed_email).to eq('anew@email.com')
+          expect(assigns(:user).email).to eq(original_email)
+        end
+
+        it "sends a confirmation email" do
+          User.any_instance.should_receive(:send_confirmation_email)
+          patch :update, id: @user.to_param, user: { email: 'anew@email.com' }
+        end
+      end
+
+      describe "with the same email" do
+        it "sends a confirmation if the email param is present" do
+          User.any_instance.should_receive(:send_confirmation_email)
+          patch :update, id: @user.to_param, user: { email: @user.email }
+        end
+      end
+
+      describe "without an email present" do
+        it "does not send out an email" do
+          User.any_instance.should_not_receive(:send_confirmation_email)
+          patch :update, id: @user.to_param, user: { last_name: 'something' }
         end
       end
     end

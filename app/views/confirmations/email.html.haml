@@ -3,4 +3,7 @@
     %h1 Capsule
 
     .container
-      Your email has been confirmed!
+      - if @user
+        Your email has been confirmed!
+      - else
+        Could not find the the token

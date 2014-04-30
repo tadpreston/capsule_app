@@ -33,7 +33,7 @@ class User < ActiveRecord::Base
   before_validation UserCallbacks, unless: Proc.new { |user| user.persisted? }
   after_commit UserCallbacks
   after_create UserCallbacks, unless: Proc.new { |user| user.provider == 'contact' }
-  before_update UserCallbacks, if: Proc.new { |user| user.email_changed? }
+# before_update UserCallbacks, if: Proc.new { |user| user.email_changed? }
 
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   validates :email, presence: true, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }, if: "oauth.nil?"
@@ -107,17 +107,18 @@ class User < ActiveRecord::Base
     contacts.exists?(contact)
   end
 
-  def send_confirmation_email(save_this = false)
+  def send_confirmation_email
     generate_token(:confirmation_token)
     self.confirmation_sent_at = Time.now
-    save! if save_this
+    self.confirmed_at = nil
+    save!
     UserMailer.email_confirmation(self).deliver
   end
 
   def email_confirmed!
     self.confirmed_at = Time.now
     save!
-    update_column(:email, self.unconfirmed_email)
+    update_columns(email: self.unconfirmed_email, unconfirmed_email: nil)
   end
 
   def confirmed?

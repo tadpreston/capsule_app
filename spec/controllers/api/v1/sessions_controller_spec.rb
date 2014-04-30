@@ -121,7 +121,7 @@ describe API::V1::SessionsController do
         end
 
         it 'sends a confirmation email' do
-          UserMailer.should_receive(:email_confirmation).and_return(double("Mailer", deliver: true))
+          User.any_instance.should_receive(:send_confirmation_email)
           post :create, { oauth: @oauth_attrs }
         end
       end

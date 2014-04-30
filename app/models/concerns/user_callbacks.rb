@@ -31,9 +31,4 @@ class UserCallbacks
     user.send_confirmation_email
   end
 
-  def self.before_update(user)
-    user.send_confirmation_email
-    user.unconfirmed_email = user.email
-    user.email = user.email_was unless user.email_was.blank?
-  end
 end

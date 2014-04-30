@@ -23,8 +23,14 @@ module API
       end
 
       def update
+        original_email = @user.email
         unless @user.update_attributes(user_params)
           render :update, status: 422
+        else
+          if user_params[:email]
+            @user.send_confirmation_email
+            @user.update_columns(unconfirmed_email: user_params[:email], email: original_email)
+          end
         end
       end
 
