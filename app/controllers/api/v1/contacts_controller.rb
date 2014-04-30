@@ -10,7 +10,7 @@ module API
       end
 
       def create
-        @contact = User.find_or_create_by_phone_number(contact_params[:phone_number], contact_params)
+        @contact = User.find_or_create_by_phone_number(contact_params[:phone_number], contact_params.merge(provider: 'contact'))
         if @contact.persisted?
           @user.add_as_contact(@contact)
         else
