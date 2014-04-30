@@ -57,7 +57,7 @@ module API
         end
 
         def user_params
-          params.required(:user).permit(:email, :username, :first_name, :last_name, :location, :password, :password_confirmation, :time_zone, :tutorial_progress,
+          params.required(:user).permit(:email, :username, :first_name, :last_name, :location, :password, :password_confirmation, :time_zone, :tutorial_progress, :phone_number,
                                         oauth: [
                                           { location: [:id, :name] }, { friends: [:name, :id, :username, :first_name, :last_name] }, :birthday, :quotes, :verified, :work, :education,
                                           :timezone, :updated_time, :name, :email, :birthdate, :locale, :first_name, :username, :id, :provider, :uid,

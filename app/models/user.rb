@@ -112,7 +112,7 @@ class User < ActiveRecord::Base
     self.confirmation_sent_at = Time.now
     self.confirmed_at = nil
     save!
-    UserMailer.email_confirmation(self).deliver
+    UserMailer.delay.email_confirmation(self)
   end
 
   def email_confirmed!
