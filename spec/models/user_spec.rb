@@ -26,6 +26,8 @@
 #  confirmation_sent_at :datetime
 #  unconfirmed_email    :string(255)
 #  tutorial_progress    :integer          default(0)
+#  watched              :boolean          default(FALSE)
+#  incognito            :boolean          default(FALSE)
 #
 
 require 'spec_helper'
