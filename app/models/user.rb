@@ -112,6 +112,15 @@ class User < ActiveRecord::Base
     UserMailer.email_confirmation(self).deliver
   end
 
+  def email_confirmed!
+    self.confirmed_at = Time.now
+    save!
+  end
+
+  def confirmed?
+    self.confirmed_at
+  end
+
   protected
 
     def uid_and_provider_are_unique

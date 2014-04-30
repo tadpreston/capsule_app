@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'confirmations/email'
+
   require 'sidekiq/web'
   mount Sidekiq::Web => '/sidekiq'
 

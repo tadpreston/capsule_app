@@ -372,4 +372,26 @@ describe User do
       @user.send_confirmation_email
     end
   end
+
+  describe "confirmed? method" do
+    before { @user.save }
+
+    it "is not confirmed" do
+      expect(@user).to_not be_confirmed
+    end
+
+    it "is confirmed" do
+      @user.confirmed_at = Time.now
+      expect(@user).to be_confirmed
+    end
+  end
+
+  describe "email_confirmed method" do
+    before { @user.save }
+
+    it "sets the confirmed_at date" do
+      @user.email_confirmed!
+      expect(@user).to be_confirmed
+    end
+  end
 end
