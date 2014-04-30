@@ -13,7 +13,7 @@ module API
       end
 
       def create
-        @user = User.new(user_params)
+        @user = User.new(user_params.merge(provider: 'capsule'))
         if @user.save
           @user.reload
           @device = @user.devices.create(remote_ip: request.remote_ip, user_agent: request.user_agent, last_sign_in_at: Time.now)

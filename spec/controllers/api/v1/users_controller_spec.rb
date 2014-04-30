@@ -96,6 +96,11 @@ describe API::V1::UsersController do
           post 'create', { user: valid_attributes }
         }.to change(Device, :count).by(1)
       end
+
+      it 'sends out a confirmation email' do
+        UserMailer.should_receive(:email_confirmation).and_return(double("Mailer", deliver: true))
+        post 'create', { user: valid_attributes }
+      end
     end
 
     describe 'with invalid params' do

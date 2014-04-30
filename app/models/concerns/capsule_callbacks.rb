@@ -13,7 +13,7 @@ class CapsuleCallbacks
      recipients = capsule.recipients_attributes
 
       recipients.each do |recipient|
-        user = User.find_or_create_by_phone_number(recipient[:phone_number], recipient)
+        user = User.find_or_create_by_phone_number(recipient[:phone_number], recipient.merge(provider: 'contact'))
         capsule.add_as_recipient user
         capsule.user.add_as_contact user
       end

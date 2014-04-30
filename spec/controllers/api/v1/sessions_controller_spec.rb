@@ -109,12 +109,20 @@ describe API::V1::SessionsController do
       end
 
       describe "user does not exist" do
+        before do
+          @oauth_attrs = oauth_attributes
+          @oauth_attrs[:uid] = '4567890'
+        end
+
         it 'creates user' do
-          oauth_attrs = oauth_attributes
-          oauth_attrs[:uid] = '4567890'
           expect {
-            post :create, { oauth: oauth_attrs }
+            post :create, { oauth: @oauth_attrs }
           }.to change(User, :count).by(1)
+        end
+
+        it 'sends a confirmation email' do
+          UserMailer.should_receive(:email_confirmation).and_return(double("Mailer", deliver: true))
+          post :create, { oauth: @oauth_attrs }
         end
       end
     end

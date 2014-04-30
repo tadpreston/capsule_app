@@ -51,6 +51,8 @@ Spork.prefork do
     config.include Capybara::DSL
 
     config.include Requests::JsonHelpers, type: :request
+
+    config.after(:each) { ActionMailer::Base.deliveries.clear }
   end
 end
 

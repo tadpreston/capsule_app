@@ -5,4 +5,4 @@
   You can confirm your account email through the link below:
 
 %p
-  = link_to 'Confirm my account', confirmation_url(conf_token: @user.confirmation_token)
+  = link_to 'Confirm my account', confirmation_url(conf_tken: @user.confirmation_token, host: ENV["URL_HOST"])

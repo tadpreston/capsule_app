@@ -63,6 +63,7 @@ describe User do
         uid: 18554325,
         id: 18554325,
         lang: "en",
+        email: 'joe@bloggs.com',
         geo_enabled: false,
         time_zone: "Mountain Time (US & Canada)",
         profile_image_url: "http:\/\/pbs.twimg.com\/profile_images\/69339932\/P1000115_normal.jpg",
