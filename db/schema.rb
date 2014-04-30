@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140430213942) do
+ActiveRecord::Schema.define(version: 20140430215108) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,6 +45,8 @@ ActiveRecord::Schema.define(version: 20140430213942) do
     t.integer  "payload_type"
     t.integer  "promotional_state"
     t.hstore   "relative_location"
+    t.boolean  "watched"
+    t.boolean  "incognito"
   end
 
   add_index "capsules", ["latitude", "longitude"], name: "index_capsules_on_latitude_and_longitude", using: :btree
@@ -143,8 +145,6 @@ ActiveRecord::Schema.define(version: 20140430213942) do
     t.datetime "confirmation_sent_at"
     t.string   "unconfirmed_email"
     t.integer  "tutorial_progress",    default: 0
-    t.boolean  "watched",              default: false
-    t.boolean  "incognito",            default: false
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", using: :btree

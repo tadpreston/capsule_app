@@ -18,6 +18,8 @@
 #  payload_type      :integer
 #  promotional_state :integer
 #  relative_location :hstore
+#  watched           :boolean
+#  incognito         :boolean
 #
 
 require 'spec_helper'
@@ -202,6 +204,28 @@ describe Capsule do
     it "returns true" do
       @capsule.recipients << @recipient
       expect(@capsule.is_a_recipient?(@recipient)).to be_true
+    end
+  end
+
+  describe "is_watched? method" do
+    it "returns false" do
+      expect(@capsule).to_not be_watched
+    end
+
+    it "returns true" do
+      @capsule.watched = true
+      expect(@capsule).to be_watched
+    end
+  end
+
+  describe "is_incognito? method" do
+    it "returns false" do
+      expect(@capsule).to_not be_incognito
+    end
+
+    it "returns true" do
+      @capsule.incognito = true
+      expect(@capsule).to be_incognito
     end
   end
 end

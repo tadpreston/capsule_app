@@ -41,5 +41,7 @@ json.recipients capsule.recipients do |recipient|
   json.uid recipient.uid
   json.profile_image recipient.profile_image
 end
+json.is_watched capsule.watched || false
+json.is_incognito capsule.incognito || false
 json.created_at capsule.created_at
 json.updated_at capsule.updated_at
