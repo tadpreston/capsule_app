@@ -12,4 +12,9 @@ json.user do
   json.provider user.provider || ''
   json.uid user.uid || ''
   json.profile_image user.profile_image || ''
+  json.tutorial_progress user.tutorial_progress
+  json.settings user.settings
+  json.email_confirmed (user.confirmed? ? true : false)
+  json.created_at user.created_at
+  json.updated_at user.updated_at
 end
