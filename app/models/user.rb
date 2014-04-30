@@ -117,6 +117,7 @@ class User < ActiveRecord::Base
   def email_confirmed!
     self.confirmed_at = Time.now
     save!
+    update_column(:email, self.unconfirmed_email)
   end
 
   def confirmed?

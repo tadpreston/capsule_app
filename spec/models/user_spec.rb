@@ -394,5 +394,11 @@ describe User do
       @user.email_confirmed!
       expect(@user).to be_confirmed
     end
+
+    it "sets the email to the unconfirmed_email" do
+      @user.update_columns(unconfirmed_email: 'anewemail@test.com')
+      @user.email_confirmed!
+      expect(@user.email).to eq('anewemail@test.com')
+    end
   end
 end
