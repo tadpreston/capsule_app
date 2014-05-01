@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'spork'
+require 'sidekiq/testing'
 #uncomment the following line to use spork with the debugger
 #require 'spork/ext/ruby-debug'
 
@@ -53,6 +54,22 @@ Spork.prefork do
     config.include Requests::JsonHelpers, type: :request
 
     config.after(:each) { ActionMailer::Base.deliveries.clear }
+
+    config.before(:each) do |example_method|
+      Sidekiq::Worker.clear_all
+
+      example = example_method.example
+
+      if example.metadata[:sidekiq] == :fake
+        Sidekiq::Testing.fake!
+      elsif example.metadata[:sidekiq] == :inline
+        Sidekiq::Testing.inline!
+      elsif example.metadata[:type] == :acceptance
+        Sidekiq::Testing.inline!
+      else
+        Sidekiq::Testing.fake!
+      end
+    end
   end
 end
 
