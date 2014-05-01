@@ -112,7 +112,7 @@ class User < ActiveRecord::Base
     self.confirmation_sent_at = Time.now
     self.confirmed_at = nil
     save!
-    UserMailer.delay.email_confirmation(self)
+    UserMailerWorker.perform_async(self.id, :email_confirmation)
   end
 
   def email_confirmed!
