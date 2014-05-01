@@ -26,6 +26,7 @@
 #  confirmation_sent_at :datetime
 #  unconfirmed_email    :string(255)
 #  tutorial_progress    :integer          default(0)
+#  pair_token           :string(255)
 #
 
 class User < ActiveRecord::Base
