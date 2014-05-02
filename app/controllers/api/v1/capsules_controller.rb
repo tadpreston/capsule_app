@@ -44,6 +44,10 @@ module API
         @capsule_count = @capsules.count(:all)
       end
 
+      def forme
+        @capsules = current_user.received_capsules
+      end
+
       private
 
         def set_capsule

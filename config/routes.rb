@@ -29,6 +29,7 @@ Rails.application.routes.draw do
           get 'explorer'
           get 'locationtags'
           get 'watched'
+          get 'forme'
         end
         resources :comments, only: [:create, :destroy]
       end

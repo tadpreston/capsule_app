@@ -159,4 +159,22 @@ describe API::V1::CapsulesController do
       end
     end
   end
+
+  describe 'GET "forme"' do
+    before do
+      @capsule_list = FactoryGirl.create_list(:capsule, 3)
+      @capsule_list.each { |c| c.recipients << @user }
+    end
+
+    it "assigns the capsules to @capsules" do
+      get :forme
+      expect(assigns(:capsules)).to_not be_nil
+    end
+
+    it "returns capsules for the current user" do
+      get :forme
+      expect(assigns(:capsules).size).to eq(@capsule_list.size)
+      @capsule_list.each { |capsule| expect(assigns(:capsules)).to include(capsule) }
+    end
+  end
 end
