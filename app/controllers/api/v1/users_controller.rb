@@ -3,7 +3,7 @@ module API
 
     class UsersController < API::V1::ApplicationController
       before_action :set_user, only: [:show, :update, :following, :followers, :contacts]
-      skip_before_action :authorize_auth_token, only: [:index, :show, :create, :following, :followers]
+      skip_before_action :authorize_auth_token, only: [:index, :show, :create, :following, :followers, :recipient]
 
       def index
         @users = User.all.order(:last_name)
@@ -44,6 +44,12 @@ module API
 
       def contacts
         @contacts = @user.contacts
+      end
+
+      def recipient
+        @user = User.find_by(recipient_token: params[:id])
+        @user.update_attributes(user_params.merge(recipient_token: nil))
+        @user.send_confirmation_email
       end
 
       private

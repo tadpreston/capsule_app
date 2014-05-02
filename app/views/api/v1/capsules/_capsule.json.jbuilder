@@ -40,6 +40,7 @@ json.recipients capsule.recipients do |recipient|
   json.provider recipient.provider
   json.uid recipient.uid
   json.profile_image recipient.profile_image
+  json.recipient_token recipient.recipient_token
 end
 json.is_watched capsule.watched || false
 json.is_incognito capsule.incognito || false

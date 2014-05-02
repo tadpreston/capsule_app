@@ -19,6 +19,7 @@ Rails.application.routes.draw do
       resources :users, only: [:index, :create, :update, :show] do
         member do
           get :following, :followers
+          patch :recipient
         end
         resources :capsules, only: [:index]
         resources :contacts, only: [:index, :create, :destroy]

@@ -1,10 +1,24 @@
 class UserCallbacks
   def self.before_save(user)
+    create_oauth(user) if user.oauth
     user.email.downcase! if user.email
   end
 
   def self.before_validation(user)
-    if user.oauth
+    create_oauth(user) if user.oauth
+  end
+
+  def self.after_commit(user)
+    FriendsWorker.perform_async(user.id)
+  end
+
+  def self.after_create(user)
+    user.send_confirmation_email
+  end
+
+  private
+
+    def self.create_oauth(user)
       oauth_hash = OauthHash.new(user.oauth).to_json
 
       user.provider = oauth_hash["provider"]
@@ -21,14 +35,5 @@ class UserCallbacks
       user.password = tmp_pwd
       user.password_confirmation = tmp_pwd
     end
-  end
-
-  def self.after_commit(user)
-    FriendsWorker.perform_async(user.id)
-  end
-
-  def self.after_create(user)
-    user.send_confirmation_email
-  end
 
 end

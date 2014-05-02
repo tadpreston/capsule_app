@@ -224,4 +224,36 @@ describe API::V1::UsersController do
     end
   end
 
+  describe "PATCH 'recipient'" do
+    before do
+      @recipient = FactoryGirl.create(:user, recipient_token: '123456')
+      @request.env['HTTP_AUTHORIZATION'] = token
+      @request.env["CONTENT_TYPE"] = "application/json"
+    end
+
+    it 'removes the recipient_token' do
+      patch :recipient, id: @recipient.recipient_token, user: { first_name: '' }
+      expect(assigns(:user).recipient_token).to be_blank
+    end
+
+    it 'updates the recipient with the oauth params' do
+      patch :recipient, id: @recipient.recipient_token, user: { oauth: oauth_attributes }
+      expect(assigns(:user).email).to eq(oauth_attributes[:email])
+      expect(assigns(:user).full_name).to eq(oauth_attributes[:name])
+    end
+
+    it 'updates the recipient with capsule params' do
+      patch :recipient, id: @recipient.recipient_token, user: valid_attributes
+      expect(assigns(:user).email).to eq(valid_attributes[:email])
+      expect(assigns(:user).first_name).to eq(valid_attributes[:first_name])
+      expect(assigns(:user).last_name).to eq(valid_attributes[:last_name])
+    end
+
+
+    it 'sends a confirmation email' do
+      User.any_instance.should_receive(:send_confirmation_email)
+      patch :recipient, id: @recipient.recipient_token, user: valid_attributes
+    end
+  end
+
 end
