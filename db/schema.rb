@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140501200259) do
+ActiveRecord::Schema.define(version: 20140502142008) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -145,15 +145,15 @@ ActiveRecord::Schema.define(version: 20140501200259) do
     t.datetime "confirmation_sent_at"
     t.string   "unconfirmed_email"
     t.integer  "tutorial_progress",    default: 0
-    t.string   "pair_token"
+    t.string   "recipient_token"
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", using: :btree
   add_index "users", ["email"], name: "index_users_on_email", using: :btree
-  add_index "users", ["pair_token"], name: "index_users_on_pair_token", using: :btree
   add_index "users", ["phone_number"], name: "index_users_on_phone_number", using: :btree
   add_index "users", ["provider", "uid"], name: "index_users_on_provider_and_uid", unique: true, using: :btree
   add_index "users", ["public_id"], name: "index_users_on_public_id", unique: true, using: :btree
+  add_index "users", ["recipient_token"], name: "index_users_on_recipient_token", using: :btree
   add_index "users", ["uid"], name: "index_users_on_uid", using: :btree
   add_index "users", ["username"], name: "index_users_on_username", using: :btree
 

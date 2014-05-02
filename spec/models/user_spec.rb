@@ -26,7 +26,7 @@
 #  confirmation_sent_at :datetime
 #  unconfirmed_email    :string(255)
 #  tutorial_progress    :integer          default(0)
-#  pair_token           :string(255)
+#  recipient_token      :string(255)
 #
 
 require 'spec_helper'
@@ -423,9 +423,9 @@ describe User do
         expect(contact).to be_a(User)
       end
 
-      it "creates a pair_token" do
+      it "creates a recipient_token" do
         contact = User.find_or_create_recipient({phone_number: '9725551212'})
-        expect(contact.pair_token).to_not be_blank
+        expect(contact.recipient_token).to_not be_blank
       end
 
       it "creates a user with various values" do

@@ -26,7 +26,7 @@
 #  confirmation_sent_at :datetime
 #  unconfirmed_email    :string(255)
 #  tutorial_progress    :integer          default(0)
-#  pair_token           :string(255)
+#  recipient_token      :string(255)
 #
 
 class User < ActiveRecord::Base
@@ -78,7 +78,7 @@ class User < ActiveRecord::Base
     args = attributes[:email] ? { email: attributes[:email] } : { phone_number: attributes[:phone_number] }
 
     find_or_create_by(args) do |user|
-      user.instance_eval('generate_token(:pair_token)')
+      user.instance_eval('generate_token(:recipient_token)')
       tmp_pwd = SecureRandom.hex
       user.password = tmp_pwd
       user.password_confirmation = tmp_pwd
