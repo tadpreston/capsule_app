@@ -249,7 +249,6 @@ describe API::V1::UsersController do
       expect(assigns(:user).last_name).to eq(valid_attributes[:last_name])
     end
 
-
     it 'sends a confirmation email' do
       User.any_instance.should_receive(:send_confirmation_email)
       patch :recipient, id: @recipient.recipient_token, user: valid_attributes
