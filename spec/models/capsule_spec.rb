@@ -122,6 +122,7 @@ describe Capsule do
     end
   end
 
+  # TODO - Put the callback tests into another file
   describe 'after_save callback' do
     before do
       @user1 = FactoryGirl.create(:user, phone_number: '9725551212')

@@ -34,10 +34,10 @@ class User < ActiveRecord::Base
   before_validation UserCallbacks, unless: Proc.new { |user| user.persisted? }
   after_commit UserCallbacks
   after_create UserCallbacks, unless: Proc.new { |user| user.provider == 'contact' }
-# before_update UserCallbacks, if: Proc.new { |user| user.email_changed? }
 
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
-  validates :email, presence: true, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }, if: "oauth.nil?"
+# validates :email, presence: true, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }, if: "oauth.nil?"
+  validates :email, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }, unless: "email.blank?"
   validate :uid_and_provider_are_unique, if: "oauth"
   has_secure_password
   validates :password, confirmation: true, length: { minimum: 6 }, unless: Proc.new { |u| u.password.blank? && u.password_confirmation.blank? }
@@ -73,6 +73,30 @@ class User < ActiveRecord::Base
       user.password_confirmation = tmp_pwd
     end
   end
+
+  def self.find_or_create_recipient(attributes)
+    args = attributes[:email] ? { email: attributes[:email] } : { phone_number: attributes[:phone_number] }
+
+    find_or_create_by(args) do |user|
+      user.instance_eval('generate_token(:pair_token)')
+      tmp_pwd = SecureRandom.hex
+      user.password = tmp_pwd
+      user.password_confirmation = tmp_pwd
+      attributes.each do |key, val|
+        user[key] = val
+      end
+    end
+  end
+
+    def self.generate_token(column)
+      token = ''
+
+      begin
+        token = SecureRandom.urlsafe_base64
+      end while User.exists?(column => token)
+
+      token
+    end
 
   def authenticate(password = nil)
     if password

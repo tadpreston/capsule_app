@@ -122,10 +122,10 @@ describe User do
   # Validations
   it { should be_valid }
 
-  describe "when email is not present" do
-    before { @user.email = "" }
-    it { should_not be_valid }
-  end
+#  describe "when email is not present" do
+#    before { @user.email = "" }
+#    it { should_not be_valid }
+#  end
 
   describe "when email format is invalid" do
     it "should be invalid" do
@@ -400,6 +400,48 @@ describe User do
       @user.update_columns(unconfirmed_email: 'anewemail@test.com')
       @user.email_confirmed!
       expect(@user.email).to eq('anewemail@test.com')
+    end
+  end
+
+  describe "find_or_create_recipient class method" do
+    describe "contact does not exist" do
+      it "creates a user" do
+        expect {
+          User.find_or_create_recipient({email: 'testing@email.com'})
+        }.to change(User, :count).by(1)
+        expect {
+          User.find_or_create_recipient({phone_number: '9725551212'})
+        }.to change(User, :count).by(1)
+      end
+
+      it "persists the user" do
+        contact = User.find_or_create_recipient({email: 'testing@email.com'})
+        expect(contact).to be_persisted
+        expect(contact).to be_a(User)
+        contact = User.find_or_create_recipient({phone_number: '9725551212'})
+        expect(contact).to be_persisted
+        expect(contact).to be_a(User)
+      end
+
+      it "creates a pair_token" do
+        contact = User.find_or_create_recipient({phone_number: '9725551212'})
+        expect(contact.pair_token).to_not be_blank
+      end
+
+      it "creates a user with various values" do
+        contact = User.find_or_create_recipient({phone_number: '9725551212', email: 'testing@email.com', first_name: 'tester', last_name: 'person'})
+        expect(contact.email).to eq('testing@email.com')
+        expect(contact.first_name).to eq('tester')
+        expect(contact.last_name).to eq('person')
+        expect(contact.phone_number).to eq('9725551212')
+      end
+    end
+
+    describe "contact does exist" do
+      it "finds an existing user" do
+        user = FactoryGirl.create(:user)
+        expect(User.find_or_create_recipient({email: user.email})).to eq(user)
+      end
     end
   end
 end
