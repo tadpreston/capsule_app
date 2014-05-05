@@ -178,4 +178,17 @@ describe API::V1::CapsulesController do
     end
   end
 
+  describe 'GET "suggested"' do
+    it 'returns a collection of suggested capsules for the current user' do
+      FactoryGirl.create_list(:capsule, 3, latitude: 32.7801399, longitude: -96.80045101)
+      FactoryGirl.create_list(:capsule, 3, latitude: 32.7554883, longitude: -97.3307658)
+      outside_capsules = FactoryGirl.create_list(:capsule, 3, latitude: 35.2219971, latitude: -101.83129689)
+
+      get :suggested
+      expect(assigns(:capsules)).to_not be_nil
+      expect(assigns(:capsules).size).to eq(5)
+      outside_capsules.each { |capsule| expect(assigns(:capsules)).to include(capsule) }
+    end
+  end
+
 end

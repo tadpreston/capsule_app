@@ -48,6 +48,10 @@ module API
         @capsules = current_user.received_capsules
       end
 
+      def suggested
+        @capsules  = Capsule.find_in_rec({ lat: 33.2342834, long: -97.5861393 }, { lat: 1.4511453, long: 1.7329357 }).limit(5)
+      end
+
       private
 
         def set_capsule
