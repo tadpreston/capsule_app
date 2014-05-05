@@ -191,4 +191,13 @@ describe API::V1::CapsulesController do
     end
   end
 
+  describe 'GET "library"' do
+    it 'returns a collection of capsules for the library' do
+      get :library
+      expect(assigns(:watched_capsules)).to_not be_nil
+      expect(assigns(:capsules_forme)).to_not be_nil
+      expect(assigns(:suggested_capsules)).to_not be_nil
+    end
+  end
+
 end

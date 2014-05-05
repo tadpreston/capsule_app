@@ -3,7 +3,7 @@ module API
 
     class CapsulesController < API::V1::ApplicationController
       before_action :set_capsule, only: [:show, :update, :destroy]
-      skip_before_action :authorize_auth_token, only: [:index, :explorer, :locationtags]
+      skip_before_action :authorize_auth_token, only: [:index, :explorer, :locationtags, :library]
 
       def index
         @user = User.find params[:user_id]
@@ -50,6 +50,12 @@ module API
 
       def suggested
         @capsules  = Capsule.find_in_rec({ lat: 33.2342834, long: -97.5861393 }, { lat: 1.4511453, long: 1.7329357 }).includes(:user).limit(5)
+      end
+
+      def library
+        @watched_capsules = current_user.favorite_capsules.by_updated_at.includes(:user)
+        @capsules_forme = current_user.received_capsules.includes(:user)
+        @suggested_capsules = Capsule.find_in_rec({ lat: 33.2342834, long: -97.5861393 }, { lat: 1.4511453, long: 1.7329357 }).includes(:user).limit(5)  # This is temporary until a suggested algorithm is developed
       end
 
       private

@@ -31,6 +31,7 @@ Rails.application.routes.draw do
           get 'watched'
           get 'forme'
           get 'suggested'
+          get 'library'
         end
         resources :comments, only: [:create, :destroy]
       end
