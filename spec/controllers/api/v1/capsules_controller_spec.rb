@@ -177,4 +177,5 @@ describe API::V1::CapsulesController do
       @capsule_list.each { |capsule| expect(assigns(:capsules)).to include(capsule) }
     end
   end
+
 end
