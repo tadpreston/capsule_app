@@ -45,11 +45,11 @@ module API
       end
 
       def forme
-        @capsules = current_user.received_capsules
+        @capsules = current_user.received_capsules.includes(:user)
       end
 
       def suggested
-        @capsules  = Capsule.find_in_rec({ lat: 33.2342834, long: -97.5861393 }, { lat: 1.4511453, long: 1.7329357 }).limit(5)
+        @capsules  = Capsule.find_in_rec({ lat: 33.2342834, long: -97.5861393 }, { lat: 1.4511453, long: 1.7329357 }).includes(:user).limit(5)
       end
 
       private
