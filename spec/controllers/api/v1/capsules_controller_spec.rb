@@ -232,4 +232,25 @@ describe API::V1::CapsulesController do
       expect(assigns(:capsule)).to be_nil
     end
   end
+
+  describe "POST 'read'" do
+    before { @capsule = FactoryGirl.create(:capsule) }
+
+    it 'creates a capsule_read record' do
+      expect {
+        post :read, id: @capsule.to_param
+      }.to change(CapsuleRead, :count).by(1)
+    end
+  end
+
+  describe "DELETE 'unread'" do
+    before { @capsule = FactoryGirl.create(:capsule) }
+
+    it 'deletes a read mark for the current user' do
+      @capsule.read_by << @user
+      expect {
+        delete :unread, id: @capsule.to_param
+      }.to change(CapsuleRead, :count).by(-1)
+    end
+  end
 end

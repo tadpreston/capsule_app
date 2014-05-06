@@ -36,6 +36,8 @@ Rails.application.routes.draw do
         member do
           get 'replies'
           get 'replied_to'
+          post 'read'
+          delete 'unread'
         end
         resources :comments, only: [:create, :destroy]
       end
