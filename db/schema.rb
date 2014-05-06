@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140506152359) do
+ActiveRecord::Schema.define(version: 20140506181054) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -58,6 +58,7 @@ ActiveRecord::Schema.define(version: 20140506152359) do
     t.boolean  "watched"
     t.boolean  "incognito"
     t.integer  "in_reply_to"
+    t.integer  "comments_count",    default: 0
   end
 
   add_index "capsules", ["in_reply_to"], name: "index_capsules_on_in_reply_to", using: :btree
@@ -158,6 +159,7 @@ ActiveRecord::Schema.define(version: 20140506152359) do
     t.string   "unconfirmed_email"
     t.integer  "tutorial_progress",    default: 0
     t.string   "recipient_token"
+    t.integer  "comments_count",       default: 0
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", using: :btree
