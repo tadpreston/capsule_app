@@ -21,6 +21,7 @@ class API::V1::ApplicationController < ActionController::Base
     def current_user
       @current_user ||= current_device.user if current_device
     end
+    helper_method :current_user
     helper_method :current_device
 
     def current_device

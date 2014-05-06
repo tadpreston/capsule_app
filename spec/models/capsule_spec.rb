@@ -234,4 +234,24 @@ describe Capsule do
       expect(@capsule).to be_incognito
     end
   end
+
+  describe "read_by? method" do
+    before do
+      @capsule.save
+      @user = FactoryGirl.create(:user)
+    end
+
+    it "returns false" do
+      expect(@capsule.read_by?(@user)).to be_false
+    end
+
+    it "returns true" do
+      @capsule.read_by << @user
+      expect(@capsule.read_by?(@user)).to be_true
+    end
+
+    it "returns false if user is nil" do
+      expect(@capsule.read_by?(nil)).to be_false
+    end
+  end
 end

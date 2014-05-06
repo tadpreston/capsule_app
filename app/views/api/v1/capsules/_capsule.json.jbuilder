@@ -44,5 +44,6 @@ json.recipients capsule.recipients do |recipient|
 end
 json.is_watched capsule.watched || false
 json.is_incognito capsule.incognito || false
+json.is_read capsule.read_by?(current_user)
 json.created_at capsule.created_at
 json.updated_at capsule.updated_at

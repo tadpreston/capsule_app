@@ -92,4 +92,8 @@ class Capsule < ActiveRecord::Base
   def is_a_recipient?(recipient)
     recipients.exists?(recipient)
   end
+
+  def read_by?(user)
+    read_by.exists?(user)
+  end
 end
