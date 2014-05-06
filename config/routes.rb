@@ -33,6 +33,10 @@ Rails.application.routes.draw do
           get 'suggested'
           get 'library'
         end
+        member do
+          get 'replies'
+          get 'replied_to'
+        end
         resources :comments, only: [:create, :destroy]
       end
       resources :relationships, only: [:create, :destroy]

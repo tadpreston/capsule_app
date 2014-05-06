@@ -39,6 +39,8 @@ class Capsule < ActiveRecord::Base
   has_many :assets, dependent: :destroy
   has_many :recipient_users, dependent: :destroy
   has_many :recipients, through: :recipient_users, source: :user
+  has_many :replies, class_name: "Capsule", foreign_key: "in_reply_to"
+  belongs_to :replied_to, class_name: "Capsule", foreign_key: "in_reply_to"
 
   scope :by_updated_at, -> { order(updated_at: :desc) }
 

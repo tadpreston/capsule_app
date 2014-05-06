@@ -200,4 +200,36 @@ describe API::V1::CapsulesController do
     end
   end
 
+  describe 'GET "replies"' do
+    before { @capsule = FactoryGirl.create(:capsule) }
+
+    it 'returns a collection of replied capsules' do
+      capsule_list = FactoryGirl.create_list(:capsule, 3, in_reply_to: @capsule.id)
+
+      get :replies, id: @capsule.to_param
+      expect(assigns(:capsules)).to_not be_nil
+      capsule_list.each { |capsule| expect(assigns(:capsules)).to include(capsule) }
+    end
+
+    it 'returns an empty collection' do
+      get :replies, id: @capsule.to_param
+      expect(assigns(:capsules)).to be_empty
+    end
+  end
+
+  describe "GET 'replied_to'" do
+    before { @capsule = FactoryGirl.create(:capsule) }
+
+    it 'returns the capsule that the current capsule replied to' do
+      reply_capsule = FactoryGirl.create(:capsule, in_reply_to: @capsule.id)
+      get :replied_to, id: reply_capsule.to_param
+      expect(assigns(:capsule)).to_not be_nil
+      expect(assigns(:capsule)).to eq(@capsule)
+    end
+
+    it 'returns nil if there is no replied_to' do
+      get :replied_to, id: @capsule.to_param
+      expect(assigns(:capsule)).to be_nil
+    end
+  end
 end

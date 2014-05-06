@@ -58,6 +58,16 @@ module API
         @suggested_capsules = Capsule.find_in_rec({ lat: 33.2342834, long: -97.5861393 }, { lat: 1.4511453, long: 1.7329357 }).includes(:user).limit(5)  # This is temporary until a suggested algorithm is developed
       end
 
+      def replies
+        capsule = Capsule.find params[:id]
+        @capsules = capsule.replies
+      end
+
+      def replied_to
+        capsule = Capsule.find params[:id]
+        @capsule = capsule.replied_to
+      end
+
       private
 
         def set_capsule
@@ -69,7 +79,7 @@ module API
         end
 
         def capsule_params
-          params.required(:capsule).permit(:user_id, :title, { location: [:latitude, :longitude, :radius] }, :status, :payload_type, :promotional_state, :passcode, :visibility, :thumbnail,
+          params.required(:capsule).permit(:user_id, :title, { location: [:latitude, :longitude, :radius] }, :status, :payload_type, :promotional_state, :passcode, :visibility, :thumbnail, :in_reply_to,
                                            { relative_location: [:radius] },
                                            comments_attributes: [:user_id, :body],
                                            assets_attributes: [:media_type, :resource, :metadata],

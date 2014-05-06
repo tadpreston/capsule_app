@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140502142008) do
+ActiveRecord::Schema.define(version: 20140505211139) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,8 +47,10 @@ ActiveRecord::Schema.define(version: 20140502142008) do
     t.hstore   "relative_location"
     t.boolean  "watched"
     t.boolean  "incognito"
+    t.integer  "in_reply_to"
   end
 
+  add_index "capsules", ["in_reply_to"], name: "index_capsules_on_in_reply_to", using: :btree
   add_index "capsules", ["latitude", "longitude"], name: "index_capsules_on_latitude_and_longitude", using: :btree
   add_index "capsules", ["latitude"], name: "index_capsules_on_latitude", using: :btree
   add_index "capsules", ["longitude"], name: "index_capsules_on_longitude", using: :btree
