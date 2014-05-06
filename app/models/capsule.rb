@@ -42,6 +42,8 @@ class Capsule < ActiveRecord::Base
   has_many :recipients, through: :recipient_users, source: :user
   has_many :replies, class_name: "Capsule", foreign_key: "in_reply_to"
   belongs_to :replied_to, class_name: "Capsule", foreign_key: "in_reply_to"
+  has_many :reads, class_name: 'CapsuleRead'
+  has_many :read_by, through: :reads, source: :user
 
   scope :by_updated_at, -> { order(updated_at: :desc) }
 

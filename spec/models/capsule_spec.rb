@@ -39,6 +39,8 @@ describe Capsule do
   it { should have_many(:recipients).through(:recipient_users) }
   it { should have_many(:replies) }
   it { should belong_to(:replied_to) }
+  it { should have_many(:reads) }
+  it { should have_many(:read_by).through(:reads) }
 
   it { should validate_presence_of(:title) }
 

@@ -118,6 +118,8 @@ describe User do
   it { should have_many(:received_capsules).through(:recipient_users) }
   it { should have_many(:contact_users) }
   it { should have_many(:contacts).through(:contact_users) }
+  it { should have_many(:reads) }
+  it { should have_many(:read_capsules).through(:reads) }
 
   # Validations
   it { should be_valid }
