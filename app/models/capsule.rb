@@ -20,6 +20,7 @@
 #  relative_location :hstore
 #  watched           :boolean
 #  incognito         :boolean
+#  in_reply_to       :integer
 #
 
 class Capsule < ActiveRecord::Base
