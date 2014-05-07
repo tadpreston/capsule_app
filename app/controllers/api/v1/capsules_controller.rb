@@ -81,7 +81,7 @@ module API
       end
 
       def loadtest
-        @capsules = Capsule.all.includes(:user)
+        @capsules = Capsule.all.includes(:user, :assets, :recipients)
       end
 
       private
