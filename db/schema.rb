@@ -11,11 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140506181054) do
+ActiveRecord::Schema.define(version: 20140507195950) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
+  enable_extension "pg_stat_statements"
   enable_extension "uuid-ossp"
 
   create_table "assets", force: true do |t|
@@ -55,7 +56,6 @@ ActiveRecord::Schema.define(version: 20140506181054) do
     t.integer  "payload_type"
     t.integer  "promotional_state"
     t.hstore   "relative_location"
-    t.boolean  "watched"
     t.boolean  "incognito"
     t.integer  "in_reply_to"
     t.integer  "comments_count",    default: 0

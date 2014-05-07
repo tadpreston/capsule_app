@@ -18,9 +18,9 @@
 #  payload_type      :integer
 #  promotional_state :integer
 #  relative_location :hstore
-#  watched           :boolean
 #  incognito         :boolean
 #  in_reply_to       :integer
+#  comments_count    :integer          default(0)
 #
 
 require 'spec_helper'

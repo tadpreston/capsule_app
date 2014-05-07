@@ -27,6 +27,7 @@
 #  unconfirmed_email    :string(255)
 #  tutorial_progress    :integer          default(0)
 #  recipient_token      :string(255)
+#  comments_count       :integer          default(0)
 #
 
 require 'spec_helper'
