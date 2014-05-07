@@ -18,6 +18,7 @@ gem 'coffee-rails', '~> 4.0.1'
 # gem 'therubyracer',  platforms: :ruby
 
 gem 'sinatra', '~> 1.4.5'
+gem 'dalli', '~> 2.7.1'
 
 gem 'jquery-rails', '~> 3.1.0'
 gem 'turbolinks', '~> 2.2.2'
