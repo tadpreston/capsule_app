@@ -17,7 +17,7 @@ envelope(json, :success) do
         json.status capsule.status
         json.promotional_state capsule.promotional_state || 0
         json.thumbnail capsule.thumbnail
-        json.set! :assets, capsule.assets
+#       json.set! :assets, capsule.assets
         json.start_date '2014-04-02T11:12:13'
         json.lock_question capsule.lock_question
         json.lock_answer capsule.lock_answer
