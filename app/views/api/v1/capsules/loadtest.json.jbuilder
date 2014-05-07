@@ -7,9 +7,9 @@ envelope(json, :success) do
         json.title capsule.title
         json.set! :hash_tags, capsule.hash_tags_array
         json.set! :creator do
-          json.id capsule.user.id
-          json.email capsule.user.email
-          json.full_name capsule.user_full_name
+#          json.id capsule.user.id
+#          json.email capsule.user.email
+#          json.full_name capsule.user_full_name
         end
       end
     end
