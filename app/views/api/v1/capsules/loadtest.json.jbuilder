@@ -23,7 +23,7 @@ envelope(json, :success) do
         json.lock_answer capsule.lock_answer
         json.is_watched capsule.watched || false
         json.is_incognito capsule.incognito || false
-        json.is_read capsule.read_by?(current_user)
+#       json.is_read capsule.read_by?(current_user)
         json.created_at capsule.created_at
         json.updated_at capsule.updated_at
       end
