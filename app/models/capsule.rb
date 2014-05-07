@@ -45,6 +45,8 @@ class Capsule < ActiveRecord::Base
   has_many :reads, class_name: 'CapsuleRead'
   has_many :read_by, through: :reads, source: :user
 
+  delegate :full_name, to: :user, prefix: true
+
   scope :by_updated_at, -> { order(updated_at: :desc) }
 
   pg_search_scope :search_by_hashtags, against: :hash_tags, using: { tsearch: { dictionary: "english" } }
@@ -95,5 +97,9 @@ class Capsule < ActiveRecord::Base
 
   def read_by?(user)
     read_by.exists?(user)
+  end
+
+  def hash_tags_array
+    self.hash_tags.split(' ')
   end
 end
