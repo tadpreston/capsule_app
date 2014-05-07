@@ -3,7 +3,7 @@ module API
 
     class CapsulesController < API::V1::ApplicationController
       before_action :set_capsule, only: [:show, :update, :destroy]
-      skip_before_action :authorize_auth_token, only: [:index, :explorer, :locationtags, :library, :read, :unread]
+      skip_before_action :authorize_auth_token, only: [:index, :explorer, :locationtags, :library, :read, :unread, :loadtest]
 
       def index
         @user = User.find params[:user_id]
@@ -78,6 +78,10 @@ module API
         capsule = Capsule.find params[:id]
         capsule.read_by.delete current_user
         render json: { status: 'Success' }
+      end
+
+      def loadtest
+        @capsules = Capsule.all.includes(:user)
       end
 
       private

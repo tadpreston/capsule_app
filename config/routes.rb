@@ -32,6 +32,7 @@ Rails.application.routes.draw do
           get 'forme'
           get 'suggested'
           get 'library'
+          get 'loadtest'
         end
         member do
           get 'replies'
