@@ -82,7 +82,7 @@ class Capsule < ActiveRecord::Base
   end
 
   def thumbnail
-    "http://res.cloudinary.com/demo/image/upload/w_100,h_100,c_thumb,g_face/butterfly.jpg"
+    "http://res.cloudinary.com/demo/image/upload/w_320,h_313,c_thumb,g_face/butterfly.jpg"
   end
 
   def recipients_attributes=(recipients)
