@@ -44,6 +44,8 @@ class Capsule < ActiveRecord::Base
   belongs_to :replied_to, class_name: "Capsule", foreign_key: "in_reply_to"
   has_many :reads, class_name: 'CapsuleRead'
   has_many :read_by, through: :reads, source: :user
+  has_many :capsule_watches
+  has_many :watchers, through: :capsule_watches, source: :user
 
   delegate :full_name, to: :user, prefix: true
 
@@ -97,6 +99,10 @@ class Capsule < ActiveRecord::Base
 
   def read_by?(user)
     read_by.exists?(user)
+  end
+
+  def watched_by?(user)
+    watchers.exists?(user)
   end
 
   def hash_tags_array

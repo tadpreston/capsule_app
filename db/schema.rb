@@ -11,12 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140507195950) do
+ActiveRecord::Schema.define(version: 20140507200831) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
-  enable_extension "pg_stat_statements"
   enable_extension "uuid-ossp"
 
   create_table "assets", force: true do |t|
@@ -39,6 +38,16 @@ ActiveRecord::Schema.define(version: 20140507195950) do
 
   add_index "capsule_reads", ["capsule_id"], name: "index_capsule_reads_on_capsule_id", using: :btree
   add_index "capsule_reads", ["user_id"], name: "index_capsule_reads_on_user_id", using: :btree
+
+  create_table "capsule_watches", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "capsule_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "capsule_watches", ["capsule_id"], name: "index_capsule_watches_on_capsule_id", using: :btree
+  add_index "capsule_watches", ["user_id"], name: "index_capsule_watches_on_user_id", using: :btree
 
   create_table "capsules", force: true do |t|
     t.integer  "user_id"

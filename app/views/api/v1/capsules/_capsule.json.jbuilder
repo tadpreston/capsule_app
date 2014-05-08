@@ -42,7 +42,7 @@ json.recipients capsule.recipients do |recipient|
   json.profile_image recipient.profile_image
   json.recipient_token recipient.recipient_token
 end
-json.is_watched capsule.watched || false
+json.is_watched capsule.watched_by?(current_user)
 json.is_incognito capsule.incognito || false
 json.is_read capsule.read_by?(current_user)
 json.created_at capsule.created_at

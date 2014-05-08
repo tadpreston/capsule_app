@@ -80,6 +80,18 @@ module API
         render json: { status: 'Success' }
       end
 
+      def watch
+        capsule = Capsule.find params[:id]
+        capsule.watchers << current_user
+        render json: { status: 'Success' }
+      end
+
+      def unwatch
+        capsule = Capsule.find params[:id]
+        capsule.watchers.delete current_user
+        render json: { status: 'Success' }
+      end
+
       def loadtest
         @capsules = Capsule.all.includes(:user, :assets, :recipients)
       end
