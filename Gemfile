@@ -19,7 +19,7 @@ gem 'coffee-rails', '~> 4.0.1'
 
 gem 'sinatra', '~> 1.4.5'
 
-gem 'newrelic_rpm'
+gem 'newrelic_rpm', '~> 3.8.0.218', group: :production
 
 gem 'jquery-rails', '~> 3.1.0'
 gem 'turbolinks', '~> 2.2.2'
