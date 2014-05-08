@@ -19,6 +19,8 @@ gem 'coffee-rails', '~> 4.0.1'
 
 gem 'sinatra', '~> 1.4.5'
 
+gem 'newrelic_rpm'
+
 gem 'jquery-rails', '~> 3.1.0'
 gem 'turbolinks', '~> 2.2.2'
 gem 'jbuilder', '~> 2.0.6'
