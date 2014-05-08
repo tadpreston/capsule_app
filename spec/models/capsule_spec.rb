@@ -21,6 +21,7 @@
 #  incognito         :boolean
 #  in_reply_to       :integer
 #  comments_count    :integer          default(0)
+#  likes             :hstore
 #
 
 require 'spec_helper'
