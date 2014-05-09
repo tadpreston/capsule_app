@@ -92,6 +92,20 @@ module API
         render json: { status: 'Success' }
       end
 
+      def like
+        capsule = Capsule.find params[:id]
+        capsule.likes << current_user.id
+        capsule.save
+        render json: { status: 'Success' }
+      end
+
+      def unlike
+        capsule = Capsule.find params[:id]
+        capsule.likes.delete current_user.id
+        capsule.save
+        render json: { status: 'Success' }
+      end
+
       def loadtest
         @capsules = Capsule.all.includes(:user, :assets, :recipients)
       end

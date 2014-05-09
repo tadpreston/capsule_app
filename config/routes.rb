@@ -41,6 +41,8 @@ Rails.application.routes.draw do
           delete 'unread'
           post 'watch'
           delete 'unwatch'
+          post 'like'
+          delete 'unlike'
         end
         resources :comments, only: [:create, :destroy]
       end

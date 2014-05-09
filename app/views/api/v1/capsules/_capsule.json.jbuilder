@@ -45,5 +45,7 @@ end
 json.is_watched capsule.watched_by?(current_user)
 json.is_incognito capsule.incognito || false
 json.is_read capsule.read_by?(current_user)
+json.is_liked capsule.likes.include?(current_user.id)
+json.like_count capsule.likes.size
 json.created_at capsule.created_at
 json.updated_at capsule.updated_at

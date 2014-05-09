@@ -21,7 +21,7 @@
 #  incognito         :boolean
 #  in_reply_to       :integer
 #  comments_count    :integer          default(0)
-#  likes             :hstore
+#  likes_store       :hstore
 #
 
 require 'spec_helper'
@@ -214,17 +214,6 @@ describe Capsule do
     end
   end
 
-  describe "is_watched? method" do
-    it "returns false" do
-      expect(@capsule).to_not be_watched
-    end
-
-    it "returns true" do
-      @capsule.watched = true
-      expect(@capsule).to be_watched
-    end
-  end
-
   describe "is_incognito? method" do
     it "returns false" do
       expect(@capsule).to_not be_incognito
@@ -255,4 +244,13 @@ describe Capsule do
       expect(@capsule.read_by?(nil)).to be_false
     end
   end
+
+#  describe "like methods" do
+#    describe "like<< method" do
+#      it "adds the user to the likes hash" do
+#        @capsule.likes << @user
+#        expect(@capsule.likes).to have_value(@user.id)
+#      end
+#    end
+#  end
 end

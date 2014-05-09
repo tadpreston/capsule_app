@@ -21,13 +21,16 @@
 #  incognito         :boolean
 #  in_reply_to       :integer
 #  comments_count    :integer          default(0)
-#  likes             :hstore
+#  likes_store       :hstore
 #
 
 class Capsule < ActiveRecord::Base
+  include PgSearch
+  include IsLikeable
+
   attr_reader :recipients_attributes
 
-  include PgSearch
+  is_likeable :likes_store
 
   before_save CapsuleCallbacks
   after_save CapsuleCallbacks
@@ -109,4 +112,5 @@ class Capsule < ActiveRecord::Base
   def hash_tags_array
     self.hash_tags.split(' ')
   end
+
 end
