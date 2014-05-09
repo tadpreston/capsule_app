@@ -113,4 +113,16 @@ class Capsule < ActiveRecord::Base
     self.hash_tags.split(' ')
   end
 
+  def liked_by?(user)
+    if user
+      likes.include?(user.id)
+    else
+      false
+    end
+  end
+
+  def likes_count
+    likes.size
+  end
+
 end
