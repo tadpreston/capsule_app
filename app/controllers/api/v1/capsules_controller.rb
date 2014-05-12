@@ -11,7 +11,8 @@ module API
       end
 
       def watched
-        @capsules = current_user.favorite_capsules.by_updated_at
+        user = params[:user_id] ? User.find(params[:user_id]) : current_user
+        @capsules = user.favorite_capsules.by_updated_at
       end
 
       def show
