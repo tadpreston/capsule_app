@@ -11,7 +11,8 @@ module API
       end
 
       def watched
-        @capsules = current_user.watched_capsules.by_updated_at.includes(:user)
+        user = params[:user_id] ? User.find(params[:user_id]) : current_user
+        @capsules = user.watched_capsules.by_updated_at.includes(:user)
       end
 
       def show
