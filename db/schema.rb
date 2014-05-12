@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140508181313) do
+ActiveRecord::Schema.define(version: 20140509205809) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -122,6 +122,17 @@ ActiveRecord::Schema.define(version: 20140508181313) do
 
   add_index "favorites", ["capsule_id"], name: "index_favorites_on_capsule_id", using: :btree
   add_index "favorites", ["user_id"], name: "index_favorites_on_user_id", using: :btree
+
+  create_table "hashtags", force: true do |t|
+    t.string   "tag"
+    t.decimal  "longitude"
+    t.decimal  "latitude"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "hashtags", ["longitude", "latitude"], name: "index_hashtags_on_longitude_and_latitude", using: :btree
+  add_index "hashtags", ["tag"], name: "index_hashtags_on_tag", using: :btree
 
   create_table "recipient_users", force: true do |t|
     t.integer  "user_id"
