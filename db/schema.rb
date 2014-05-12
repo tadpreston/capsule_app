@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140509205809) do
+ActiveRecord::Schema.define(version: 20140512194849) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -133,6 +133,21 @@ ActiveRecord::Schema.define(version: 20140509205809) do
 
   add_index "hashtags", ["longitude", "latitude"], name: "index_hashtags_on_longitude_and_latitude", using: :btree
   add_index "hashtags", ["tag"], name: "index_hashtags_on_tag", using: :btree
+
+  create_table "location_watches", force: true do |t|
+    t.integer  "user_id"
+    t.decimal  "longitude"
+    t.decimal  "latitude"
+    t.decimal  "radius"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "location_watches", ["latitude", "longitude"], name: "index_location_watches_on_latitude_and_longitude", using: :btree
+  add_index "location_watches", ["latitude"], name: "index_location_watches_on_latitude", using: :btree
+  add_index "location_watches", ["longitude", "latitude"], name: "index_location_watches_on_longitude_and_latitude", using: :btree
+  add_index "location_watches", ["longitude"], name: "index_location_watches_on_longitude", using: :btree
+  add_index "location_watches", ["user_id"], name: "index_location_watches_on_user_id", using: :btree
 
   create_table "recipient_users", force: true do |t|
     t.integer  "user_id"

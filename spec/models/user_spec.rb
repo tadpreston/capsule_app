@@ -121,6 +121,7 @@ describe User do
   it { should have_many(:contacts).through(:contact_users) }
   it { should have_many(:reads) }
   it { should have_many(:read_capsules).through(:reads) }
+  it { should have_many(:location_watches) }
 
   # Validations
   it { should be_valid }
