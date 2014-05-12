@@ -48,6 +48,7 @@ Rails.application.routes.draw do
       end
       resources :relationships, only: [:create, :destroy]
       resources :hashtags, only: [:index]
+      resources :location_watches, only: [:create, :destroy]
     end
   end
 end
