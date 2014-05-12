@@ -1,3 +1,15 @@
+# == Schema Information
+#
+# Table name: hashtags
+#
+#  id         :integer          not null, primary key
+#  tag        :string(255)
+#  longitude  :decimal(, )
+#  latitude   :decimal(, )
+#  created_at :datetime
+#  updated_at :datetime
+#
+
 class Hashtag < ActiveRecord::Base
 
   def self.find_location_hashtags(params = {})
@@ -12,6 +24,10 @@ class Hashtag < ActiveRecord::Base
       south_bound = origin[:lat] - span[:lat]
       hashtags = hashtags.where(longitude: (west_bound..east_bound), latitude: (south_bound..north_bound))
     end
-    hashtags
+    hashtags.map { |hashtag| hashtag.tag }
+  end
+
+  def tag_name
+    self.tag
   end
 end
