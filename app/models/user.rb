@@ -160,6 +160,10 @@ class User < ActiveRecord::Base
     self.watched_capsules << capsule
   end
 
+  def unwatch_capsule(capsule)
+    self.watched_capsules.delete(capsule)
+  end
+
   protected
 
     def uid_and_provider_are_unique
