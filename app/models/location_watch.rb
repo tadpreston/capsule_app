@@ -12,5 +12,8 @@
 #
 
 class LocationWatch < ActiveRecord::Base
+  after_create LocationWatchCallbacks
+
   belongs_to :user
+
 end

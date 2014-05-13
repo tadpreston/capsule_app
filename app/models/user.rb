@@ -156,6 +156,10 @@ class User < ActiveRecord::Base
     self.confirmed_at
   end
 
+  def watch_capsule(capsule)
+    self.watched_capsules << capsule
+  end
+
   protected
 
     def uid_and_provider_are_unique
