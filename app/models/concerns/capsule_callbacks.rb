@@ -19,4 +19,8 @@ class CapsuleCallbacks
       end
     end
   end
+
+  def self.after_create(capsule)
+    CapsuleLocationWatchWorker.perform_async(capsule.id)
+  end
 end

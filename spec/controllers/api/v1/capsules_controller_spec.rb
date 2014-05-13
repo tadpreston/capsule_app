@@ -107,9 +107,9 @@ describe API::V1::CapsulesController do
       @capsule3.update_columns(updated_at: 3.days.ago)
       @capsule4.update_columns(updated_at: 1.days.ago)
 
-      @user.favorite_capsules << @capsule1
-      @user.favorite_capsules << @capsule3
-      @user.favorite_capsules << @capsule4
+      @user.watch_capsule @capsule1
+      @user.watch_capsule @capsule3
+      @user.watch_capsule @capsule4
     end
 
     it 'returns a collection of watched capsules for the current user' do

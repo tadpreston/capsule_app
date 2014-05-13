@@ -11,7 +11,7 @@ module API
       end
 
       def watched
-        @capsules = current_user.favorite_capsules.by_updated_at
+        @capsules = current_user.watched_capsules.by_updated_at.includes(:user)
       end
 
       def show

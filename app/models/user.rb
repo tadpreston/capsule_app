@@ -164,6 +164,10 @@ class User < ActiveRecord::Base
     self.watched_capsules.delete(capsule)
   end
 
+  def is_watching_capsule?(capsule)
+    self.watched_capsules.exists? capsule
+  end
+
   protected
 
     def uid_and_provider_are_unique

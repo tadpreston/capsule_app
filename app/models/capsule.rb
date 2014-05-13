@@ -34,6 +34,7 @@ class Capsule < ActiveRecord::Base
 
   before_save CapsuleCallbacks
   after_save CapsuleCallbacks
+  after_create CapsuleCallbacks
 
   validates :title, presence: true
 
