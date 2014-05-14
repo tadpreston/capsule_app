@@ -4,6 +4,7 @@ module API
     class ContactsController < API::V1::ApplicationController
       before_action :set_user
       before_action :set_contact, only: [:update, :destroy]
+      skip_before_action :authorize_auth_token, only: [:index]
 
       def index
         @contacts = @user.contacts
