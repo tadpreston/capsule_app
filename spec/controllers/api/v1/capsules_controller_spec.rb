@@ -253,4 +253,32 @@ describe API::V1::CapsulesController do
       }.to change(CapsuleRead, :count).by(-1)
     end
   end
+
+  describe "POST 'portable'" do
+    before { @capsule = FactoryGirl.create(:capsule) }
+
+    it "adds a record to the portable_capsules table" do
+      expect {
+        post :portable, id: @capsule.to_param
+      }.to change(PortableCapsule, :count).by(1)
+    end
+
+    it "marks a capsule as portable" do
+      post :portable, id: @capsule.to_param
+      expect(@capsule.is_portable?(@user)).to be_true
+    end
+  end
+
+  describe "DELETE 'remove_portable'" do
+    before do
+      @capsule = FactoryGirl.create(:capsule)
+      @capsule.make_portable(@user)
+    end
+
+    it "removes the portable marker for the capsule user" do
+      expect {
+        delete :remove_portable, id: @capsule.to_param
+      }.to change(PortableCapsule, :count).by(-1)
+    end
+  end
 end

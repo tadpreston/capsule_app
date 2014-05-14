@@ -2,7 +2,7 @@ module API
   module V1
 
     class CapsulesController < API::V1::ApplicationController
-      before_action :set_capsule, only: [:show, :update, :destroy]
+      before_action :set_capsule, only: [:show, :update, :destroy, :portable, :remove_portable]
       skip_before_action :authorize_auth_token, only: [:index, :explorer, :locationtags, :library, :read, :unread, :loadtest]
 
       def index
@@ -109,6 +109,16 @@ module API
 
       def loadtest
         @capsules = Capsule.all.includes(:user, :assets, :recipients)
+      end
+
+      def portable
+        @capsule.make_portable current_user
+        render json: { status: 'Success' }
+      end
+
+      def remove_portable
+        @capsule.remove_portable current_user
+        render json: { status: 'Success' }
       end
 
       private

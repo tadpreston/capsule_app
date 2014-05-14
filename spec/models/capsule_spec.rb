@@ -262,4 +262,29 @@ describe Capsule do
       expect(@capsule.is_portable?(@user)).to be_true
     end
   end
+
+  describe "make_portable method" do
+    before do
+      @capsule.save
+      @user = FactoryGirl.create(:user)
+    end
+
+    it "makes the capsule portable" do
+      @capsule.make_portable(@user)
+      expect(@capsule.is_portable?(@user)).to be_true
+    end
+  end
+
+  describe "remove_portable method" do
+    before do
+      @capsule.save
+      @user = FactoryGirl.create(:user)
+      @capsule.make_portable(@user)
+    end
+
+    it "removes the porable marker for the user" do
+      @capsule.remove_portable(@user)
+      expect(@capsule.is_portable?(@user)).to be_false
+    end
+  end
 end
