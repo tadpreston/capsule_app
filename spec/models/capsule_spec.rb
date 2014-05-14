@@ -42,6 +42,8 @@ describe Capsule do
   it { should belong_to(:replied_to) }
   it { should have_many(:reads) }
   it { should have_many(:read_by).through(:reads) }
+  it { should have_many(:portable_capsules) }
+  it { should have_many(:taken_by).through(:portable_capsules) }
 
   it { should validate_presence_of(:title) }
 

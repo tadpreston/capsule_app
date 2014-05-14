@@ -1,4 +1,5 @@
 json.id capsule.id
+json.in_reply_to capsule.in_reply_to if capsule.in_reply_to
 json.set! :creator do
   json.id capsule.user.id
   json.email capsule.user.email

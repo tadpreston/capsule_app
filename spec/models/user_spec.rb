@@ -122,6 +122,8 @@ describe User do
   it { should have_many(:reads) }
   it { should have_many(:read_capsules).through(:reads) }
   it { should have_many(:location_watches) }
+  it { should have_many(:portable_capsules) }
+  it { should have_many(:taken_capsules).through(:portable_capsules) }
 
   # Validations
   it { should be_valid }

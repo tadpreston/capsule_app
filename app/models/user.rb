@@ -61,6 +61,8 @@ class User < ActiveRecord::Base
   has_many :capsule_watches
   has_many :watched_capsules, through: :capsule_watches, source: :capsule
   has_many :location_watches
+  has_many :portable_capsules
+  has_many :taken_capsules, through: :portable_capsules, source: :capsule
 
   def self.find_or_create_by_oauth(oauth)
     User.find_or_create_by(provider: oauth[:provider], uid: oauth[:uid].to_s) do |user|
