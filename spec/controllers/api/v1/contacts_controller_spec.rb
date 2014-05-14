@@ -11,10 +11,6 @@ describe API::V1::ContactsController do
       @request.env['HTTP_AUTHORIZATION'] = token
       @request.env["CONTENT_TYPE"] = "application/json"
 
-      get :index, user_id: user.to_param
-      expect(response).to_not be_success
-      expect(response.status).to eq(403)
-
       post :create, user_id: user.to_param
       expect(response).to_not be_success
       expect(response.status).to eq(403)
