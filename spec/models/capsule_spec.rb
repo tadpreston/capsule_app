@@ -247,12 +247,19 @@ describe Capsule do
     end
   end
 
-#  describe "like methods" do
-#    describe "like<< method" do
-#      it "adds the user to the likes hash" do
-#        @capsule.likes << @user
-#        expect(@capsule.likes).to have_value(@user.id)
-#      end
-#    end
-#  end
+  describe "is_portable? method" do
+    before do
+      @capsule.save
+      @user = FactoryGirl.create(:user)
+    end
+
+    it "returns false" do
+      expect(@capsule.is_portable?(@user)).to be_false
+    end
+
+    it "returns true" do
+      @capsule.taken_by << @user
+      expect(@capsule.is_portable?(@user)).to be_true
+    end
+  end
 end

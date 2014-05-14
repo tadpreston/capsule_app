@@ -128,4 +128,8 @@ class Capsule < ActiveRecord::Base
     likes.size
   end
 
+  def is_portable?(user)
+    taken_by.exists?(user)
+  end
+
 end
