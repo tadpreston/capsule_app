@@ -111,16 +111,6 @@ module API
         @capsules = Capsule.all.includes(:user, :assets, :recipients)
       end
 
-      def portable
-        @capsule.make_portable current_user
-        render json: { status: 'Success' }
-      end
-
-      def remove_portable
-        @capsule.remove_portable current_user
-        render json: { status: 'Success' }
-      end
-
       private
 
         def set_capsule
@@ -133,7 +123,7 @@ module API
 
         def capsule_params
           params.required(:capsule).permit(:user_id, :title, { location: [:latitude, :longitude, :radius] }, :status, :payload_type, :promotional_state, :passcode,
-                                           :visibility, :thumbnail, :in_reply_to,
+                                           :visibility, :thumbnail, :in_reply_to, :is_portable,
                                            { relative_location: [:radius] },
                                            comments_attributes: [:user_id, :body],
                                            assets_attributes: [:media_type, :resource, :metadata],

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140514160011) do
+ActiveRecord::Schema.define(version: 20140514201331) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -69,6 +69,7 @@ ActiveRecord::Schema.define(version: 20140514160011) do
     t.integer  "in_reply_to"
     t.integer  "comments_count",    default: 0
     t.hstore   "likes_store"
+    t.boolean  "is_portable"
   end
 
   add_index "capsules", ["in_reply_to"], name: "index_capsules_on_in_reply_to", using: :btree
@@ -148,16 +149,6 @@ ActiveRecord::Schema.define(version: 20140514160011) do
   add_index "location_watches", ["longitude", "latitude"], name: "index_location_watches_on_longitude_and_latitude", using: :btree
   add_index "location_watches", ["longitude"], name: "index_location_watches_on_longitude", using: :btree
   add_index "location_watches", ["user_id"], name: "index_location_watches_on_user_id", using: :btree
-
-  create_table "portable_capsules", force: true do |t|
-    t.integer  "user_id"
-    t.integer  "capsule_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "portable_capsules", ["capsule_id"], name: "index_portable_capsules_on_capsule_id", using: :btree
-  add_index "portable_capsules", ["user_id"], name: "index_portable_capsules_on_user_id", using: :btree
 
   create_table "recipient_users", force: true do |t|
     t.integer  "user_id"

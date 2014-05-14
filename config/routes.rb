@@ -48,8 +48,6 @@ Rails.application.routes.draw do
           delete 'unwatch'
           post 'like'
           delete 'unlike'
-          post :portable
-          delete :remove_portable
         end
         resources :comments, only: [:create, :destroy]
       end

@@ -22,6 +22,7 @@
 #  in_reply_to       :integer
 #  comments_count    :integer          default(0)
 #  likes_store       :hstore
+#  is_portable       :boolean
 #
 
 require 'spec_helper'
@@ -42,8 +43,6 @@ describe Capsule do
   it { should belong_to(:replied_to) }
   it { should have_many(:reads) }
   it { should have_many(:read_by).through(:reads) }
-  it { should have_many(:portable_capsules) }
-  it { should have_many(:taken_by).through(:portable_capsules) }
 
   it { should validate_presence_of(:title) }
 
@@ -247,44 +246,4 @@ describe Capsule do
     end
   end
 
-  describe "is_portable? method" do
-    before do
-      @capsule.save
-      @user = FactoryGirl.create(:user)
-    end
-
-    it "returns false" do
-      expect(@capsule.is_portable?(@user)).to be_false
-    end
-
-    it "returns true" do
-      @capsule.taken_by << @user
-      expect(@capsule.is_portable?(@user)).to be_true
-    end
-  end
-
-  describe "make_portable method" do
-    before do
-      @capsule.save
-      @user = FactoryGirl.create(:user)
-    end
-
-    it "makes the capsule portable" do
-      @capsule.make_portable(@user)
-      expect(@capsule.is_portable?(@user)).to be_true
-    end
-  end
-
-  describe "remove_portable method" do
-    before do
-      @capsule.save
-      @user = FactoryGirl.create(:user)
-      @capsule.make_portable(@user)
-    end
-
-    it "removes the porable marker for the user" do
-      @capsule.remove_portable(@user)
-      expect(@capsule.is_portable?(@user)).to be_false
-    end
-  end
 end

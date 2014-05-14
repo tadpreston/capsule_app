@@ -22,6 +22,7 @@
 #  in_reply_to       :integer
 #  comments_count    :integer          default(0)
 #  likes_store       :hstore
+#  is_portable       :boolean
 #
 
 class Capsule < ActiveRecord::Base
@@ -128,15 +129,4 @@ class Capsule < ActiveRecord::Base
     likes.size
   end
 
-  def is_portable?(user)
-    taken_by.exists?(user)
-  end
-
-  def make_portable(user)
-    taken_by << user
-  end
-
-  def remove_portable(user)
-    taken_by.delete(user)
-  end
 end
