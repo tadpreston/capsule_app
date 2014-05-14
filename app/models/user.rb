@@ -126,6 +126,10 @@ class User < ActiveRecord::Base
     relationships.create!(followed_id: other_user.id)
   end
 
+  def remove_follower!(other_user)
+    followers.delete(other_user)
+  end
+
   def unfollow!(other_user)
     relationships.find_by(followed_id: other_user.id).destroy
   end

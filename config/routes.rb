@@ -20,6 +20,11 @@ Rails.application.routes.draw do
         member do
           get :following, :followers
           patch :recipient
+          delete :unfollow
+          delete :remove_follower
+        end
+        collection do
+          post :follow
         end
         resources :capsules, only: [:index]
         resources :contacts, only: [:index, :create, :destroy]
@@ -46,7 +51,6 @@ Rails.application.routes.draw do
         end
         resources :comments, only: [:create, :destroy]
       end
-      resources :relationships, only: [:create, :destroy]
       resources :hashtags, only: [:index]
       resources :location_watches, only: [:create, :destroy]
     end

@@ -34,6 +34,23 @@ module API
         end
       end
 
+      def follow
+        @follow_user = User.find(params[:user][:follow_id])
+        current_user.follow!(@follow_user)
+      end
+
+      def unfollow
+        @follow_user = User.find(params[:id])
+        current_user.unfollow!(@follow_user)
+        render json: { status: 'Success' }
+      end
+
+      def remove_follower
+        user = User.find(params[:id])
+        current_user.remove_follower!(user)
+        render json: { status: 'Success' }
+      end
+
       def following
         @users = @user.followed_users
       end
