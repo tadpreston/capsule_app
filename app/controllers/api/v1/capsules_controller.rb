@@ -54,8 +54,14 @@ module API
       end
 
       def library
-        @watched_capsules = current_user.favorite_capsules.by_updated_at.includes(:user)
-        @capsules_forme = current_user.received_capsules.includes(:user)
+        @watched_capsules = []
+        @capsules_forme = []
+        @user_capsules = []
+        if current_user
+          @watched_capsules = current_user.favorite_capsules.by_updated_at.includes(:user)
+          @capsules_forme = current_user.received_capsules.includes(:user)
+          @user_capsules = current_user.capsules.by_updated_at
+        end
         @suggested_capsules = Capsule.find_in_rec({ lat: 33.2342834, long: -97.5861393 }, { lat: 1.4511453, long: 1.7329357 }).includes(:user).limit(5)  # This is temporary until a suggested algorithm is developed
       end
 
