@@ -79,41 +79,41 @@ module API
       end
 
       def read
-        capsule = Capsule.find params[:id]
-        capsule.read_by << current_user
-        render json: { status: 'Success' }
+        @capsule = Capsule.find params[:id]
+        @capsule.read_by << current_user
+        render :show
       end
 
       def unread
-        capsule = Capsule.find params[:id]
-        capsule.read_by.delete current_user
-        render json: { status: 'Success' }
+        @capsule = Capsule.find params[:id]
+        @capsule.read_by.delete current_user
+        render :show
       end
 
       def watch
-        capsule = Capsule.find params[:id]
-        capsule.watchers << current_user
-        render json: { status: 'Success' }
+        @capsule = Capsule.find params[:id]
+        @capsule.watchers << current_user
+        render :show
       end
 
       def unwatch
-        capsule = Capsule.find params[:id]
-        capsule.watchers.delete current_user
-        render json: { status: 'Success' }
+        @capsule = Capsule.find params[:id]
+        @capsule.watchers.delete current_user
+        render :show
       end
 
       def like
-        capsule = Capsule.find params[:id]
-        capsule.likes << current_user.id
-        capsule.save
-        render json: { status: 'Success' }
+        @capsule = Capsule.find params[:id]
+        @capsule.likes << current_user.id
+        @capsule.save
+        render :show
       end
 
       def unlike
-        capsule = Capsule.find params[:id]
-        capsule.likes.delete current_user.id
-        capsule.save
-        render json: { status: 'Success' }
+        @capsule = Capsule.find params[:id]
+        @capsule.likes.delete current_user.id
+        @capsule.save
+        render :show
       end
 
       def loadtest
