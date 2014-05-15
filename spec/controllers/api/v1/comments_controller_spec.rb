@@ -31,7 +31,7 @@ describe API::V1::CommentsController do
 
   describe "DELETE 'destroy'" do
     it 'deletes a comment record' do
-      comment = FactoryGirl.create(:comment, user: @user, capsule: @capsule)
+      comment = FactoryGirl.create(:comment, user: @user, commentable: @capsule)
       expect {
         delete :destroy, { capsule_id: @capsule.to_param, id: comment.to_param }
       }.to change(Comment, :count).by(-1)

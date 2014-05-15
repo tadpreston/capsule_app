@@ -42,7 +42,7 @@ class Capsule < ActiveRecord::Base
   belongs_to :user
   has_many :favorites
   has_many :favorite_users, through: :favorites, source: :user
-  has_many :comments, dependent: :destroy
+  has_many :comments, as: :commentable, dependent: :destroy
   has_many :assets, dependent: :destroy
   has_many :recipient_users, dependent: :destroy
   has_many :recipients, through: :recipient_users, source: :user
