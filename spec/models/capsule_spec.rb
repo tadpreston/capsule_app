@@ -111,7 +111,7 @@ describe Capsule do
     end
   end
 
-  describe 'find_in_rec class method' do
+  describe 'find_in_rec scope' do
     before do
       @origin = { lat: 33.190, long: -96.8915 }
       @span = { lat: 2.5359475904, long: 1.7578124096 }
@@ -126,6 +126,43 @@ describe Capsule do
 
     it 'does not include capsules outside of the rectangle' do
       expect(Capsule.find_in_rec(@origin, @span)).to_not include(@capsule3)
+    end
+  end
+
+  describe 'with_hash_tag scope' do
+    it 'returns capsules with the right tags' do
+      capsule1 = FactoryGirl.create(:capsule, title: 'Title with #tag1 #tag2')
+      capsule2 = FactoryGirl.create(:capsule, title: 'Title with #tag3 tag#4')
+      capsule3 = FactoryGirl.create(:capsule, title: 'Title with #tag1 #tag4')
+      capsules = Capsule.with_hash_tag('#tag1')
+      expect(capsules.size).to eq(2)
+      capsules.each { |capsule| expect([capsule1, capsule3]).to include(capsule) }
+      expect(capsules).to_not include(capsule2)
+    end
+  end
+
+  describe 'find_location_hash_tags method' do
+    before do
+      @origin = { lat: 33.190, long: -96.8915 }
+      @span = { lat: 2.5359475904, long: 1.7578124096 }
+      @capsule1 = FactoryGirl.create(:capsule, title: 'Title with #tag1 #tag2', location: { latitude: '33.167111', longitude: '-96.663793', radius: '20000' })
+      @capsule2 = FactoryGirl.create(:capsule, title: 'Title with #tag3 #tag4', location: { latitude: '33.013300', longitude: '-96.823046', radius: '20000' })
+      @capsule3 = FactoryGirl.create(:capsule, title: 'Title with #tag1 #tag2', location: { latitude: '30.089326', longitude: '-96.231873', radius: '20000' })
+    end
+
+    it 'gets the correct capsules without a hashtag' do
+      capsules = Capsule.find_location_hash_tags(@origin, @span)
+      expect(capsules.size).to eq(2)
+      capsules.each { |capsule| expect([@capsule1, @capsule2]).to include(capsule) }
+      expect(capsules).to_not include(@capsule3)
+    end
+
+    it 'gets the correct capsules with a hashtag' do
+      capsules = Capsule.find_location_hash_tags(@origin, @span, '#tag2')
+      expect(capsules.size).to eq(1)
+      expect(capsules.to_a).to eq([@capsule1])
+      expect(capsules.to_a).to_not include(@capsule2)
+      expect(capsules.to_a).to_not include(@capsule3)
     end
   end
 

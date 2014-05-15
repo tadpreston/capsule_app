@@ -37,7 +37,10 @@ module API
       end
 
       def explorer
-        @capsules = Capsule.find_in_rec({ lat: params[:latOrigin].to_f, long: params[:longOrigin].to_f }, { lat: params[:latSpan].to_f, long: params[:longSpan].to_f } ).includes(:user, :assets, :recipients)
+        origin = { lat: params[:latOrigin].to_f, long: params[:longOrigin].to_f }
+        span = { lat: params[:latSpan].to_f, long: params[:longSpan].to_f }
+        tag = params[:hashtag]
+        @capsules = Capsule.find_location_hash_tags(origin, span, tag)
       end
 
       def locationtags

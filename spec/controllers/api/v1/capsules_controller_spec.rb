@@ -76,6 +76,14 @@ describe API::V1::CapsulesController do
       expect(assigns(:capsules)).to eq([@capsule2, @capsule1])
       expect(assigns(:capsules)).to_not include(@capsule3)
     end
+
+    it 'returns an ordered collection of capsules in @capsules with a tag' do
+      tag = @capsule1.hash_tags.split(' ')[0]
+      get :explorer, { latOrigin: @origin[:lat], longOrigin: @origin[:long], latSpan: @span[:lat], longSpan: @span[:long], hashtag: tag }
+      expect(assigns(:capsules)).to_not be_empty
+      expect(assigns(:capsules)).to eq([@capsule2, @capsule1])
+      expect(assigns(:capsules)).to_not include(@capsule3)
+    end
   end
 
   describe 'GET "locationtags"' do

@@ -59,7 +59,7 @@ class Capsule < ActiveRecord::Base
 
   scope :by_updated_at, -> { order(updated_at: :desc) }
 
-  pg_search_scope :search_by_hashtags, against: :hash_tags, using: { tsearch: { dictionary: "english" } }
+  # pg_search_scope :search_by_hashtags, against: :hash_tags, using: { tsearch: { dictionary: "english" } }
 
   accepts_nested_attributes_for :comments, allow_destroy: true
   accepts_nested_attributes_for :assets, allow_destroy: true
@@ -81,8 +81,14 @@ class Capsule < ActiveRecord::Base
     where(longitude: (west_bound..east_bound), latitude: (south_bound..north_bound))
   end
 
-  def self.find_location_hash_tags(origin, span, tags)
-    Capsule.find_in_rec(origin, span).search_by_hashtags(tags.gsub(/[|]/,' ')).includes(:user)
+  def self.with_hash_tag(tag)
+    where('hash_tags ilike ?', "%#{tag}%")
+  end
+
+  def self.find_location_hash_tags(origin, span, tag = nil)
+    capsules = find_in_rec(origin, span)
+    capsules = capsules.with_hash_tag(tag) if tag
+    capsules.includes(:user, :assets, :recipients)
   end
 
   def purged_title
