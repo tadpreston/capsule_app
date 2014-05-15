@@ -21,4 +21,5 @@ describe Comment do
 
   it { should belong_to(:user) }
   it { should belong_to(:commentable) }
+  it { should have_many(:replies) }
 end
