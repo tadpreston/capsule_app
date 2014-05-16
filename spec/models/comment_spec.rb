@@ -8,6 +8,7 @@
 #  commentable_type :string(255)
 #  body             :text
 #  likes_store      :hstore
+#  comments_count   :integer          default(0)
 #  created_at       :datetime
 #  updated_at       :datetime
 #

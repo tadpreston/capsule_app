@@ -3,15 +3,19 @@ module API
 
     class CommentsController < API::V1::ApplicationController
       before_action :set_capsule
+      skip_before_action :authorize_auth_token, only: :index
+
+      def index
+        @comments = @capsule.comments
+      end
 
       def create
-        @comment = @capsule.comments.new(comment_params.merge({user_id: current_user.id}))
-        @comment.save
+        @comment = @capsule.comments.create(comment_params.merge({user_id: current_user.id}))
       end
 
       def destroy
-        @comment = @capsule.comments.find(params[:id])
-        @comment.destroy
+        comment = @capsule.comments.find(params[:id])
+        comment.destroy
         render json: { status: 'Deleted' }
       end
 

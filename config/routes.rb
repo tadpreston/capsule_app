@@ -49,7 +49,7 @@ Rails.application.routes.draw do
           post 'like'
           delete 'unlike'
         end
-        resources :comments, only: [:create, :destroy]
+        resources :comments, only: [:index, :create, :destroy]
       end
       resources :hashtags, only: [:index]
       resources :location_watches, only: [:create, :destroy]

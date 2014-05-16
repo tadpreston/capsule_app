@@ -12,6 +12,13 @@ describe API::V1::CommentsController do
 
   let(:valid_attributes) { FactoryGirl.attributes_for(:comment) }
 
+  describe 'GET "index"' do
+    it "returns http success" do
+      get :index, capsule_id: @capsule.to_param
+      expect(response).to be_success
+    end
+  end
+
   describe 'POST "create"' do
     describe 'with valid params' do
       it 'creates a new capsule' do

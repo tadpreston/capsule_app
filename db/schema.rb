@@ -84,6 +84,7 @@ ActiveRecord::Schema.define(version: 20140515212456) do
     t.string   "commentable_type"
     t.text     "body"
     t.hstore   "likes_store"
+    t.integer  "comments_count",   default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
   end
