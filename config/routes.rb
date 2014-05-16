@@ -58,6 +58,8 @@ Rails.application.routes.draw do
       end
       resources :hashtags, only: [:index]
       resources :location_watches, only: [:create, :destroy]
+
+      get 'profile/(:id)', to: 'profile#index', as: 'profile'
     end
   end
 end

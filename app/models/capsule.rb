@@ -53,7 +53,6 @@ class Capsule < ActiveRecord::Base
   has_many :capsule_watches
   has_many :watchers, through: :capsule_watches, source: :user
   has_many :portable_capsules
-  has_many :taken_by, through: :portable_capsules, source: :user
 
   delegate :full_name, to: :user, prefix: true
 
