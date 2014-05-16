@@ -31,25 +31,30 @@ Rails.application.routes.draw do
       end
       resources :capsules do
         collection do
-          get 'explorer'
-          get 'locationtags'
-          get 'watched'
-          get 'forme'
-          get 'suggested'
-          get 'library'
-          get 'loadtest'
+          get :explorer
+          get :locationtags
+          get :watched
+          get :forme
+          get :suggested
+          get :library
+          get :loadtest
         end
         member do
-          get 'replies'
-          get 'replied_to'
-          post 'read'
-          delete 'unread'
-          post 'watch'
-          delete 'unwatch'
-          post 'like'
-          delete 'unlike'
+          get    :replies
+          get    :replied_to
+          post   :read
+          delete :unread
+          post   :watch
+          delete :unwatch
+          post   :like
+          delete :unlike
         end
-        resources :comments, only: [:index, :create, :destroy]
+        resources :comments, only: [:index, :create, :destroy] do
+          member do
+            post :like
+            delete :unlike
+          end
+        end
       end
       resources :hashtags, only: [:index]
       resources :location_watches, only: [:create, :destroy]

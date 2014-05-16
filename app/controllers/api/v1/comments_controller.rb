@@ -3,6 +3,7 @@ module API
 
     class CommentsController < API::V1::ApplicationController
       before_action :set_capsule
+      before_action :set_comment, only: [:like, :unlike]
       skip_before_action :authorize_auth_token, only: :index
 
       def index
@@ -11,6 +12,7 @@ module API
 
       def create
         @comment = @capsule.comments.create(comment_params.merge({user_id: current_user.id}))
+        render :show
       end
 
       def destroy
@@ -19,13 +21,33 @@ module API
         render json: { status: 'Deleted' }
       end
 
+      def like
+        @comment.likes << current_user.id
+        @comment.save
+        render :show
+      end
+
+      def unlike
+        @comment.likes.delete current_user.id
+        @comment.save
+        render :show
+      end
+
       private
 
         def set_capsule
           begin
             @capsule = Capsule.find params[:capsule_id]
           rescue
-            render json: { status: 'Not Found', response: { errors: [ { capsule: [ "Not found with id: #{params[:id]}" ] } ] } }, status: 404
+            render json: { status: 'Not Found', response: { errors: [ { capsule: [ "Not found with id: #{params[:capsule_id]}" ] } ] } }, status: 404
+          end
+        end
+
+        def set_comment
+          begin
+            @comment = Comment.find params[:id]
+          rescue
+            render json: { status: 'Not Found', response: { errors: [ { comment: [ "Not found with id: #{params[:id]}" ] } ] } }, status: 404
           end
         end
 
