@@ -104,16 +104,22 @@ class Capsule < ActiveRecord::Base
       current_long = starting_long
       begin
         capsule_count = Capsule.where(latitude: current_lat-BOX_RANGE..current_lat, longitude: current_long..current_long+BOX_RANGE).count
-        center_lat = (current_lat - (BOX_RANGE/2)).round(4)
-        center_long = (current_long + (BOX_RANGE/2)).round(4)
-        name = "#{current_lat.round(2)},#{current_long.round(2)}"
-        results[:boxes] << { name: name, center_lat: center_lat, center_long: center_long, count: capsule_count }
+        if capsule_count > 0
+          center_lat = (current_lat - (BOX_RANGE/2)).round(4)
+          center_long = (current_long + (BOX_RANGE/2)).round(4)
+          name = "#{current_lat.round(2)},#{current_long.round(2)}"
+          results[:boxes] << { name: name, center_lat: center_lat, center_long: center_long, count: capsule_count }
+        end
         current_long += BOX_RANGE
       end until current_long > ending_long
       current_lat -= BOX_RANGE
     end until current_lat < ending_lat
 
     results
+  end
+
+  def self.start_point(point)
+    (point.abs.round + (point.abs.modulo(1) < BOX_RANGE ? BOX_RANGE : 0)) * (point < 0 ? -1 : 1)
   end
 
   def purged_title
@@ -161,9 +167,5 @@ class Capsule < ActiveRecord::Base
   end
 
   protected
-
-    def self.start_point(point)
-      (point.abs.round + (point.abs.modulo(1) < BOX_RANGE ? BOX_RANGE : 0)) * (point < 0 ? -1 : 1)
-    end
 
 end
