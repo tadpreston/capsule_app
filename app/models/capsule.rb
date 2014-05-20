@@ -65,6 +65,7 @@ class Capsule < ActiveRecord::Base
 
   PAYLOAD_TYPES = [NO_VALUE_TYPE = 'NoValue', AUDIO_TYPE = 'Audio', VIDEO_TYPE = 'Video', PICTURE_TYPE = 'Picture', TEXT_TYPE = 'Text']
   PROMOTIONAL_STATES = ["NoValue", "Promo State One", "Promo State Two", "Promo State Three", "Promo State Four"]
+  BOX_RANGE = 0.2
 
   def self.find_in_rec(origin, span)
     east_bound = origin[:long] + span[:long]
@@ -88,6 +89,31 @@ class Capsule < ActiveRecord::Base
     capsules = find_in_rec(origin, span)
     capsules = capsules.with_hash_tag(tag) if tag
     capsules.includes(:user, :assets, :recipients)
+  end
+
+  def self.find_boxes(origin, span)
+    starting_lat = start_point(origin[:lat].to_f)
+    starting_long = start_point(origin[:long].to_f)
+    ending_lat = origin[:lat].to_f - span[:lat].to_f
+    ending_long = origin[:long].to_f + span[:long].to_f
+
+    current_lat = starting_lat
+    results = { boxes: [] }
+
+    begin
+      current_long = starting_long
+      begin
+        capsule_count = Capsule.where(latitude: current_lat-BOX_RANGE..current_lat, longitude: current_long..current_long+BOX_RANGE).count
+        center_lat = (current_lat - (BOX_RANGE/2)).round(4)
+        center_long = (current_long + (BOX_RANGE/2)).round(4)
+        name = "#{current_lat.round(2)},#{current_long.round(2)}"
+        results[:boxes] << { name: name, center_lat: center_lat, center_long: center_long, count: capsule_count }
+        current_long += BOX_RANGE
+      end until current_long > ending_long
+      current_lat -= BOX_RANGE
+    end until current_lat < ending_lat
+
+    results
   end
 
   def purged_title
@@ -133,5 +159,11 @@ class Capsule < ActiveRecord::Base
   def likes_count
     likes.size
   end
+
+  protected
+
+    def self.start_point(point)
+      (point.abs.round + (point.abs.modulo(1) < BOX_RANGE ? BOX_RANGE : 0)) * (point < 0 ? -1 : 1)
+    end
 
 end

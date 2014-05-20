@@ -166,6 +166,23 @@ describe Capsule do
     end
   end
 
+  describe 'find_boxes method' do
+    before do
+      @origin = { lat: 33.190, long: -96.8915 }
+      @span = { lat: 1.5359475904, long: 0.9578124096 }
+      @capsule1 = FactoryGirl.create(:capsule, title: 'Title with #tag1 #tag2', location: { latitude: '33.197111', longitude: '-96.663793', radius: '20000' })
+      @capsule2 = FactoryGirl.create(:capsule, title: 'Title with #tag3 #tag4', location: { latitude: '33.013300', longitude: '-96.823046', radius: '20000' })
+      @capsule3 = FactoryGirl.create(:capsule, title: 'Title with #tag1 #tag2', location: { latitude: '31.689326', longitude: '-96.231873', radius: '20000' })
+    end
+
+    it 'returns an array of values' do
+      boxes = Capsule.find_boxes(@origin, @span)
+      expect(boxes[:boxes]).to be_an(Array)
+      expect(boxes[:boxes].size).to eq(48)
+    end
+
+  end
+
   # TODO - Put the callback tests into another file
   describe 'after_save callback' do
     before do
