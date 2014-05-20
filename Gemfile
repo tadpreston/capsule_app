@@ -19,6 +19,8 @@ gem 'coffee-rails', '~> 4.0.1'
 # gem 'therubyracer',  platforms: :ruby
 
 gem 'sinatra', '~> 1.4.5'
+gem 'memcachier'
+gem 'dalli'
 
 gem 'newrelic_rpm', '~> 3.8.0.218', group: :production
 
