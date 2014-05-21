@@ -60,7 +60,7 @@ module API
               count: lb.capsule_count
             }
           end
-          render json: { status: 'success', results: { boxes: boxes } }
+          render json: { status: 'success', response: { boxes: boxes } }
         else
           capsule_ids = @location_boxes.collect { |lb| lb.capsule_ids }.flatten
           @capsules = Capsule.where(id: capsule_ids).includes(:user,:assets,:recipients)
