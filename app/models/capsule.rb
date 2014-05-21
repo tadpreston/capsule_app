@@ -104,14 +104,13 @@ class Capsule < ActiveRecord::Base
       current_long = starting_long
       begin
         name = "#{current_lat.round(2)},#{current_long.round(2)}"
-#       capsule_count = Capsule.where(latitude: current_lat-BOX_RANGE..current_lat, longitude: current_long..current_long+BOX_RANGE).count
-        capsule_count = cached_box_count(current_lat-BOX_RANGE..current_lat, current_long..current_long+BOX_RANGE, name)
-        if capsule_count > 0
+        box = cached_box_count(current_lat-BOX_RANGE..current_lat, current_long..current_long+BOX_RANGE, name)[0]
+        if box[2] > 0
           center_lat = (current_lat - (BOX_RANGE/2)).round(4)
           center_long = (current_long + (BOX_RANGE/2)).round(4)
-          box = { name: name, center_lat: center_lat, center_long: center_long, count: capsule_count }
+          box_hash = { name: name, center_lat: box[1], center_long: box[0], count: box[2] }
 
-          results[:boxes] << { name: name, center_lat: center_lat, center_long: center_long, count: capsule_count }
+          results[:boxes] << box_hash
         end
         current_long += BOX_RANGE
       end until current_long > ending_long
@@ -123,7 +122,7 @@ class Capsule < ActiveRecord::Base
 
   def self.cached_box_count(lat_range, long_range, name)
     Rails.cache.fetch([name, "box_count"]) do
-      Capsule.where(latitude: lat_range, longitude: long_range).count
+      Capsule.where(latitude: lat_range, longitude: long_range).pluck("median(longitude), median(latitude), count(*)")
     end
   end
 
