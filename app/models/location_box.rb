@@ -30,6 +30,10 @@ class LocationBox < ActiveRecord::Base
     ids.size
   end
 
+  def capsule_ids
+    ids
+  end
+
   protected
 
     def ids
