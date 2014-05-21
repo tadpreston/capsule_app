@@ -51,7 +51,7 @@ module API
 
         @location_boxes = LocationBox.where(latitude: start_lat..origin[:latitude], longitude: origin[:longitude]..end_long)
 
-        if lat_span.round(1) > 0.1
+        if lat_span.round(1) > 0.2
           boxes = @location_boxes.map do |lb|
             {
               name: "#{lb.latitude},#{lb.longitude}",
