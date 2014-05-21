@@ -66,7 +66,10 @@ module IsLikeable
   private
 
     def likes_initializer
-      @likes = LikeAccessor.new(self, likes_accessor[0])
+      begin
+        @likes = LikeAccessor.new(self, likes_accessor[0])
+      rescue ActiveModel::MissingAttributeError
+      end
     end
 
 end
