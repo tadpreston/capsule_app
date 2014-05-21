@@ -21,4 +21,18 @@ class LocationBox < ActiveRecord::Base
 
     { latitude: origin_lat, longitude: origin_long }
   end
+
+  def capsules
+    Capsule.find ids
+  end
+
+  def capsule_count
+    ids.size
+  end
+
+  protected
+
+    def ids
+      @ids || eval(capsule_store["ids"])
+    end
 end
