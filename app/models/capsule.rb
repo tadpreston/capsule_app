@@ -65,7 +65,7 @@ class Capsule < ActiveRecord::Base
 
   PAYLOAD_TYPES = [NO_VALUE_TYPE = 'NoValue', AUDIO_TYPE = 'Audio', VIDEO_TYPE = 'Video', PICTURE_TYPE = 'Picture', TEXT_TYPE = 'Text']
   PROMOTIONAL_STATES = ["NoValue", "Promo State One", "Promo State Two", "Promo State Three", "Promo State Four"]
-  BOX_RANGE = 0.2
+  BOX_RANGE = 0.1
 
   def self.find_in_rec(origin, span)
     east_bound = origin[:long] + span[:long]
@@ -91,7 +91,16 @@ class Capsule < ActiveRecord::Base
     capsules.includes(:user, :assets, :recipients)
   end
 
-  def self.find_boxes(origin, span)
+  def self.find_boxes_old(origin, span, range = BOX_RANGE)
+#   Capsule.where("trunc(latitude,1) BETWEEN ? AND ? AND trunc(longitude,1) BETWEEN ? AND ?",31.9,32.1,-97.4,-97.2)
+    sql = <<-SQL
+      SELECT trunc(latitude,1) as lat, trunc(longitude,1) as lon, median(latitude) as med_lat, median(longitude) as med_long, count(*)
+      FROM capsules
+      WHERE (latitude BETWEEN 31 AND 35) AND (longitude BETWEEN -99 AND -95)
+      GROUP BY lat, lon
+      ORDER BY lat,lon;
+    SQL
+
     starting_lat = start_point(origin[:lat].to_f)
     starting_long = start_point(origin[:long].to_f)
     ending_lat = origin[:lat].to_f - span[:lat].to_f
@@ -118,6 +127,41 @@ class Capsule < ActiveRecord::Base
     end until current_lat < ending_lat
 
     results
+  end
+
+  def self.find_boxes(origin, span, range = BOX_RANGE)
+    start_lat = truncate_decimals(origin[:lat].to_f - span[:lat].to_f)
+    end_lat = truncate_decimals(origin[:lat].to_f) + 0.1
+    start_long = truncate_decimals(origin[:long].to_f) - 0.1
+    end_long = truncate_decimals(origin[:long].to_f + span[:long].to_f)
+
+    sql = <<-SQL
+      SELECT trunc(latitude,1) as lat, trunc(longitude,1) as lon, median(latitude) as med_lat, median(longitude) as med_long, count(*)
+      FROM capsules
+      WHERE (latitude BETWEEN #{start_lat} AND #{end_lat}) AND (longitude BETWEEN #{start_long} AND #{end_long})
+      GROUP BY lat, lon
+      ORDER BY lat,lon;
+    SQL
+
+    boxed_capsules = find_by_sql sql
+
+    boxes = boxed_capsules.map { |bc| { name: "#{bc.lat},#{bc.lon}", center_lat: bc.med_lat, center_long: bc.med_long, count: bc.count } }
+
+    { boxes: boxes }
+  end
+
+  def self.find_in_boxes(origin, span)
+    start_lat = truncate_decimals(origin[:lat].to_f - span[:lat].to_f)
+    end_lat = truncate_decimals(origin[:lat].to_f) + 0.1
+    start_long = truncate_decimals(origin[:long].to_f) - 0.1
+    end_long = truncate_decimals(origin[:long].to_f + span[:long].to_f)
+
+    Capsule.where("trunc(latitude,1) BETWEEN ? AND ? AND trunc(longitude,1) BETWEEN ? AND ?",start_lat,end_lat,start_long,end_long)
+  end
+
+  def self.truncate_decimals(value, places = 1)
+    precision = 10**places
+    (value * precision).to_i / precision.to_f
   end
 
   def self.cached_box_count(lat_range, long_range, name)
