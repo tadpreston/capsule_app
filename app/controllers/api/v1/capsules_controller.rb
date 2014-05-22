@@ -71,7 +71,7 @@ module API
         origin = { lat: params[:latOrigin].to_f, long: params[:longOrigin].to_f }
         span = { lat: params[:latSpan].to_f, long: params[:longSpan].to_f }
 
-        if span[:lat].to_f > 0.1
+        if span[:lat].to_f > 0.2
           render json: { status: 'Success', response: Capsule.find_boxes(origin, span) }
         else
           @capsules = Capsule.find_in_boxes(origin,span)
