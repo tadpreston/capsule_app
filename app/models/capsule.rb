@@ -39,7 +39,7 @@ class Capsule < ActiveRecord::Base
 
   validates :title, presence: true
 
-  belongs_to :user
+  belongs_to :user, touch: true
   has_many :favorites
   has_many :favorite_users, through: :favorites, source: :user
   has_many :comments, as: :commentable, dependent: :destroy

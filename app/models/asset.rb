@@ -12,7 +12,7 @@
 #
 
 class Asset < ActiveRecord::Base
-  belongs_to :capsule
+  belongs_to :capsule, touch: true
 
   validates :media_type, presence: true
   validates :resource, presence: true

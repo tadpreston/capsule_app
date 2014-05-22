@@ -10,6 +10,6 @@
 #
 
 class RecipientUser < ActiveRecord::Base
-  belongs_to :user
-  belongs_to :capsule
+  belongs_to :user, touch: true
+  belongs_to :capsule, touch: true
 end
