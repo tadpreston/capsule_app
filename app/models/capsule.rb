@@ -224,6 +224,24 @@ class Capsule < ActiveRecord::Base
     likes.size
   end
 
+  def flush_cache
+    Rails.cache.delete([self.class.name, "author"])
+    Rails.cache.delete([self.class.name, "recipeints"])
+    Rails.cache.delete([self.class.name, "assets"])
+  end
+
+  def cached_user
+    Rails.cache.fetch([self, "author"]) { user }
+  end
+
+  def cached_recipients
+    Rails.cache.fetch([self, "recipients"]) { recipients.to_a }
+  end
+
+  def cached_assets
+    Rails.cache.fetch([self, "assets"]) { assets.to_a }
+  end
+
   protected
 
 end

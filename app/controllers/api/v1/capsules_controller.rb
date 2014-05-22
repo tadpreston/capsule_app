@@ -74,7 +74,7 @@ module API
         if span[:lat].to_f > 0.1
           render json: { status: 'Success', response: Capsule.find_boxes(origin, span) }
         else
-          @capsules = Capsule.find_in_boxes(origin,span).includes(:user,:assets,:recipients)
+          @capsules = Capsule.find_in_boxes(origin,span)
         end
 
 #        if span[:lat] > Capsule::BOX_RANGE || span[:long] > Capsule::BOX_RANGE
