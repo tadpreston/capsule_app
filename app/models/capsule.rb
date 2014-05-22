@@ -143,7 +143,7 @@ class Capsule < ActiveRecord::Base
       ORDER BY lat,lon;
     SQL
 
-    boxed_capsules = find_by_sql sql
+    boxed_capsules = cached_boxes(sql, "#{start_lat},#{end_long}")
 
     boxes = boxed_capsules.map { |bc| { name: "#{bc.lat},#{bc.lon}", center_lat: bc.med_lat, center_long: bc.med_long, count: bc.count } }
 
@@ -162,6 +162,12 @@ class Capsule < ActiveRecord::Base
   def self.truncate_decimals(value, places = 1)
     precision = 10**places
     (value * precision).to_i / precision.to_f
+  end
+
+  def self.cached_boxes(sql, name)
+    Rails.cache.fetch([name, "boxes"]) do
+      find_by_sql sql
+    end
   end
 
   def self.cached_box_count(lat_range, long_range, name)
