@@ -91,44 +91,6 @@ class Capsule < ActiveRecord::Base
     capsules.includes(:user, :assets, :recipients)
   end
 
-  def self.find_boxes_old(origin, span, range = BOX_RANGE)
-#   Capsule.where("trunc(latitude,1) BETWEEN ? AND ? AND trunc(longitude,1) BETWEEN ? AND ?",31.9,32.1,-97.4,-97.2)
-    sql = <<-SQL
-      SELECT trunc(latitude,1) as lat, trunc(longitude,1) as lon, median(latitude) as med_lat, median(longitude) as med_long, count(*)
-      FROM capsules
-      WHERE (latitude BETWEEN 31 AND 35) AND (longitude BETWEEN -99 AND -95)
-      GROUP BY lat, lon
-      ORDER BY lat,lon;
-    SQL
-
-    starting_lat = start_point(origin[:lat].to_f)
-    starting_long = start_point(origin[:long].to_f)
-    ending_lat = origin[:lat].to_f - span[:lat].to_f
-    ending_long = origin[:long].to_f + span[:long].to_f
-
-    current_lat = starting_lat
-    results = { boxes: [] }
-
-    begin
-      current_long = starting_long
-      begin
-        name = "#{current_lat.round(2)},#{current_long.round(2)}"
-        box = cached_box_count(current_lat-BOX_RANGE..current_lat, current_long..current_long+BOX_RANGE, name)[0]
-        if box[2] > 0
-          center_lat = (current_lat - (BOX_RANGE/2)).round(4)
-          center_long = (current_long + (BOX_RANGE/2)).round(4)
-          box_hash = { name: name, center_lat: box[1], center_long: box[0], count: box[2] }
-
-          results[:boxes] << box_hash
-        end
-        current_long += BOX_RANGE
-      end until current_long > ending_long
-      current_lat -= BOX_RANGE
-    end until current_lat < ending_lat
-
-    results
-  end
-
   def self.find_boxes(origin, span, range = BOX_RANGE)
     start_lat = truncate_decimals(origin[:lat].to_f - span[:lat].to_f)
     end_lat = truncate_decimals(origin[:lat].to_f) + 0.1
@@ -170,14 +132,67 @@ class Capsule < ActiveRecord::Base
     end
   end
 
-  def self.cached_box_count(lat_range, long_range, name)
-    Rails.cache.fetch([name, "box_count"]) do
-      Capsule.where(latitude: lat_range, longitude: long_range).pluck("median(longitude), median(latitude), count(*)")
-    end
-  end
-
   def self.start_point(point)
     (point.abs.round + (point.abs.modulo(1) < BOX_RANGE ? BOX_RANGE : 0)) * (point < 0 ? -1 : 1)
+  end
+
+  def self.to_hash(collection)
+    collection.map do |capsule|
+      author = capsule.cached_user
+      assets = capsule.cached_assets
+      recipients = capsule.cached_recipients
+      {
+        id: capsule.id,
+        creator: {
+          id: author.id,
+          email: author.email,
+          username: author.username,
+          full_name: author.full_name,
+          first_name: author.first_name,
+          last_name: author.last_name,
+          phone_number: author.phone_number,
+          location: author.location,
+          locale: author.locale,
+          timezone: author.time_zone,
+          provider: author.provider,
+          uid: author.uid,
+          profile_image: author.profile_image
+        },
+        title: capsule.title,
+        hash_tags: capsule.hash_tags.split(' '),
+        location: capsule.location,
+        relative_location: capsule.relative_location,
+        payload_type: capsule.payload_type || 0,
+        status: capsule.status,
+        promotional_state: capsule.promotional_state || 0,
+        thumbnail: capsule.thumbnail,
+        assets: [],
+        start_date: '2014-04-02T11:12:13',
+        lock_question: capsule.lock_question,
+        lock_answer: capsule.lock_answer,
+        recipients: recipients.map do |recipient|
+          {
+            id: recipient.id,
+            email: recipient.email,
+            username: recipient.username,
+            full_name: recipient.full_name,
+            first_name: recipient.first_name,
+            last_name: recipient.last_name,
+            phone_number: recipient.phone_number,
+            location: recipient.location,
+            locale: recipient.locale,
+            timezone: recipient.time_zone,
+            provider: recipient.provider,
+            uid: recipient.uid,
+            profile_image: recipient.profile_image,
+            recipient_token: recipient.recipient_token
+          }
+        end,
+        is_incognito: capsule.incognito || false,
+        created_at: capsule.created_at,
+        updated_at: capsule.updated_at
+      }
+    end
   end
 
   def purged_title

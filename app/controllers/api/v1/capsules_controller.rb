@@ -75,6 +75,7 @@ module API
           render json: { status: 'Success', response: Capsule.find_boxes(origin, span) }
         else
           @capsules = Capsule.find_in_boxes(origin,span)
+          render json: { status: 'Success', response: { capsule_count: @capsules.size, capsules: Capsule.to_hash(@capsules) } }
         end
 
 #        if span[:lat] > Capsule::BOX_RANGE || span[:long] > Capsule::BOX_RANGE
