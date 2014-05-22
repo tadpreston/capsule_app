@@ -92,13 +92,15 @@ class Capsule < ActiveRecord::Base
   end
 
   def self.find_boxes(origin, span, range = BOX_RANGE)
-    start_lat = truncate_decimals(origin[:lat].to_f - span[:lat].to_f)
-    end_lat = truncate_decimals(origin[:lat].to_f) + 0.1
-    start_long = truncate_decimals(origin[:long].to_f) - 0.1
-    end_long = truncate_decimals(origin[:long].to_f + span[:long].to_f)
+    box_span = span[:lat].to_f >= 2 ? 0.5 : 0.2
+
+    start_lat = (truncate_decimals((origin[:lat] - span[:lat]) / box_span, 0) * box_span).round(1)
+    end_lat = (truncate_decimals(origin[:lat].to_f / box_span, 0) * box_span).round(1)
+    start_long = (truncate_decimals(origin[:long].to_f / box_span, 0) * box_span) - box_span
+    end_long = truncate_decimals((origin[:long].to_f + span[:long].to_f) / box_span, 0) * box_span
 
     sql = <<-SQL
-      SELECT trunc(latitude,1) as lat, trunc(longitude,1) as lon, median(latitude) as med_lat, median(longitude) as med_long, count(*)
+      SELECT (trunc(latitude / #{box_span}) * #{box_span}) as lat, (trunc(longitude / #{box_span}) * #{box_span}) as lon, median(latitude) as med_lat, median(longitude) as med_long, count(*)
       FROM capsules
       WHERE (latitude BETWEEN #{start_lat} AND #{end_lat}) AND (longitude BETWEEN #{start_long} AND #{end_long})
       GROUP BY lat, lon
