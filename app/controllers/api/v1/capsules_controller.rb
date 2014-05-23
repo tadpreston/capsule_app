@@ -36,37 +36,6 @@ module API
         render json: { status: 'Deleted' }
       end
 
-#      def explorer
-#        lat_span = params[:latSpan].to_f
-#        long_span = params[:longSpan].to_f
-#        origin_lat = params[:latOrigin].to_f
-#        origin_long = params[:longOrigin].to_f
-#
-#        start_lat = origin_lat - lat_span
-#        start_lat = (start_lat.round(1) > start_lat.round(2)) ? (start_lat - 0.1).round(1) : start_lat.round(1)
-#        end_long = origin_long + long_span
-#        end_long = (end_long.round(1) < end_long.round(2)) ? (end_long + 0.1).round(1) : end_long.round(1)
-#
-#        origin = LocationBox.get_origin(origin_lat, origin_long)
-#
-#        @location_boxes = LocationBox.where(latitude: start_lat..origin[:latitude], longitude: origin[:longitude]..end_long)
-#
-#        if lat_span.round(1) > 0.2
-#          boxes = @location_boxes.map do |lb|
-#            {
-#              name: "#{lb.latitude},#{lb.longitude}",
-#              center_lat: lb.lat_median,
-#              center_long: lb.long_median,
-#              count: lb.capsule_count
-#            }
-#          end
-#          render json: { status: 'success', response: { boxes: boxes } }
-#        else
-#          capsule_ids = @location_boxes.collect { |lb| lb.capsule_ids }.flatten
-#          @capsules = Capsule.where(id: capsule_ids).includes(:user,:assets,:recipients)
-#        end
-#      end
-
       def explorer
         origin = { lat: params[:latOrigin].to_f, long: params[:longOrigin].to_f }
         span = { lat: params[:latSpan].to_f, long: params[:longSpan].to_f }
@@ -75,7 +44,6 @@ module API
           render json: { status: 'Success', response: Capsule.find_boxes(origin, span) }
         else
           @capsules = Capsule.find_in_boxes(origin,span)
-          render json: { status: 'Success', response: { capsule_count: @capsules.size, capsules: Capsule.to_hash(@capsules) } }
         end
 
 #        if span[:lat] > Capsule::BOX_RANGE || span[:long] > Capsule::BOX_RANGE
