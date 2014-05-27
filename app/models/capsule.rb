@@ -281,6 +281,4 @@ class Capsule < ActiveRecord::Base
     Rails.cache.fetch([self, "assets"]) { assets.to_a }
   end
 
-  protected
-
 end

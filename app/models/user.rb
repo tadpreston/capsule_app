@@ -172,6 +172,24 @@ class User < ActiveRecord::Base
     self.watched_capsules.exists? capsule
   end
 
+  def flush_cache
+    Rails.cache.delete([self.class.name, "favorite_capsules"])
+    Rails.cache.delete([self.class.name, "received_capsules"])
+    Rails.cache.delete([self.class.name, "capsules"])
+  end
+
+  def cached_favorite_capsules
+    Rails.cache.fetch([self, "favorite_capsules"]) { favorite_capsules.by_updated_at }
+  end
+
+  def cached_received_capsules
+    Rails.cache.fetch([self, "received_capsules"]) { received_capsules }
+  end
+
+  def cached_capsules
+    Rails.cache.fetch([self, "capsules"]) { capsules.by_updated_at }
+  end
+
   protected
 
     def uid_and_provider_are_unique
