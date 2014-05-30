@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140520225426) do
+ActiveRecord::Schema.define(version: 20140529185443) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,9 +26,14 @@ ActiveRecord::Schema.define(version: 20140520225426) do
     t.hstore   "metadata"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "job_id"
+    t.string   "storage_path"
+    t.hstore   "process_response"
+    t.boolean  "complete",         default: false
   end
 
   add_index "assets", ["capsule_id"], name: "index_assets_on_capsule_id", using: :btree
+  add_index "assets", ["job_id"], name: "index_assets_on_job_id", using: :btree
 
   create_table "capsule_reads", force: true do |t|
     t.integer  "user_id"

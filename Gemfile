@@ -12,6 +12,7 @@ gem 'pg_search', '~> 0.7.3'
 gem 'sidekiq', '~> 3.0.0'
 gem 'oj', '~> 2.9.3'
 gem 'oj_mimic_json', '~> 1.0.0'
+gem 'transloadit', '~> 1.1.1'
 
 gem 'sass-rails', '~> 4.0.3'
 #gem 'uglifier', '>= 1.3.0'

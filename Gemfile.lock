@@ -171,6 +171,8 @@ GEM
     redis (3.0.7)
     redis-namespace (1.4.1)
       redis (~> 3.0.4)
+    rest-client (1.6.7)
+      mime-types (>= 1.16)
     rspec (2.14.1)
       rspec-core (~> 2.14.0)
       rspec-expectations (~> 2.14.0)
@@ -227,6 +229,9 @@ GEM
     thread_safe (0.3.3)
     tilt (1.4.1)
     timers (1.1.0)
+    transloadit (1.1.1)
+      multi_json
+      rest-client
     treetop (1.4.15)
       polyglot
       polyglot (>= 0.3.1)
@@ -281,6 +286,7 @@ DEPENDENCIES
   sinatra (~> 1.4.5)
   spork-rails (~> 4.0.0)
   spring (~> 1.1.2)
+  transloadit (~> 1.1.1)
   turbolinks (~> 2.2.2)
   uglifier (~> 2.5.0)
   unicorn (~> 4.8.2)

@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   get 'home/index'
   root 'home#index'
   resources :users
+  post 'process_response', to: 'process_responses#create', as: :process_response
 
 # API Routes
 

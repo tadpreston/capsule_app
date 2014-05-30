@@ -224,7 +224,11 @@ class Capsule < ActiveRecord::Base
   end
 
   def thumbnail
-    "http://res.cloudinary.com/demo/image/upload/w_320,h_313,c_thumb,g_face/butterfly.jpg"
+    if assets
+      assets.first.thumbnail
+    else
+      "http://res.cloudinary.com/demo/image/upload/w_320,h_313,c_thumb,g_face/butterfly.jpg"
+    end
   end
 
   def recipients_attributes=(recipients)
