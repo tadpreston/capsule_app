@@ -76,9 +76,36 @@ class MediaProc
 
   def process_audio
 
+    options = {
+      key: ENV['AWS_ACCESS_KEY'],
+      secret: ENV['AWS_SECRET_KEY'],
+      bucket: ENV['S3_BUCKET_UPLOAD'],
+      path: "#{@file_path.key}/#{@file_path.filename}"
+    }
+    original = @transloadit.step('original', '/s3/import', options)
+
+    options = {
+      use: "original",
+      preset: "mp3"
+    }
+    encode = @transloadit.step('encode', '/audio/encode', options)
+
+    options = {
+      key: ENV['AWS_ACCESS_KEY'],
+      secret: ENV['AWS_SECRET_KEY'],
+      bucket: ENV['S3_BUCKET'],
+      path: "#{@storage_path}/${previous_step.name}/${file.url_name}",
+      use: ["original", "thumb"]
+    }
+    store = @transloadit.step('store', '/s3/store', options)
+
+    assembly = @transloadit.assembly(steps: [original, encode, store])
+    assembly.submit!
   end
 
   def process_video
-
+    new_file_path = "https://#{@file_path.host}/#{ENV['S3_BUCKET']}/#{@storage_path}/#{@file_path.filename}"
+    s3_file = S3File.new @file_path
+    s3_file.move_to new_file_name
   end
 end

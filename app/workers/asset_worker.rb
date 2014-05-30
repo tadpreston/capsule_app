@@ -4,6 +4,7 @@ class AssetWorker
 
   def perform(asset_id)
     asset = Asset.find asset_id
+    upload_path = asset.resource
 
     media_proc = MediaProc.new(asset.resource, notify_url: notify_url)
 
@@ -14,6 +15,9 @@ class AssetWorker
     asset.resource = FileUri.new(asset.resource).filename
 
     asset.save
+
+    s3_file = S3File.new(upload_path)
+    s3_file.remove_file
   end
 
   def notify_url
