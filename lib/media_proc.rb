@@ -43,7 +43,7 @@ class MediaProc
     )
   end
 
-  def process_image
+  def process_image_original
 
     options = {
       key: ENV['AWS_ACCESS_KEY'],
@@ -72,6 +72,12 @@ class MediaProc
 
     assembly = @transloadit.assembly(steps: [original, thumb, store])
     assembly.submit!
+  end
+
+  def process_image
+    new_file_path = "https://#{@file_path.host}/#{ENV['S3_BUCKET']}/#{@storage_path}/#{@file_path.filename}"
+    s3_file = S3File.new @file_path
+    s3_file.move_to new_file_name
   end
 
   def process_audio

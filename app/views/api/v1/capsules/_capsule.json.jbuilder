@@ -22,7 +22,7 @@ json.relative_location capsule.relative_location
 json.payload_type capsule.payload_type || 0
 json.status capsule.status
 json.promotional_state capsule.promotional_state || 0
-json.thumbnail capsule.thumbnail
+json.thumbnail capsule.thumbnail_path
 json.set! :assets, capsule.cached_assets
 json.start_date '2014-04-02T11:12:13'
 json.lock_question capsule.lock_question

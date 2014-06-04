@@ -23,6 +23,8 @@
 #  comments_count    :integer          default(0)
 #  likes_store       :hstore
 #  is_portable       :boolean
+#  thumbnail         :string(255)
+#  start_date        :datetime
 #
 
 require 'spec_helper'

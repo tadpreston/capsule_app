@@ -34,7 +34,7 @@ class S3File
   end
 
   def initialize_file(uri)
-    @file_uri = FileUri.new uri
+    @file_uri = uri.is_a?(FileUri) ? uri : FileUri.new(uri)
     @path = @file_uri.path
   end
 
