@@ -1,6 +1,6 @@
 envelope(json, :success) do
   json.config do
-    json.data_upload_url "http://#{ENV['S3_BUCKET_UPLOAD']}.s3.amazonaws.com/"
+    json.s3_bucket ENV['S3_UPLOAD_BUCKET']
     json.aws_access_key ENV['AWS_ACCESS_KEY']
     json.aws_access_secret ENV['AWS_SECRET_KEY']
     json.promotional_states Capsule::PROMOTIONAL_STATES do |p_state|
