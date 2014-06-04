@@ -148,7 +148,7 @@ module API
 
         def capsule_params
           params.required(:capsule).permit(:user_id, :title, { location: [:latitude, :longitude, :radius] }, :status, :payload_type, :promotional_state, :passcode,
-                                           :visibility, :thumbnail, :in_reply_to, :is_portable,
+                                           :visibility, :thumbnail, :in_reply_to, :is_portable, :start_date,
                                            { relative_location: [:radius] },
                                            comments_attributes: [:user_id, :body],
                                            assets_attributes: [:media_type, :resource, :metadata],

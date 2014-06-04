@@ -23,6 +23,8 @@
 #  comments_count    :integer          default(0)
 #  likes_store       :hstore
 #  is_portable       :boolean
+#  thumbnail         :string(255)
+#  start_date        :datetime
 #
 
 class Capsule < ActiveRecord::Base
@@ -223,9 +225,9 @@ class Capsule < ActiveRecord::Base
     title.slice(/^[^#]*\b/)
   end
 
-  def thumbnail
-    unless assets.empty?
-      assets.first.thumbnail
+  def thumbnail_path
+    unless self.thumbnail.blank?
+      "https://#{ENV['CDN_HOST']}/#{self.thumbnail}"
     else
       "http://res.cloudinary.com/demo/image/upload/w_320,h_313,c_thumb,g_face/butterfly.jpg"
     end

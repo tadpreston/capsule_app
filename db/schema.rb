@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140529185443) do
+ActiveRecord::Schema.define(version: 20140604170108) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -76,6 +76,8 @@ ActiveRecord::Schema.define(version: 20140529185443) do
     t.integer  "comments_count",    default: 0
     t.hstore   "likes_store"
     t.boolean  "is_portable"
+    t.string   "thumbnail"
+    t.datetime "start_date"
   end
 
   add_index "capsules", ["in_reply_to"], name: "index_capsules_on_in_reply_to", using: :btree
