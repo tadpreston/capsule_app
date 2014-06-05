@@ -1,5 +1,5 @@
 class AssetCallbacks
-  def self.after_commit(asset)
-    AssetWorker.perform_async(asset.id) if asset.job_id.blank?
+  def self.after_create(asset)
+    AssetWorker.perform_in(30.seconds, asset.id)
   end
 end
