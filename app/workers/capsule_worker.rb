@@ -21,7 +21,7 @@ class CapsuleWorker
       source_bucket.objects.delete("#{capsule.thumbnail}")
       capsule.update_attributes(thumbnail: storage_path)
     else
-      CapsuleWorker.perform_in(30.seconds, capsule_id)
+      CapsuleWorker.perform_in(15.seconds, capsule_id)
     end
 
   end
