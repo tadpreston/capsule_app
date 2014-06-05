@@ -23,7 +23,11 @@ json.payload_type capsule.payload_type || 0
 json.status capsule.status
 json.promotional_state capsule.promotional_state || 0
 json.thumbnail capsule.thumbnail_path
-json.set! :assets, capsule.cached_assets
+json.assets capsule.cached_assets do |asset|
+  json.type asset.asset_type
+  json.url asset.resource_path
+  json.metadata asset.metadata
+end
 json.start_date '2014-04-02T11:12:13'
 json.lock_question capsule.lock_question
 json.lock_answer capsule.lock_answer
