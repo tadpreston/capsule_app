@@ -13,39 +13,57 @@ class AssetWorker
       )
 
       source_bucket = s3.buckets[ENV['S3_BUCKET_UPLOAD']]
+      storage_path = "#{SecureRandom.urlsafe_base64(32)}/#{asset.resource}"
 
       if source_bucket.objects[asset.resource].exists?
-        storage_path = "#{SecureRandom.urlsafe_base64(32)}/#{asset.resource}"
-        unless asset.media_type == 'audio'
+        unless asset.media_type == 'audio'  # copy image and video objects from upload to storage bucket
           dest_bucket = s3.buckets[ENV['S3_BUCKET']]
           source_obj = source_bucket.objects[asset.resource]
           dest_obj = dest_bucket.objects[storage_path]
 
           source_obj.copy_to(dest_obj, { acl: :public_read })
-          source_bucket.objects.delete(asset.resource)
-
           asset.update_attributes(resource: storage_path, complete: true)
-        else
+        else  # process audio with Transloadit
+          transloadit = Transloadit.new(
+            service: ENV['TRANSLOADIT_URL'],
+            key: ENV['TRANSLOADIT_AUTH_KEY'],
+            secret: ENV['TRANSLOADIT_SECRET_KEY']
+          )
 
+          options = {
+            key: ENV['AWS_ACCESS_KEY'],
+            secret: ENV['AWS_SECRET_KEY'],
+            bucket: ENV['S3_BUCKET_UPLOAD'],
+            path: asset.resource
+          }
+          original = transloadit.step('original', '/s3/import', options)
+
+          options = {
+            use: "original",
+            preset: "mp3"
+          }
+          encode = transloadit.step('encode', '/audio/encode', options)
+
+          options = {
+            key: ENV['AWS_ACCESS_KEY'],
+            secret: ENV['AWS_SECRET_KEY'],
+            bucket: ENV['S3_BUCKET'],
+            path: storage_path,
+            use: ["original","encode"]
+          }
+          store = transloadit.step('store', '/s3/store', options)
+
+          assembly = transloadit.assembly(steps: [original, encode, store])
+          assembly.submit!
+
+          asset.update_attributes(resource: storage_path)
         end
+
+        source_bucket.objects.delete(asset.resource)
       else
-        AssetWorker.perform_in(30.seconds, asset_id)
+        AssetWorker.perform_in(15.seconds, asset_id)
       end
 
-#      upload_path = "https://s3.amazonaws.com/#{ENV['S3_BUCKET_UPLOAD']}/#{asset.resource}"
-#
-#      media_proc = MediaProc.new(upload_path, notify_url: notify_url)
-#
-#      media_proc_response = media_proc.process
-#      asset.process_response = media_proc_response.body
-#      asset.job_id = media_proc_response[:assembly_id]
-#      asset.storage_path = media_proc.storage_path
-#      asset.resource = FileUri.new(asset.resource).filename
-#
-#      asset.save
-#
-#      s3_file = S3File.new(upload_path)
-#      s3_file.remove_file
     end
   end
 
