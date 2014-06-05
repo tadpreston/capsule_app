@@ -23,6 +23,10 @@ class Asset < ActiveRecord::Base
   validates :media_type, presence: true
   validates :resource, presence: true
 
+  def resource_path
+    "https://#{ENV['CDN_HOST']}/#{resource}"
+  end
+
   def thumbnail
     "https://#{ENV['CDN_HOST']}/#{storage_path}/thumb/#{resource}"
   end
