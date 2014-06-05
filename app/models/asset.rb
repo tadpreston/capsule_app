@@ -16,7 +16,7 @@
 #
 
 class Asset < ActiveRecord::Base
-  after_commit AssetCallbacks
+  after_create AssetCallbacks
 
   belongs_to :capsule, touch: true
 

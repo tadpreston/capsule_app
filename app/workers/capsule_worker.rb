@@ -4,13 +4,25 @@ class CapsuleWorker
   def perform(capsule_id)
     capsule = Capsule.find capsule_id
 
-    file_path = FileUri.new("https://s3.amazonaws.com/#{ENV['S3_BUCKET_UPLOAD']}/#{capsule.thumbnail}")
-    storage_path = "#{SecureRandom.urlsafe_base64(32)}"
+    s3 = AWS::S3.new(
+      access_key_id: ENV['AWS_ACCESS_KEY'],
+      secret_access_key: ENV['AWS_SECRET_KEY']
+    )
 
-    new_file_path = "https://#{file_path.host}/#{ENV['S3_BUCKET']}/#{storage_path}/#{file_path.filename}"
-    s3_file = S3File.new file_path
-    s3_file.move_to new_file_name
+    source_bucket = s3.buckets[ENV['S3_BUCKET_UPLOAD']]
 
-    capsule.update_column(:thumbnail, "#{storage_path}/#{file_path.filename}")
+    if source_bucket.objects[capsule.thumbnail].exists?
+      storage_path = "#{SecureRandom.urlsafe_base64(32)}/#{capsule.thumbnail}"
+      dest_bucket = s3.buckets[ENV['S3_BUCKET']]
+      source_obj = source_bucket.objects[capsule.thumbnail]
+      dest_obj = dest_bucket.objects[storage_path]
+
+      source_obj.copy_to(dest_obj, { acl: :public_read })
+      source_bucket.objects.delete("#{capsule.thumbnail}")
+      capsule.update_attributes(thumbnail: storage_path)
+    else
+      CapsuleWorker.perform_in(30.seconds, capsule_id)
+    end
+
   end
 end
