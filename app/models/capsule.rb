@@ -227,7 +227,11 @@ class Capsule < ActiveRecord::Base
 
   def thumbnail_path
     unless self.thumbnail.blank?
-      "https://#{ENV['CDN_HOST']}/#{self.thumbnail}"
+      if self.thumbnail.include?('/')
+        "https://#{ENV['CDN_HOST']}/#{self.thumbnail}"
+      else
+        "https://#{ENV['CDN_HOST']}/default/waiting.png"
+      end
     else
       "http://res.cloudinary.com/demo/image/upload/w_320,h_313,c_thumb,g_face/butterfly.jpg"
     end
