@@ -11,6 +11,15 @@
 #
 
 class Hashtag < ActiveRecord::Base
+  include PgSearch
+
+  pg_search_scope :search_by_tag,
+                  against: :tag,
+                  using: [
+                    :tsearch,
+                    :trigram,
+                    :dmetaphone
+                  ]
 
   def self.find_location_hashtags(params = {})
     hashtags = Hashtag.select("tag, count(tag) as tag_count").group("tag").order('tag_count DESC')

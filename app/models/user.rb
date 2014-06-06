@@ -31,6 +31,8 @@
 #
 
 class User < ActiveRecord::Base
+  include PgSearch
+
   before_save UserCallbacks
   before_validation UserCallbacks, unless: Proc.new { |user| user.persisted? }
   after_commit UserCallbacks
@@ -61,6 +63,8 @@ class User < ActiveRecord::Base
   has_many :capsule_watches
   has_many :watched_capsules, through: :capsule_watches, source: :capsule
   has_many :location_watches
+
+  pg_search_scope :search_user, against: [:first_name, :last_name], using: [:tsearch, :trigram, :dmetaphone]
 
   def self.find_or_create_by_oauth(oauth)
     User.find_or_create_by(provider: oauth[:provider], uid: oauth[:uid].to_s) do |user|

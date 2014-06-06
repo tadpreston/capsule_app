@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   namespace :api, defaults: {format: 'json'} do
     namespace :v1 do
       get 'config', to: 'configs#index'
+      get 'search', to: 'searches#index'
 
       resources :sessions, only: [:create, :destroy, :show]
       resources :users, only: [:index, :create, :update, :show] do

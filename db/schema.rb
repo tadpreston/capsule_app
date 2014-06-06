@@ -11,13 +11,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140529185443) do
+ActiveRecord::Schema.define(version: 20140604170108) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
   enable_extension "pg_stat_statements"
   enable_extension "uuid-ossp"
+  enable_extension "pg_trgm"
+  enable_extension "fuzzystrmatch"
 
   create_table "assets", force: true do |t|
     t.integer  "capsule_id"
@@ -76,6 +78,8 @@ ActiveRecord::Schema.define(version: 20140529185443) do
     t.integer  "comments_count",    default: 0
     t.hstore   "likes_store"
     t.boolean  "is_portable"
+    t.string   "thumbnail"
+    t.datetime "start_date"
   end
 
   add_index "capsules", ["in_reply_to"], name: "index_capsules_on_in_reply_to", using: :btree
@@ -141,8 +145,8 @@ ActiveRecord::Schema.define(version: 20140529185443) do
     t.datetime "updated_at"
   end
 
-  add_index "hashtags", ["longitude", "latitude"], name: "index_hashtags_on_longitude_and_latitude", using: :btree
-  add_index "hashtags", ["tag"], name: "index_hashtags_on_tag", using: :btree
+  add_index "hashtags", ["latitude"], name: "index_hashtags_on_latitude", using: :btree
+  add_index "hashtags", ["longitude"], name: "index_hashtags_on_longitude", using: :btree
 
   create_table "location_watches", force: true do |t|
     t.integer  "user_id"
