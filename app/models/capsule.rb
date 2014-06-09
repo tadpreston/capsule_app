@@ -143,7 +143,6 @@ class Capsule < ActiveRecord::Base
     start_long = truncate_decimals(origin[:long].to_f) - 0.1
     end_long = truncate_decimals(origin[:long].to_f + span[:long].to_f)
 
-#   Capsule.where("trunc(latitude,1) BETWEEN ? AND ? AND trunc(longitude,1) BETWEEN ? AND ?",start_lat,end_lat,start_long,end_long).includes(:user, :assets, :recipients)
     Capsule.where("trunc(latitude,1) BETWEEN ? AND ? AND trunc(longitude,1) BETWEEN ? AND ?",start_lat,end_lat,start_long,end_long)
   end
 

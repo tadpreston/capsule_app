@@ -40,23 +40,12 @@ module API
         origin = { lat: params[:latOrigin].to_f, long: params[:longOrigin].to_f }
         span = { lat: params[:latSpan].to_f, long: params[:longSpan].to_f }
 
-        if span[:lat].to_f > 0.2
-#         render json: { status: 'Success', response: Capsule.find_boxes(origin, span) }
+        if span[:lat].to_f > 0.4
           @boxes = Capsule.find_boxes(origin, span)
           render :explorer_boxes
         else
           @capsules = Capsule.find_in_boxes(origin,span)
         end
-
-#        if span[:lat] > Capsule::BOX_RANGE || span[:long] > Capsule::BOX_RANGE
-#          #large rect response
-#          boxes = Capsule.find_boxes(origin, span)
-#          render json: { status: 'Success', 'response' => boxes }
-#        else
-#          # small rect response
-#          tag = params[:hashtag]
-#          @capsules = Capsule.find_location_hash_tags(origin, span, tag)
-#        end
       end
 
       def locationtags
