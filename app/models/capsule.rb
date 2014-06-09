@@ -116,7 +116,7 @@ class Capsule < ActiveRecord::Base
     { boxes: boxes }
   end
 
-  def self.find_boxes(origin, span, range = BOX_RANGE)
+  def self.find_boxes(origin, span, hashtag)
     box_span = span[:lat].to_f >= 2 ? 0.5 : 0.2
 
     start_lat = (truncate_decimals((origin[:lat] - span[:lat]) / box_span, 0) * box_span).round(1)
@@ -124,26 +124,38 @@ class Capsule < ActiveRecord::Base
     start_long = (truncate_decimals(origin[:long].to_f / box_span, 0) * box_span) - box_span
     end_long = truncate_decimals((origin[:long].to_f + span[:long].to_f) / box_span, 0) * box_span
 
-    sql = <<-SQL
-      SELECT (trunc(latitude / #{box_span}) * #{box_span}) as lat, (trunc(longitude / #{box_span}) * #{box_span}) as lon, median(latitude) as med_lat, median(longitude) as med_long, count(*)
-      FROM capsules
-      WHERE (latitude BETWEEN #{start_lat} AND #{end_lat}) AND (longitude BETWEEN #{start_long} AND #{end_long})
-      GROUP BY lat, lon
-      ORDER BY lat,lon;
-    SQL
+    if hashtag.blank?
+      sql = <<-SQL
+        SELECT (trunc(latitude / #{box_span}) * #{box_span}) as lat, (trunc(longitude / #{box_span}) * #{box_span}) as lon, median(latitude) as med_lat, median(longitude) as med_long, count(*)
+        FROM capsules
+        WHERE (latitude BETWEEN #{start_lat} AND #{end_lat}) AND (longitude BETWEEN #{start_long} AND #{end_long})
+        GROUP BY lat, lon
+        ORDER BY lat,lon;
+      SQL
+    else
+      sql = <<-SQL
+        SELECT (trunc(latitude / #{box_span}) * #{box_span}) as lat, (trunc(longitude / #{box_span}) * #{box_span}) as lon, median(latitude) as med_lat, median(longitude) as med_long, count(*)
+        FROM capsules
+        WHERE (latitude BETWEEN #{start_lat} AND #{end_lat}) AND (longitude BETWEEN #{start_long} AND #{end_long}) AND (title ilike '%#{hashtag}%')
+        GROUP BY lat, lon
+        ORDER BY lat,lon;
+      SQL
+    end
 
     boxed_capsules = find_by_sql sql
 
     boxed_capsules.map { |bc| { name: "#{bc.lat},#{bc.lon}", center_lat: bc.med_lat, center_long: bc.med_long, count: bc.count } }
   end
 
-  def self.find_in_boxes(origin, span)
+  def self.find_in_boxes(origin, span, hashtag)
     start_lat = truncate_decimals(origin[:lat].to_f - span[:lat].to_f)
     end_lat = truncate_decimals(origin[:lat].to_f) + 0.1
     start_long = truncate_decimals(origin[:long].to_f) - 0.1
     end_long = truncate_decimals(origin[:long].to_f + span[:long].to_f)
 
-    Capsule.where("trunc(latitude,1) BETWEEN ? AND ? AND trunc(longitude,1) BETWEEN ? AND ?",start_lat,end_lat,start_long,end_long)
+    capsules = Capsule.where("trunc(latitude,1) BETWEEN ? AND ? AND trunc(longitude,1) BETWEEN ? AND ?",start_lat,end_lat,start_long,end_long)
+    capsules = capsules.where("title ilike ?", "%#{hashtag}%") unless hashtag.blank?
+    capsules
   end
 
   def self.truncate_decimals(value, places = 1)

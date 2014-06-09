@@ -39,12 +39,13 @@ module API
       def explorer
         origin = { lat: params[:latOrigin].to_f, long: params[:longOrigin].to_f }
         span = { lat: params[:latSpan].to_f, long: params[:longSpan].to_f }
+        hashtag = params[:hashtag].blank? ? '' : params[:hashtag]
 
         if span[:lat].to_f > 0.4
-          @boxes = Capsule.find_boxes(origin, span)
+          @boxes = Capsule.find_boxes(origin, span, hashtag)
           render :explorer_boxes
         else
-          @capsules = Capsule.find_in_boxes(origin,span)
+          @capsules = Capsule.find_in_boxes(origin,span, hashtag)
         end
       end
 
