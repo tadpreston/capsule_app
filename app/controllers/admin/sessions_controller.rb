@@ -1,5 +1,7 @@
 module Admin
   class SessionsController < Admin::ApplicationController
+    skip_before_action :authorize
+
     def new
     end
 
