@@ -17,8 +17,11 @@
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 
   %body
+
+    = render 'admin/layouts/messages'
+
     .container
-      = render 'admin/layouts/messages'
+      = render 'admin/layouts/menu_bar' if authorized?
 
       = yield
 

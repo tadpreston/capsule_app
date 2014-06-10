@@ -1,0 +1,19 @@
+%nav.navbar.navbar-default{ role: 'navigation' }
+  .container-fluid
+    .navbar-header
+      %button.navbar-toggle{ type: 'button', data: { toggle: 'collapse', target: 'navbar-collapse-1' } }
+        %span.sr-only Capsuleapp Admin
+        %span.icon-bar
+        %span.icon-bar
+        %span.icon-bar
+      = link_to 'Capsuleapp Admin', admin_root_path, class: 'navbar-brand'
+    .collapse.navbar-collapse#navbar-collapse-1
+      %ul.nav.navbar-nav
+        %li.active= link_to 'Home', admin_root_path
+        %li= link_to 'Objections', '#'
+        %li= link_to 'Users', '#'
+      %p.navbar-text.navbar-right
+        Signed in as
+        = "#{current_user.first_name} #{current_user.last_name}"
+        |
+        = link_to 'Sign out', admin_session_path(current_user), method: :delete
