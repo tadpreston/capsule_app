@@ -8,7 +8,7 @@ envelope(json, :success) do
         json.set! :hash_tags, capsule.hash_tags.split(' ')
         json.location capsule.location
         json.relative_location capsule.relative_location
-        json.thumbnail capsule.thumbnail
+        json.thumbnail capsule.thumbnail_path
         json.is_watched capsule.watched_by?(current_user)
         json.is_incognito capsule.incognito || false
         json.is_read capsule.read_by?(current_user)
