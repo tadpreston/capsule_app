@@ -10,6 +10,11 @@ Rails.application.routes.draw do
   resources :users
   post 'process_response', to: 'process_responses#create', as: :process_response
 
+# Admin Routes
+  namespace :admin do
+    resources :sessions, only: [:new, :create, :destroy]
+  end
+
 # API Routes
 
   namespace :api, defaults: {format: 'json'} do

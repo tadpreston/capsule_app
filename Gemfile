@@ -7,7 +7,7 @@ gem 'rails', '4.1.1'
 gem 'pg', '~> 0.17.1'
 gem "unicorn", "~> 4.8.2"
 gem "haml-rails", "~> 0.5.3"
-gem "bootstrap-sass", "~> 3.1.1.0"
+gem "bootstrap-sass", "~> 3.1.1.1"
 gem 'pg_search', '~> 0.7.4'
 gem 'sidekiq', '~> 3.0.0'
 gem 'oj', '~> 2.9.3'
