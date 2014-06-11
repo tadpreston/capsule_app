@@ -15,6 +15,7 @@ json.set! :creator do
   json.uid capsule.cached_user.uid
   json.profile_image capsule.cached_user.profile_image
 end
+json.is_owned is_owned?(capsule.user_id)
 json.title capsule.title
 json.set! :hash_tags, capsule.hash_tags.split(' ')
 json.location capsule.location

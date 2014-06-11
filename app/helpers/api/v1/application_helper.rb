@@ -15,6 +15,14 @@ module API
         end
 
       end
+
+      def is_owned?(user_id)
+        if current_user
+          user_id == current_user.id
+        else
+          false
+        end
+      end
     end
   end
 end
