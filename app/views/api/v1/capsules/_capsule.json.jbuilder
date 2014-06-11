@@ -27,7 +27,7 @@ json.assets capsule.cached_assets do |asset|
   json.media_type asset.media_type
   json.resource asset.media_type == "text" ? asset.resource : asset.resource_path
 end
-json.start_date '2014-04-02T11:12:13'
+json.start_date capsule.start_date
 json.lock_question capsule.lock_question
 json.lock_answer capsule.lock_answer
 json.recipients capsule.cached_recipients do |recipient|
