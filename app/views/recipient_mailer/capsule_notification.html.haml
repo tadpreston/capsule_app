@@ -1,0 +1,18 @@
+%h2= "Hi #{@user.first_name},"
+%br
+%br
+%p
+  You have been sent a capsuel from
+  = @capsule.user.first_name
+  .
+%br
+%p
+  Here is the link to download the app to your phone
+  = link_to 'https://itunes.apple.com/us/app/106-park/id418612824?mt=8', 'https://itunes.apple.com/us/app/106-park/id418612824?mt=8'
+  .
+  Or, you can just look at the capsule
+  = link_to 'capsule://?c=823879123', 'capsule://?c=823879123'
+
+%br
+%p
+  Thanks from the Capsule team!
