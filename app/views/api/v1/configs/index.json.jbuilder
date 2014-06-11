@@ -6,5 +6,7 @@ envelope(json, :success) do
     json.promotional_states Capsule::PROMOTIONAL_STATES do |p_state|
       json.set! :state, p_state
     end
+    json.store_url 'https://itunes.apple.com/us/app/106-park/id418612824?mt=8'
+    json.content_token_url 'capsule://?c=823879123'
   end
 end
