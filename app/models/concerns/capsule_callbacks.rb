@@ -16,6 +16,10 @@ class CapsuleCallbacks
         user = User.find_or_create_recipient(recipient)
         capsule.add_as_recipient user
         capsule.user.add_as_contact user
+
+        if user.phone_number.blank?
+          RecipientWorker.perform_in(5.seconds, user.id, capsule.id)
+        end
       end
     end
   end
