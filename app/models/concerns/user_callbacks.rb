@@ -13,7 +13,7 @@ class UserCallbacks
   end
 
   def self.after_create(user)
-    user.send_confirmation_email
+#   user.send_confirmation_email
   end
 
   private
