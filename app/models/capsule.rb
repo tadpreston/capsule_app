@@ -303,4 +303,11 @@ class Capsule < ActiveRecord::Base
     Rails.cache.fetch([self, "assets"]) { assets.to_a }
   end
 
+  def is_incognito=(value)
+    self.incognito = value
+  end
+
+  def is_incognito
+    self.incognito
+  end
 end
