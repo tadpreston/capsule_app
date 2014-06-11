@@ -92,6 +92,7 @@ class User < ActiveRecord::Base
       tmp_pwd = SecureRandom.hex
       user.password = tmp_pwd
       user.password_confirmation = tmp_pwd
+      user.provider = 'recipient'
       attributes.each do |key, val|
         user[key] = val
       end
