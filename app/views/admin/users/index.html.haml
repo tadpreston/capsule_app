@@ -1,6 +1,12 @@
 .container
   .row
-    = link_to 'Add A User', new_admin_user_path, class: 'btn btn-primary'
+    .col-sm-6= link_to 'Add A User', new_admin_user_path, class: 'btn btn-primary'
+    .col-sm-6
+      .pull-right
+        = form_tag admin_users_path, method: :get, class: 'form-inline', role: 'form' do
+          .form-group
+            = text_field_tag :query, params[:query], class: 'form-control span6', placeholder: 'Search'
+          = submit_tag 'Search', class: 'btn btn-primary'
 
   .autopagerize_page_element
 

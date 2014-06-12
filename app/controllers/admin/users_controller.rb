@@ -3,7 +3,12 @@ module Admin
     before_action :set_user, only: [:edit, :update, :show, :destroy]
 
     def index
-      @users = User.all.order(:last_name).page(params[:page]).per(13)
+      if params[:query].blank?
+        @users = User.all.order(:last_name).page(params[:page]).per(13)
+      else
+        q = "%#{params[:query]}%"
+        @users = User.where('first_name ilike ? OR last_name ilike ? OR email ilike ?', q, q, q).order(:last_name).page(params[:page]).per(13)
+      end
     end
 
     def new
