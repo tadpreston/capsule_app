@@ -13,6 +13,8 @@ Rails.application.routes.draw do
 # Admin Routes
   namespace :admin do
     resources :sessions, only: [:new, :create, :destroy]
+    resources :admin_users
+    resources :users
 
     root 'home#index'
   end

@@ -1,0 +1,25 @@
+= form_for @user, url: @user.persisted? ? admin_user_path(@user) : admin_users_path, html: { class: 'form-horizontal', role: 'form' } do |f|
+  .form-group
+    = f.label :email, class: 'col-sm-2 control-label'
+    .col-sm-6
+      = f.text_field :email, class: 'form-control', placeholder: 'Email address'
+  .form-group
+    = f.label :first_name, class: 'col-sm-2 control-label'
+    .col-sm-6
+      = f.text_field :first_name, class: 'form-control', placeholder: 'First Name'
+  .form-group
+    = f.label :last_name, class: 'col-sm-2 control-label'
+    .col-sm-6
+      = f.text_field :last_name, class: 'form-control', placeholder: 'Last Name'
+  .form-group
+    = f.label :password, class: 'col-sm-2 control-label'
+    .col-sm-6
+      = f.password_field :password, class: 'form-control', placeholder: 'Password'
+  .form-group
+    = f.label :password_confirmation, class: 'col-sm-2 control-label'
+    .col-sm-6
+      = f.password_field :password_confirmation, class: 'form-control', placeholder: 'Password Confirmation'
+  .form-group
+    .col-sm-offset-2.col-sm-10
+      = f.submit class: 'btn btn-primary'
+      = link_to 'Cancel', admin_users_path, class: 'btn btn-default'

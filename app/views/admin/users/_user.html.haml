@@ -1,0 +1,11 @@
+%tr
+  %td= user.id
+  %td= user.first_name
+  %td= user.last_name
+  %td= user.email
+  %td
+    = link_to 'Show', admin_user_path(user)
+    |
+    = link_to 'Edit', edit_admin_user_path(user)
+    |
+    = link_to 'Delete', admin_user_path(user), method: :delete, data: { confirm: 'Are you sure you want to delete this user?' }

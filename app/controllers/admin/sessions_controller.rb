@@ -6,8 +6,7 @@ module Admin
     end
 
     def create
-      user = AdminUser.find_by(email: params[:email])
-      if user && user.authenticate(params[:password])
+      if user = AdminUser.find_by(email: params[:email]).try(:authenticate, params[:password])
         session[:user_id] = user.id
         redirect_to admin_root_url, notice: "Logged In"
       else

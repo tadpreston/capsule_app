@@ -11,7 +11,8 @@
       %ul.nav.navbar-nav
         %li.active= link_to 'Home', admin_root_path
         %li= link_to 'Objections', '#'
-        %li= link_to 'Users', '#'
+        %li= link_to 'Users', admin_users_path
+        %li= link_to 'Admin Users', admin_admin_users_path
       %p.navbar-text.navbar-right
         Signed in as
         = "#{current_user.first_name} #{current_user.last_name}"

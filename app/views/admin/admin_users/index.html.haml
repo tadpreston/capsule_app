@@ -1,0 +1,14 @@
+.container
+  .row
+    = link_to 'Add A User', new_admin_admin_user_path, class: 'btn btn-primary'
+
+  %table.table.table-hover
+    %thead
+      %tr
+        %th ID
+        %th First Name
+        %th Last Name
+        %th Email
+        %th
+    %tbody
+      = render @admin_users

@@ -1,0 +1,18 @@
+.container
+  %h1 Show Admin User
+  %br
+
+  %form.form-horizontal{ role: "form" }
+    .form-group
+      %label.col-sm-2.control-label Email
+      .col-sm-6= @admin_user.email
+    .form-group
+      %label.col-sm-2.control-label First Name
+      .col-sm-6= @admin_user.first_name
+    .form-group
+      %label.col-sm-2.control-label Last Name
+      .col-sm-6= @admin_user.last_name
+    .form-group
+      .col-sm-offset-2.col-sm-6
+        = link_to 'Edit', edit_admin_admin_user_path(@admin_user), class: 'btn btn-primary'
+        = link_to 'Back', admin_admin_users_path, class: 'btn btn-default'
