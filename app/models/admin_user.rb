@@ -14,6 +14,8 @@
 class AdminUser < ActiveRecord::Base
   has_secure_password
 
+  has_many :objections
+
   validate :email, unique: true
   validate :password, length: { minimum: 6 }
 end

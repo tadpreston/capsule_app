@@ -55,6 +55,7 @@ class Capsule < ActiveRecord::Base
   has_many :capsule_watches
   has_many :watchers, through: :capsule_watches, source: :user
   has_many :portable_capsules
+  has_many :objections, as: :objectionable, dependent: :destroy
 
   delegate :full_name, to: :user, prefix: true
 

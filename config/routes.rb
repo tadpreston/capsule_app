@@ -66,6 +66,7 @@ Rails.application.routes.draw do
             delete :unlike
           end
         end
+        resources :objections, only: :create
       end
       resources :hashtags, only: [:index]
       resources :location_watches, only: [:create, :destroy]

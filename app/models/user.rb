@@ -63,6 +63,7 @@ class User < ActiveRecord::Base
   has_many :capsule_watches
   has_many :watched_capsules, through: :capsule_watches, source: :capsule
   has_many :location_watches
+  has_many :objections
 
   pg_search_scope :search_user, against: [:first_name, :last_name], using: [:tsearch, :trigram, :dmetaphone]
 
