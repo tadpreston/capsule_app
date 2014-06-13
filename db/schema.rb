@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140610151630) do
+ActiveRecord::Schema.define(version: 20140613151749) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -171,6 +171,23 @@ ActiveRecord::Schema.define(version: 20140610151630) do
   add_index "location_watches", ["longitude", "latitude"], name: "index_location_watches_on_longitude_and_latitude", using: :btree
   add_index "location_watches", ["longitude"], name: "index_location_watches_on_longitude", using: :btree
   add_index "location_watches", ["user_id"], name: "index_location_watches_on_user_id", using: :btree
+
+  create_table "objections", force: true do |t|
+    t.integer  "objectionable_id"
+    t.string   "objectionable_type"
+    t.integer  "user_id"
+    t.text     "comment"
+    t.boolean  "dmca"
+    t.boolean  "criminal"
+    t.integer  "admin_user_id"
+    t.datetime "handled_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "objections", ["admin_user_id"], name: "index_objections_on_admin_user_id", using: :btree
+  add_index "objections", ["objectionable_id", "objectionable_type"], name: "index_objections_on_objectionable_id_and_objectionable_type", using: :btree
+  add_index "objections", ["user_id"], name: "index_objections_on_user_id", using: :btree
 
   create_table "recipient_users", force: true do |t|
     t.integer  "user_id"
