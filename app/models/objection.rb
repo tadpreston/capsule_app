@@ -20,9 +20,4 @@ class Objection < ActiveRecord::Base
   belongs_to :user
   belongs_to :admin_user
 
-  def capsule_id=(value)
-  end
-
-  def comment_id=(value)
-  end
 end
