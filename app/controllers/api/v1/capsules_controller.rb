@@ -41,12 +41,14 @@ module API
         span = { lat: params[:latSpan].to_f, long: params[:longSpan].to_f }
         hashtag = params[:hashtag].blank? ? '' : params[:hashtag]
 
-        if span[:lat].to_f > 0.4
-          @boxes = Capsule.find_boxes(origin, span, hashtag)
-          render :explorer_boxes
-        else
-          @capsules = Capsule.find_in_boxes(origin,span, hashtag)
-        end
+        @capsule_boxes = Explorer.new(origin, span, hashtag).find_capsules
+
+#        if span[:lat].to_f > 0.4
+#          @boxes = Capsule.find_boxes(origin, span, hashtag)
+#          render :explorer_boxes
+#        else
+#          @capsules = Capsule.find_in_boxes(origin,span, hashtag)
+#        end
       end
 
       def locationtags
