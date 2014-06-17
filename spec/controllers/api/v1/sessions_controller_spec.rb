@@ -120,10 +120,10 @@ describe API::V1::SessionsController do
           }.to change(User, :count).by(1)
         end
 
-        it 'sends a confirmation email' do
-          User.any_instance.should_receive(:send_confirmation_email)
-          post :create, { oauth: @oauth_attrs }
-        end
+#        it 'sends a confirmation email' do
+#          User.any_instance.should_receive(:send_confirmation_email)
+#          post :create, { oauth: @oauth_attrs }
+#        end
       end
     end
   end

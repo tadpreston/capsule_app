@@ -41,10 +41,10 @@ describe UserCallbacks do
       @user.save
     end
 
-    it "should send a confirmation email" do
-      User.any_instance.should_receive(:send_confirmation_email)
-      @user.save
-    end
+#    it "should send a confirmation email" do
+#      User.any_instance.should_receive(:send_confirmation_email)
+#      @user.save
+#    end
 
     it "should not send a confirmation email" do
       @user.provider = 'contact'

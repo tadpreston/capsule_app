@@ -98,43 +98,6 @@ class Capsule < ActiveRecord::Base
     find_in_rec(origin, span).where(incognito: true).includes(:user, :assets, :recipients)
   end
 
-  def self.find_boxes(origin, span, hashtag)
-    box_span = span[:lat].to_f >= 2 ? 0.5 : 0.2
-
-    start_lat = (truncate_decimals((origin[:lat] - span[:lat]) / box_span, 0) * box_span).round(1)
-    end_lat = (truncate_decimals(origin[:lat].to_f / box_span, 0) * box_span).round(1)
-    start_long = (truncate_decimals(origin[:long].to_f / box_span, 0) * box_span) - box_span
-    end_long = truncate_decimals((origin[:long].to_f + span[:long].to_f) / box_span, 0) * box_span
-
-    if hashtag.blank?
-      sql = <<-SQL
-        SELECT (trunc(latitude / #{box_span}) * #{box_span}) as lat, (trunc(longitude / #{box_span}) * #{box_span}) as lon, median(latitude) as med_lat, median(longitude) as med_long, count(*)
-        FROM capsules
-        WHERE (latitude BETWEEN #{start_lat} AND #{end_lat}) AND (longitude BETWEEN #{start_long} AND #{end_long})
-        GROUP BY lat, lon
-        ORDER BY lat,lon;
-      SQL
-    else
-      sql = <<-SQL
-        SELECT (trunc(latitude / #{box_span}) * #{box_span}) as lat, (trunc(longitude / #{box_span}) * #{box_span}) as lon, median(latitude) as med_lat, median(longitude) as med_long, count(*)
-        FROM capsules
-        WHERE (latitude BETWEEN #{start_lat} AND #{end_lat}) AND (longitude BETWEEN #{start_long} AND #{end_long}) AND (title ilike '%#{hashtag}%')
-        GROUP BY lat, lon
-        ORDER BY lat,lon;
-      SQL
-    end
-
-    boxed_capsules = cached_boxes(sql, "#{start_lat},#{end_long}")
-
-    boxed_capsules.map! { |bc| { name: "#{bc.lat},#{bc.lon}", center_lat: bc.med_lat, center_long: bc.med_long, count: bc.count } }
-
-    if boxed_capsules.size == 1 && boxed_capsules[0][:count] == 1
-      where(latitude: start_lat..end_lat, longitude: start_long..end_long).take
-    else
-      boxed_capsules
-    end
-  end
-
   def self.find_in_boxes(origin, span, hashtag)
     start_lat = truncate_decimals(origin[:lat].to_f - span[:lat].to_f)
     end_lat = truncate_decimals(origin[:lat].to_f) + 0.1
