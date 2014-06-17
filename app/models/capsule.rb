@@ -94,6 +94,10 @@ class Capsule < ActiveRecord::Base
     capsules.includes(:user, :assets, :recipients)
   end
 
+  def self.find_hidden_in_rec(origin, span)
+    find_in_rec(origin, span).where(incognito: true).includes(:user, :assets, :recipients)
+  end
+
   def self.find_boxes(origin, span, hashtag)
     box_span = span[:lat].to_f >= 2 ? 0.5 : 0.2
 

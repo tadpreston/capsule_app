@@ -49,6 +49,7 @@ Rails.application.routes.draw do
           get :suggested
           get :library
           get :loadtest
+          get :hidden
         end
         member do
           get    :replies

@@ -3,7 +3,8 @@ module API
 
     class CapsulesController < API::V1::ApplicationController
       before_action :set_capsule, only: [:show, :update, :destroy, :portable, :remove_portable]
-      skip_before_action :authorize_auth_token, only: [:index, :explorer, :locationtags, :library, :read, :unread, :loadtest]
+      before_action :set_origin_span, only: [:explorer, :hidden, :locationtags]
+      skip_before_action :authorize_auth_token, only: [:index, :explorer, :locationtags, :library, :read, :unread, :loadtest, :hidden]
 
       def index
         @user = User.find params[:user_id]
@@ -37,22 +38,12 @@ module API
       end
 
       def explorer
-        origin = { lat: params[:latOrigin].to_f, long: params[:longOrigin].to_f }
-        span = { lat: params[:latSpan].to_f, long: params[:longSpan].to_f }
         hashtag = params[:hashtag].blank? ? '' : params[:hashtag]
-
-        @capsule_boxes = Explorer.new(origin, span, hashtag).find_capsules
-
-#        if span[:lat].to_f > 0.4
-#          @boxes = Capsule.find_boxes(origin, span, hashtag)
-#          render :explorer_boxes
-#        else
-#          @capsules = Capsule.find_in_boxes(origin,span, hashtag)
-#        end
+        @capsule_boxes = Explorer.new(@origin, @span, hashtag).find_capsules
       end
 
       def locationtags
-        @capsules = Capsule.find_location_hash_tags({ lat: params[:latOrigin].to_f, long: params[:longOrigin].to_f }, { lat: params[:latSpan].to_f, long: params[:longSpan].to_f }, params[:hashtags].gsub(/[|]/,' '))
+        @capsules = Capsule.find_location_hash_tags(@origin, @span, params[:hashtags].gsub(/[|]/,' '))
         @capsule_count = @capsules.count(:all)
       end
 
@@ -74,6 +65,10 @@ module API
           @user_capsules = current_user.cached_capsules.by_updated_at
         end
         @suggested_capsules = Capsule.find_in_rec({ lat: 33.2342834, long: -97.5861393 }, { lat: 1.4511453, long: 1.7329357 }).includes(:user).limit(5)  # This is temporary until a suggested algorithm is developed
+      end
+
+      def hidden
+        @capsules = Capsule.find_hidden_in_rec(@origin, @span)
       end
 
       def replies
@@ -136,6 +131,11 @@ module API
           rescue
             render json: { status: 'Not Found', response: { errors: [ { capsule: [ "Not found with id: #{params[:id]}" ] } ] } }, status: 404
           end
+        end
+
+        def set_origin_span
+          @origin = { lat: params[:latOrigin].to_f, long: params[:longOrigin].to_f }
+          @span = { lat: params[:latSpan].to_f, long: params[:longSpan].to_f }
         end
 
         def capsule_params
