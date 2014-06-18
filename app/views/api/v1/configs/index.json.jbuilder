@@ -8,7 +8,9 @@ envelope(json, :success) do
     end
     json.store_url 'https://itunes.apple.com/us/app/106-park/id418612824?mt=8'
     json.content_token_url 'capsule://?c=823879123'
-    json.world_lat ['-72', '72']
-    json.world_long ['-185', '185']
+    json.south_lat -60
+    json.west_long -179.9
+    json.north_lat 72
+    json.east_long 179.9
   end
 end
