@@ -38,12 +38,15 @@ class Explorer
   def single_capsules(capsule_boxes_array)
     singles = capsule_boxes_array.clone
     singles.delete_if { |box| box.count > 1 }
-#   singles.map { |box| Capsule.where(latitude: box.lat.to_f..box.lat.to_f+@box_span, longitude: box.lon.to_f-@box_span..box.lon.to_f).take }
-    singles.map { |box| Capsule.where(latitude: box.med_lat.to_f, longitude: box.med_long.to_f).take }
+    singles.map do |box|
+      Rails.cache.fetch(["#{box.lat},#{box.lon}", "capsule"]) do
+        Capsule.where(latitude: box.lat.to_f..box.lat.to_f+@box_span, longitude: box.lon.to_f-@box_span..box.lon.to_f).take
+      end
+    end
   end
 
   def without_singles(capsule_boxes_array)
-    boxes = capsule_boxes_array.clone.delete_if { |box| box.count <= 1 }
+    boxes = capsule_boxes_array.clone.delete_if { |box| box.count == 1 }
     boxes.map { |bc| { name: "#{bc.lat},#{bc.lon}", center_lat: bc.med_lat, center_long: bc.med_long, count: bc.count } }
   end
 
