@@ -38,7 +38,8 @@ class Explorer
   def single_capsules(capsule_boxes_array)
     singles = capsule_boxes_array.clone
     singles.delete_if { |box| box.count > 1 }
-    singles.map { |box| Capsule.where(latitude: box.lat.to_f..box.lat.to_f+@box_span, longitude: box.lon.to_f-@box_span..box.lon.to_f).take }
+#   singles.map { |box| Capsule.where(latitude: box.lat.to_f..box.lat.to_f+@box_span, longitude: box.lon.to_f-@box_span..box.lon.to_f).take }
+    singles.map { |box| Capsule.where(latitude: box.med_lat.to_f, longitude: box.med_long.to_f).take }
   end
 
   def without_singles(capsule_boxes_array)
