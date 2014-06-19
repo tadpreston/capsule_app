@@ -39,7 +39,7 @@ class Explorer
     singles = capsule_boxes_array.clone
     singles.delete_if { |box| box.count > 1 }
     singles.map do |box|
-      Rails.cache.fetch(["#{box.lat},#{box.lon}", "capsule"]) do
+      Rails.cache.fetch(["single/capsule/#{box.lat},#{box.lon}"]) do
         Capsule.where(latitude: box.lat.to_f..box.lat.to_f+@box_span, longitude: box.lon.to_f-@box_span..box.lon.to_f).take
       end
     end
