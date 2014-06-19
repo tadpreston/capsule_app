@@ -9,3 +9,4 @@ json.is_incognito capsule.incognito || false
 json.is_read capsule.read_by?(current_user)
 json.is_portable capsule.is_portable || false
 json.is_owned is_owned?(capsule.user_id)
+json.is_processed capsule.is_processed?
