@@ -122,65 +122,6 @@ class Capsule < ActiveRecord::Base
     (point.abs.round + (point.abs.modulo(1) < BOX_RANGE ? BOX_RANGE : 0)) * (point < 0 ? -1 : 1)
   end
 
-  def self.to_hash(collection)
-    collection.map do |capsule|
-      author = capsule.cached_user
-      assets = capsule.cached_assets
-      recipients = capsule.cached_recipients
-      {
-        id: capsule.id,
-        creator: {
-          id: author.id,
-          email: author.email,
-          username: author.username,
-          full_name: author.full_name,
-          first_name: author.first_name,
-          last_name: author.last_name,
-          phone_number: author.phone_number,
-          location: author.location,
-          locale: author.locale,
-          timezone: author.time_zone,
-          provider: author.provider,
-          uid: author.uid,
-          profile_image: author.profile_image
-        },
-        title: capsule.title,
-        hash_tags: capsule.hash_tags.split(' '),
-        location: capsule.location,
-        relative_location: capsule.relative_location,
-        payload_type: capsule.payload_type || 0,
-        status: capsule.status,
-        promotional_state: capsule.promotional_state || 0,
-        thumbnail: capsule.thumbnail,
-        assets: [],
-        start_date: '2014-04-02T11:12:13',
-        lock_question: capsule.lock_question,
-        lock_answer: capsule.lock_answer,
-        recipients: recipients.map do |recipient|
-          {
-            id: recipient.id,
-            email: recipient.email,
-            username: recipient.username,
-            full_name: recipient.full_name,
-            first_name: recipient.first_name,
-            last_name: recipient.last_name,
-            phone_number: recipient.phone_number,
-            location: recipient.location,
-            locale: recipient.locale,
-            timezone: recipient.time_zone,
-            provider: recipient.provider,
-            uid: recipient.uid,
-            profile_image: recipient.profile_image,
-            recipient_token: recipient.recipient_token
-          }
-        end,
-        is_incognito: capsule.incognito || false,
-        created_at: capsule.created_at,
-        updated_at: capsule.updated_at
-      }
-    end
-  end
-
   def purged_title
     title.slice(/^[^#]*\b/)
   end
@@ -207,15 +148,15 @@ class Capsule < ActiveRecord::Base
   end
 
   def is_a_recipient?(recipient)
-    recipients.exists?(recipient)
+    cached_recipients.include?(recipient)
   end
 
   def read_by?(user)
-    read_by.exists?(user)
+    cached_read_by.include?(user)
   end
 
   def watched_by?(user)
-    watchers.exists?(user)
+    cached_watchers.include?(user)
   end
 
   def hash_tags_array
@@ -234,29 +175,38 @@ class Capsule < ActiveRecord::Base
     likes.size
   end
 
-  def flush_cache
-    Rails.cache.delete([self.class.name, "author"])
-    Rails.cache.delete([self.class.name, "recipeints"])
-    Rails.cache.delete([self.class.name, "assets"])
-  end
-
-  def cached_user
-    Rails.cache.fetch([self, "author"]) { user }
-  end
-
-  def cached_recipients
-    Rails.cache.fetch([self, "recipients"]) { recipients.to_a }
-  end
-
-  def cached_assets
-    Rails.cache.fetch([self, "assets"]) { assets.to_a }
-  end
-
   def is_incognito=(value)
     self.incognito = value
   end
 
   def is_incognito
     self.incognito
+  end
+
+  # Caching associations
+  # TODO Refactor this into a module
+
+  def cached_user
+    Rails.cache.fetch(["capsule/author", self]) { user }
+  end
+
+  def cached_recipients
+    Rails.cache.fetch(["capsule/recipients", self]) { recipients.to_a }
+  end
+
+  def cached_assets
+    Rails.cache.fetch(["capsule/assets", self]) { assets.to_a }
+  end
+
+  def cached_comments
+    Rails.cache.fetch(["capsule/comments", self]) { comments.to_a }
+  end
+
+  def cached_read_by
+    Rails.cache.fetch(["capsule/read_by", self]) { read_by.to_a }
+  end
+
+  def cached_watchers
+    Rails.cache.fetch(["capsule/watchers", self]) { watchers.to_a }
   end
 end
