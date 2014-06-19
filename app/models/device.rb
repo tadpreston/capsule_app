@@ -21,7 +21,7 @@ class Device < ActiveRecord::Base
   # validations
 
   # associations
-  belongs_to :user
+  belongs_to :user, touch: true
 
   # scopes
 

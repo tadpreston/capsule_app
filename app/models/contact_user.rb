@@ -10,6 +10,6 @@
 #
 
 class ContactUser < ActiveRecord::Base
-  belongs_to :user
-  belongs_to :contact, class_name: 'User'
+  belongs_to :user, touch: true
+  belongs_to :contact, class_name: 'User', touch: true
 end
