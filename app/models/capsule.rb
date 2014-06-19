@@ -109,6 +109,24 @@ class Capsule < ActiveRecord::Base
     capsules
   end
 
+  def self.find_hashtags(origin, span, hashtag)
+    start_lat = truncate_decimals(origin[:lat].to_f - span[:lat].to_f)
+    end_lat = truncate_decimals(origin[:lat].to_f) + 0.1
+    start_long = truncate_decimals(origin[:long].to_f) - 0.1
+    end_long = truncate_decimals(origin[:long].to_f + span[:long].to_f)
+
+    sql = <<-SQL
+      SELECT regexp_matches(hash_tags, '[^[:space:]]*#{hashtag}[^[:space:]]*') as tag_match, count(*) AS tag_count
+      FROM capsules
+      WHERE (trunc(latitude,1) BETWEEN #{start_lat} AND #{end_lat}) AND (trunc(longitude,1) BETWEEN #{start_long} AND #{end_long}) AND (hash_tags like '%#{hashtag}%')
+      GROUP BY tag_match
+      ORDER BY tag_count DESC;
+    SQL
+
+    tags = find_by_sql sql
+    tags.collect { |tag| tag.tag_match.join(' ') } + promoted_tags
+  end
+
   def self.truncate_decimals(value, places = 1)
     precision = 10**places
     (value * precision).to_i / precision.to_f
@@ -120,6 +138,10 @@ class Capsule < ActiveRecord::Base
 
   def self.start_point(point)
     (point.abs.round + (point.abs.modulo(1) < BOX_RANGE ? BOX_RANGE : 0)) * (point < 0 ? -1 : 1)
+  end
+
+  def self.promoted_tags
+    [ '#hometown', '#dallas', '#fishboy' ]
   end
 
   def purged_title
