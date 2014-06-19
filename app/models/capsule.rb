@@ -45,7 +45,7 @@ class Capsule < ActiveRecord::Base
   has_many :favorites
   has_many :favorite_users, through: :favorites, source: :user
   has_many :comments, as: :commentable, dependent: :destroy
-  has_many :assets, -> { where(complete: true) }, dependent: :destroy
+  has_many :assets, dependent: :destroy
   has_many :recipient_users, dependent: :destroy
   has_many :recipients, through: :recipient_users, source: :user
   has_many :replies, class_name: "Capsule", foreign_key: "in_reply_to"
@@ -157,6 +157,12 @@ class Capsule < ActiveRecord::Base
 
   def watched_by?(user)
     cached_watchers.include?(user)
+  end
+
+  def is_processed?
+    processed_flag = true
+    cached_assets.each { |asset| processed_flag = false if asset.complete == false }
+    processed_flag
   end
 
   def hash_tags_array
