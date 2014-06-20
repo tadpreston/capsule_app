@@ -4,7 +4,7 @@ module API
     class CapsulesController < API::V1::ApplicationController
       before_action :set_capsule, only: [:show, :update, :destroy, :portable, :remove_portable]
       before_action :set_origin_span, only: [:explorer, :hidden, :locationtags]
-      skip_before_action :authorize_auth_token, only: [:index, :explorer, :locationtags, :library, :read, :unread, :loadtest, :hidden]
+      skip_before_action :authorize_auth_token, only: [:index, :explorer, :locationtags, :library, :read, :unread, :loadtest, :hidden, :show]
 
       def index
         @user = User.find params[:user_id]
