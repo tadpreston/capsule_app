@@ -124,7 +124,8 @@ class Capsule < ActiveRecord::Base
     SQL
 
     tags = find_by_sql sql
-    tags.collect { |tag| tag.tag_match.join(' ') } + promoted_tags
+#   tags.collect { |tag| tag.tag_match.join(' ') } + promoted_tags
+    promoted_tags
   end
 
   def self.truncate_decimals(value, places = 1)
