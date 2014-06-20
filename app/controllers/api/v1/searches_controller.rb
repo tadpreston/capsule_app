@@ -16,7 +16,7 @@ module API
           user_query = query.split(' ').select { |s| s.include? '@' }.join
           @users = User.where('email = ? OR username = ?',  user_query, user_query.match(/^.?(.*)/)[1])
         else
-          @capsules = Capsule.where('title ilike ? AND incognito = ?', "%#{query}%", false)
+          @capsules = Capsule.where('title ilike ?', "%#{query}%").where(incognito: false).where(relative_location: nil)
           @hashtags = Hashtag.where('tag ilike ?', "%#{query.match(/^.?(.*)/)[1]}%")
           @users = User.where('first_name ilike ? OR last_name ilike ?', "%#{query}%", "%#{query}%")
         end
