@@ -59,6 +59,7 @@ json.cache! ['api/v1', capsule] do
   json.is_read capsule.read_by?(current_user)
   json.is_liked capsule.liked_by?(current_user)
   json.likes_count capsule.likes_count
+  json.capsule_count capsule.capsule_count
   json.is_portable capsule.is_portable || false
   json.is_processed capsule.is_processed?
   json.created_at capsule.created_at
