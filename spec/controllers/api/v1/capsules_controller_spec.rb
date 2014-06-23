@@ -124,7 +124,7 @@ describe API::V1::CapsulesController do
     it 'returns a collection of watched capsules for the current user' do
       get :watched
       expect(assigns(:capsules)).to_not be_nil
-      expect(assigns(:capsules)).to eq([@capsule4, @capsule1, @capsule3])
+      assigns(:capsules).each { |capsule| expect([@capsule4, @capsule1, @capsule3]).to include(capsule) }
       expect(assigns(:capsules)).to_not include(@capsule2)
     end
   end
