@@ -208,7 +208,15 @@ class Capsule < ActiveRecord::Base
   end
 
   def is_a_recipient?(recipient)
-    cached_recipients.include?(recipient)
+    recipients.include?(recipient)
+  end
+
+  def is_public?
+    recipients.empty?
+  end
+
+  def is_provate?
+    !recipients.empty?
   end
 
   def read_by?(user)
