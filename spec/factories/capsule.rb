@@ -7,5 +7,6 @@ FactoryGirl.define do
     longitude -96.8909
     status 'new'
     payload_type 'image'
+    incognito false
   end
 end

@@ -28,8 +28,8 @@
 #
 
 class Capsule < ActiveRecord::Base
-  include PgSearch
   include IsLikeable
+  include CapsuleCachedAssociations
 
   attr_reader :recipients_attributes
 
@@ -59,16 +59,20 @@ class Capsule < ActiveRecord::Base
 
   delegate :full_name, to: :user, prefix: true
 
-  scope :by_updated_at, -> { order(updated_at: :desc) }
-
-  # pg_search_scope :search_by_hashtags, against: :hash_tags, using: { tsearch: { dictionary: "english" } }
-
   accepts_nested_attributes_for :comments, allow_destroy: true
   accepts_nested_attributes_for :assets, allow_destroy: true
 
   PAYLOAD_TYPES = [NO_VALUE_TYPE = 'NoValue', AUDIO_TYPE = 'Audio', VIDEO_TYPE = 'Video', PICTURE_TYPE = 'Picture', TEXT_TYPE = 'Text']
   PROMOTIONAL_STATES = ["NoValue", "Promo State One", "Promo State Two", "Promo State Three", "Promo State Four"]
   BOX_RANGE = 0.1
+
+  # Capsule scopes
+
+  scope :by_updated_at, -> { order(updated_at: :desc) }
+  scope :hidden, -> { where(incognito: true) }
+  scope :not_hidden, -> { where(incognito: false) }
+  scope :absolute_location, -> { where(relative_location: nil) }
+  scope :public_capsules, -> { joins('LEFT OUTER JOIN recipient_users r ON r.capsule_id = capsules.id').where('r.id IS NULL') }
 
   def self.find_in_rec(origin, span)
     east_bound = origin[:long] + span[:long]
@@ -88,6 +92,10 @@ class Capsule < ActiveRecord::Base
     where('hash_tags ilike ?', "%#{tag}%")
   end
 
+  def self.public_with_user(user_id)
+    joins('LEFT OUTER JOIN recipient_users r ON r.capsule_id = capsules.id').where('r.id IS NULL OR r.user_id = ?', user_id)
+  end
+
   def self.find_location_hash_tags(origin, span, tag = nil)
     capsules = find_in_rec(origin, span)
     capsules = capsules.with_hash_tag(tag) if tag
@@ -95,18 +103,7 @@ class Capsule < ActiveRecord::Base
   end
 
   def self.find_hidden_in_rec(origin, span)
-    find_in_rec(origin, span).where(incognito: true).includes(:user, :assets, :recipients)
-  end
-
-  def self.find_in_boxes(origin, span, hashtag)
-    start_lat = truncate_decimals(origin[:lat].to_f - span[:lat].to_f)
-    end_lat = truncate_decimals(origin[:lat].to_f) + 0.1
-    start_long = truncate_decimals(origin[:long].to_f) - 0.1
-    end_long = truncate_decimals(origin[:long].to_f + span[:long].to_f)
-
-    capsules = Capsule.where("trunc(latitude,1) BETWEEN ? AND ? AND trunc(longitude,1) BETWEEN ? AND ?",start_lat,end_lat,start_long,end_long)
-    capsules = capsules.where("title ilike ?", "%#{hashtag}%") unless hashtag.blank?
-    capsules
+    find_in_rec(origin, span).hidden.includes(:user, :assets, :recipients)
   end
 
   def self.find_hashtags(origin, span, hashtag)
@@ -125,24 +122,15 @@ class Capsule < ActiveRecord::Base
 
     tags = find_by_sql sql
     tags.collect { |tag| tag.tag_match.join(' ') } + promoted_tags
-#   promoted_tags
   end
 
-  def self.truncate_decimals(value, places = 1)
-    precision = 10**places
-    (value * precision).to_i / precision.to_f
-  end
-
-  def self.cached_boxes(sql, name)
-    Rails.cache.fetch([name, "boxes"]) { find_by_sql sql }
-  end
-
-  def self.start_point(point)
-    (point.abs.round + (point.abs.modulo(1) < BOX_RANGE ? BOX_RANGE : 0)) * (point < 0 ? -1 : 1)
-  end
-
-  def self.promoted_tags
-    [ '#hometown', '#dallas', '#fishboy' ]
+  def self.search_capsules(query, user = nil)
+    capsules = where('title ilike ?', "%#{query}%").not_hidden.absolute_location
+    if user
+      capsules.public_with_user(user.id)
+    else
+      capsules.public_capsules
+    end
   end
 
   def purged_title
@@ -176,10 +164,6 @@ class Capsule < ActiveRecord::Base
 
   def is_public?
     recipients.empty?
-  end
-
-  def is_provate?
-    !recipients.empty?
   end
 
   def read_by?(user)
@@ -220,30 +204,15 @@ class Capsule < ActiveRecord::Base
     self.incognito
   end
 
-  # Caching associations
-  # TODO Refactor this into a module
+  private
 
-  def cached_user
-    Rails.cache.fetch(["capsule/author", self]) { user }
-  end
+    def self.truncate_decimals(value, places = 1)
+      precision = 10**places
+      (value * precision).to_i / precision.to_f
+    end
 
-  def cached_recipients
-    Rails.cache.fetch(["capsule/recipients", self]) { recipients.to_a }
-  end
+    def self.promoted_tags
+      [ '#hometown', '#dallas', '#fishboy' ]
+    end
 
-  def cached_assets
-    Rails.cache.fetch(["capsule/assets", self]) { assets.to_a }
-  end
-
-  def cached_comments
-    Rails.cache.fetch(["capsule/comments", self]) { comments.to_a }
-  end
-
-  def cached_read_by
-    Rails.cache.fetch(["capsule/read_by", self]) { read_by.to_a }
-  end
-
-  def cached_watchers
-    Rails.cache.fetch(["capsule/watchers", self]) { watchers.to_a }
-  end
 end

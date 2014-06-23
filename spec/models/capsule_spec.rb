@@ -123,11 +123,29 @@ describe Capsule do
     end
 
     it 'gets the correct capsules in the rectangle' do
-      expect(Capsule.find_in_rec(@origin, @span)).to eq([@capsule2, @capsule1])
+      Capsule.find_in_rec(@origin, @span).each { |capsule| expect([@capsule2, @capsule1]).to include(capsule) }
     end
 
     it 'does not include capsules outside of the rectangle' do
       expect(Capsule.find_in_rec(@origin, @span)).to_not include(@capsule3)
+    end
+  end
+
+  describe 'find_from_center' do
+    before do
+      @origin = { lat: 33.190, long: -96.8915 }
+      @span = { lat: 1.25, long: 0.875 }
+      @capsule1 = FactoryGirl.create(:capsule, location: { latitude: '33.167111', longitude: '-96.163793', radius: '20000' })
+      @capsule2 = FactoryGirl.create(:capsule, location: { latitude: '34.013300', longitude: '-97.623046', radius: '20000' })
+      @capsule3 = FactoryGirl.create(:capsule, location: { latitude: '30.089326', longitude: '-96.231873', radius: '20000' })
+    end
+
+    it 'gets the correct capsules in the rectangle' do
+      Capsule.find_from_center(@origin, @span).each { |capsule| expect([@capsule2, @capsule1]).to include(capsule) }
+    end
+
+    it 'does not include capsules outside of the rectangle' do
+      expect(Capsule.find_from_center(@origin, @span)).to_not include(@capsule3)
     end
   end
 
@@ -165,6 +183,129 @@ describe Capsule do
       expect(capsules.to_a).to eq([@capsule1])
       expect(capsules.to_a).to_not include(@capsule2)
       expect(capsules.to_a).to_not include(@capsule3)
+    end
+  end
+
+  describe 'hidden scope' do
+    it 'finds the hidden capsules' do
+      capsule1 = FactoryGirl.create(:capsule, incognito: true)
+      capsule2 = FactoryGirl.create(:capsule)
+
+      capsules = Capsule.hidden
+      expect(capsules.count).to eq(1)
+      expect(capsules[0]).to eq(capsule1)
+    end
+  end
+
+  describe 'not_hidden scope' do
+    it 'finds capsules that are not hidden' do
+      capsule1 = FactoryGirl.create(:capsule, incognito: true)
+      capsule2 = FactoryGirl.create(:capsule, incognito: false)
+
+      capsules = Capsule.not_hidden
+      expect(capsules.count).to eq(1)
+      expect(capsules[0]).to eq(capsule2)
+    end
+  end
+
+  describe 'absolute_location scope' do
+    it 'finds capsules that have an absolute location' do
+      capsule1 = FactoryGirl.create(:capsule)
+      capsule2 = FactoryGirl.create(:capsule, relative_location: { location: { latitude: 33, longitude: -96 } })
+
+      capsules = Capsule.absolute_location
+      expect(capsules.count).to eq(1)
+      expect(capsules[0]).to eq(capsule1)
+    end
+  end
+
+  describe 'public_capsules scope' do
+    it 'finds all capsules that are public' do
+      capsule1 = FactoryGirl.create(:capsule)
+      capsule2 = FactoryGirl.create(:capsule)
+      capsule3 = FactoryGirl.create(:capsule)
+      capsule2.recipients << FactoryGirl.create(:user)
+
+      capsules = Capsule.public_capsules
+      expect(capsules.count).to eq(2)
+      capsules.each { |capsule| expect([capsule1, capsule3]).to include(capsule) }
+      expect(capsules).to_not include(capsule2)
+    end
+  end
+
+  describe 'public_with_user scope' do
+    it 'finds all capsules that are public and and the user is a recipient' do
+      capsule1 = FactoryGirl.create(:capsule)
+      capsule2 = FactoryGirl.create(:capsule)
+      capsule3 = FactoryGirl.create(:capsule)
+      capsule4 = FactoryGirl.create(:capsule)
+      capsule2.recipients << FactoryGirl.create(:user)
+      user = FactoryGirl.create(:user)
+      capsule4.recipients << user
+
+      capsules = Capsule.public_with_user(user.id)
+      expect(capsules.count).to eq(3)
+      capsules.each { |capsule| expect([capsule1,capsule3,capsule4]).to include(capsule) }
+      expect(capsules).to_not include(capsule2)
+    end
+  end
+
+  describe 'search_capsules method' do
+    it 'returns capsules that match the search term' do
+      capsule1 = FactoryGirl.create(:capsule, title: 'This is a test capsule')
+      capsule2 = FactoryGirl.create(:capsule, title: 'Just an average capsule')
+      capsule3 = FactoryGirl.create(:capsule, title: 'Another test capsule')
+
+      capsules = Capsule.search_capsules('test')
+      expect(capsules.size).to eq(2)
+      expect(capsules).to include(capsule1)
+      expect(capsules).to include(capsule3)
+    end
+
+    it 'returns capsules that match the search term and are not hidden' do
+      capsule1 = FactoryGirl.create(:capsule, title: 'This is a test capsule', incognito: true)
+      capsule2 = FactoryGirl.create(:capsule, title: 'Just an average capsule')
+      capsule3 = FactoryGirl.create(:capsule, title: 'Another test capsule')
+
+      capsules = Capsule.search_capsules('test')
+      expect(capsules.size).to eq(1)
+      expect(capsules).to include(capsule3)
+    end
+
+    it 'returns capsules that match the search term and are absolute position' do
+      capsule1 = FactoryGirl.create(:capsule, title: 'This is a test capsule')
+      capsule2 = FactoryGirl.create(:capsule, title: 'Just an average capsule')
+      capsule3 = FactoryGirl.create(:capsule, title: 'Another test capsule', relative_location: { location: { latitude: 33, longitude: -97 } })
+
+      capsules = Capsule.search_capsules('test')
+      expect(capsules.size).to eq(1)
+      expect(capsules).to include(capsule1)
+    end
+
+    it 'returns capsules that match the search term and are public' do
+      capsule1 = FactoryGirl.create(:capsule, title: 'This is a test capsule')
+      capsule2 = FactoryGirl.create(:capsule, title: 'Just an average capsule')
+      capsule3 = FactoryGirl.create(:capsule, title: 'Another test capsule')
+      capsule1.recipients << FactoryGirl.create(:user)
+
+      capsules = Capsule.search_capsules('test')
+      expect(capsules.size).to eq(1)
+      expect(capsules).to include(capsule3)
+    end
+
+    it 'returns capsules that match the search term and the user is a recipient' do
+      capsule1 = FactoryGirl.create(:capsule, title: 'This is a test capsule')
+      capsule2 = FactoryGirl.create(:capsule, title: 'Just an average capsule')
+      capsule3 = FactoryGirl.create(:capsule, title: 'Another test capsule')
+      capsule4 = FactoryGirl.create(:capsule, title: 'Some testing going on')
+      user = FactoryGirl.create(:user)
+      capsule1.recipients << user
+      capsule4.recipients << FactoryGirl.create(:user)
+
+      capsules = Capsule.search_capsules('test', user)
+      expect(capsules.size).to eq(2)
+      expect(capsules).to include(capsule1)
+      expect(capsules).to include(capsule3)
     end
   end
 
@@ -283,6 +424,15 @@ describe Capsule do
     it "returns false if user is nil" do
       expect(@capsule.read_by?(nil)).to be_false
     end
+  end
+
+  describe 'association caching methods' do
+    it { should respond_to(:cached_user) }
+    it { should respond_to(:cached_recipients) }
+    it { should respond_to(:cached_assets) }
+    it { should respond_to(:cached_comments) }
+    it { should respond_to(:cached_read_by) }
+    it { should respond_to(:cached_watchers) }
   end
 
 end
