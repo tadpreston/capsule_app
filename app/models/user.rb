@@ -31,8 +31,6 @@
 #
 
 class User < ActiveRecord::Base
-  include PgSearch
-
   before_save UserCallbacks
   before_validation UserCallbacks, unless: Proc.new { |user| user.persisted? }
   after_commit UserCallbacks
@@ -64,8 +62,6 @@ class User < ActiveRecord::Base
   has_many :watched_capsules, through: :capsule_watches, source: :capsule
   has_many :location_watches
   has_many :objections
-
-  pg_search_scope :search_user, against: [:first_name, :last_name], using: [:tsearch, :trigram, :dmetaphone]
 
   def self.find_or_create_by_oauth(oauth)
     User.find_or_create_by(provider: oauth[:provider], uid: oauth[:uid].to_s) do |user|
@@ -100,15 +96,33 @@ class User < ActiveRecord::Base
     end
   end
 
-    def self.generate_token(column)
-      token = ''
+  def self.generate_token(column)
+    token = ''
 
-      begin
-        token = SecureRandom.urlsafe_base64
-      end while User.exists?(column => token)
+    begin
+      token = SecureRandom.urlsafe_base64
+    end while User.exists?(column => token)
 
-      token
+    token
+  end
+
+  def self.search_by_identity(query)
+    user_query = query.split(' ').select { |s| s.include? '@' }.join
+    if user_query[0] == '@'
+      where(username: user_query.match(/^.?(.*)/)[1])
+    else
+      where(email: user_query)
     end
+  end
+
+  def self.search_by_name(query)
+    user_query = query.split
+    where_clause = []
+    user_query.each do |q|
+      where_clause << '(' + %w[first_name last_name].map { |column| "#{column} ilike '%#{q}%'" }.join(' OR ') + ')'
+    end
+    where(where_clause.join(' AND '))
+  end
 
   def authenticate(password = nil)
     if password

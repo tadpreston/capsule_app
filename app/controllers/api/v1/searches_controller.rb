@@ -13,12 +13,11 @@ module API
         if query[0] == '#'
           @hashtags = Capsule.search_hashtags(query)
         elsif query.include?('@')
-          user_query = query.split(' ').select { |s| s.include? '@' }.join
-          @users = User.where('email = ? OR username = ?',  user_query, user_query.match(/^.?(.*)/)[1])
+          @users = User.search_by_identity(query)
         else
           @capsules = Capsule.search_capsules(query, current_user)
           @hashtags = Capsule.search_hashtags(query)
-          @users = User.where('first_name ilike ? OR last_name ilike ?', "%#{query}%", "%#{query}%")
+          @users = User.search_by_name(query)
         end
       end
     end
