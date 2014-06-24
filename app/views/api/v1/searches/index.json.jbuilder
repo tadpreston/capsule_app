@@ -2,7 +2,7 @@ envelope(json, :success) do
   unless @users.empty?
     json.set! :users do
       json.array! @users do |user|
-        json.cache! ['api/v1/search', user] do
+        json.cache! ['api/v1', user] do
           json.id user.id
           json.email user.email
           json.username user.username
@@ -28,8 +28,8 @@ envelope(json, :success) do
   unless @capsules.empty?
     json.set! :capsules do
       json.array! @capsules do |capsule|
-        json.cache! ['api/v1/search', capsule] do
-          json.partial! 'api/v1/capsules/capsule', capsule: capsule
+        json.cache! ['api/v1/_min_capsule', capsule] do
+          json.partial! 'api/v1/capsules/min_capsule', capsule: capsule
         end
       end
     end
