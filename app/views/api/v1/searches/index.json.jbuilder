@@ -34,10 +34,10 @@ envelope(json, :success) do
       end
     end
   end
-  if @hashtags.size > 0
+  if @hashtags.to_a.size > 0
     json.set! :hashtags do
       json.array! @hashtags do |hashtag|
-        json.tag hashtag.tag
+        json.tag hashtag.hash_tags[0]
         json.latitude hashtag.latitude
         json.longitude hashtag.longitude
       end

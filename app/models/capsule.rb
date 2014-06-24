@@ -133,6 +133,13 @@ class Capsule < ActiveRecord::Base
     end
   end
 
+  def self.search_hashtags(hashtag)
+    with_hash_tag(hashtag)
+      .not_hidden
+      .absolute_location
+      .select("id, regexp_matches(hash_tags, '[^[:space:]]*#{hashtag}[^[:space:]]*') as hash_tags, latitude, longitude").order(hash_tags: :desc)
+  end
+
   def purged_title
     title.slice(/^[^#]*\b/)
   end

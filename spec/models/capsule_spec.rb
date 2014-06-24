@@ -435,4 +435,34 @@ describe Capsule do
     it { should respond_to(:cached_watchers) }
   end
 
+  describe 'search_hashtags class method' do
+    before do
+      @capsule1 = FactoryGirl.create(:capsule, title: 'A title #withhashtags #testing #wowfun')
+      @capsule2 = FactoryGirl.create(:capsule, title: 'Another #stuckintheoffice #withhashtags title #niceday')
+      @capsule3 = FactoryGirl.create(:capsule, title: 'Interesting #shouldnotfind #intheresults')
+    end
+
+    it 'returns the correct capsules' do
+      capsules = Capsule.search_hashtags('#withhashtags')
+      expect(capsules.to_a.size).to eq(2)
+      capsules.each { |c| expect([@capsule1, @capsule2]).to include(c) }
+    end
+
+    it 'returns a partial match' do
+      capsules = Capsule.search_hashtags('#intheresu')
+      expect(capsules.to_a.size).to eq(1)
+      expect(capsules[0]).to eq(@capsule3)
+    end
+
+    it 'returns the matching hashtag' do
+      capsules = Capsule.search_hashtags('#withhashtags')
+      capsules.each { |c| expect(c.hash_tags).to eq(['#withhashtags']) }
+    end
+
+    it 'returns the matching hashtag with a partial match' do
+      capsules = Capsule.search_hashtags('#withhas')
+      capsules.each { |c| expect(c.hash_tags).to eq(['#withhashtags']) }
+    end
+  end
+
 end
