@@ -1,11 +1,8 @@
 envelope(json, :success) do
   json.set! :boxes do
     json.array! @boxes do |box|
-      json.cache! ['boxV1', box], expires_in: 30.minutes do
-        json.name box[:name]
-        json.center_lat box[:center_lat]
-        json.center_long box[:center_long]
-        json.count box[:count]
+      json.cache! ['api/v1/boxes', box] do
+        json.partial! 'api/v1/capsules/capsule_box', box: box
       end
     end
   end
