@@ -13,6 +13,7 @@ json.is_processed capsule.is_processed?
 json.comments_count capsule.comments_count
 json.set! :creator do
   json.id capsule.cached_user.id
-  json.full_name capsule.cached_user.full_name
+  json.first_name capsule.cached_user.first_name
+  json.last_name capsule.cached_user.last_name
   json.profile_image capsule.cached_user.profile_image
 end

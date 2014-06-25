@@ -2,7 +2,8 @@ json.id capsule.id
 json.in_reply_to capsule.in_reply_to if capsule.in_reply_to
 json.set! :creator do
   json.id capsule.cached_user.id
-  json.full_name capsule.cached_user.full_name
+  json.first_name capsule.cached_user.first_name
+  json.last_name capsule.cached_user.last_name
   json.profile_image capsule.cached_user.profile_image
 end
 json.is_owned is_owned?(capsule.user_id)
