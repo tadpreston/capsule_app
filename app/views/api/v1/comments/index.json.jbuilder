@@ -6,7 +6,8 @@ envelope(json, :success) do
       json.body comment.body
       json.set! :author do
         json.id comment.user_id
-        json.full_name comment.user.full_name
+        json.first_name comment.user.first_name
+        json.last_name comment.user.last_name
         json.profile_image comment.user.profile_image
       end
     end
