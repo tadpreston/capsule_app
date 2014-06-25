@@ -18,13 +18,13 @@ envelope(json, :success) do
       end
       json.set! :following do
         json.array! @following do |user|
-          json.partial! 'api/v1/users/user', user: user
+          json.partial! 'api/v1/users/array_user', user: user
         end
       end
     end
     json.set! :followers do
       json.array! @followers do |user|
-        json.partial! 'api/v1/users/user', user: user
+        json.partial! 'api/v1/users/array_user', user: user
       end
     end
   end
