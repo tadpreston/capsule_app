@@ -2,17 +2,7 @@ json.id capsule.id
 json.in_reply_to capsule.in_reply_to if capsule.in_reply_to
 json.set! :creator do
   json.id capsule.cached_user.id
-  json.email capsule.cached_user.email
-  json.username capsule.cached_user.username
   json.full_name capsule.cached_user.full_name
-  json.first_name capsule.cached_user.first_name
-  json.last_name capsule.cached_user.last_name
-  json.phone_number capsule.cached_user.phone_number
-  json.location capsule.cached_user.location
-  json.locale capsule.cached_user.locale
-  json.timezone capsule.cached_user.time_zone
-  json.provider capsule.cached_user.provider
-  json.uid capsule.cached_user.uid
   json.profile_image capsule.cached_user.profile_image
 end
 json.is_owned is_owned?(capsule.user_id)
@@ -52,7 +42,17 @@ json.is_incognito capsule.incognito || false
 json.is_read capsule.read_by?(current_user)
 json.is_liked capsule.liked_by?(current_user)
 json.likes_count capsule.likes_count
-json.comments_count capsule.comments_count
+#json.comments_count capsule.comments_count
+json.comments_count capsule.test_comments_count
+json.comments capsule.test_comments do |comment|
+  json.id comment[:id]
+  json.body comment[:body]
+  json.set! :author do
+    json.id comment[:author_id]
+    json.full_name comment[:full_name]
+    json.profile_image comment[:profile_image]
+  end
+end
 json.is_portable capsule.is_portable || false
 json.is_processed capsule.is_processed?
 json.created_at capsule.created_at
