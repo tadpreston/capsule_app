@@ -42,15 +42,14 @@ json.is_incognito capsule.incognito || false
 json.is_read capsule.read_by?(current_user)
 json.is_liked capsule.liked_by?(current_user)
 json.likes_count capsule.likes_count
-#json.comments_count capsule.comments_count
-json.comments_count capsule.test_comments_count
-json.comments capsule.test_comments do |comment|
-  json.id comment[:id]
-  json.body comment[:body]
+json.comments_count capsule.comments_count
+json.comments capsule.comments do |comment|
+  json.id comment.id
+  json.body comment.body
   json.set! :author do
-    json.id comment[:author_id]
-    json.full_name comment[:full_name]
-    json.profile_image comment[:profile_image]
+    json.id comment.user_id
+    json.full_name comment.user.full_name
+    json.profile_image comment.user.profile_image
   end
 end
 json.is_portable capsule.is_portable || false

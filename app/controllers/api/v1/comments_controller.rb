@@ -7,8 +7,7 @@ module API
       skip_before_action :authorize_auth_token, only: :index
 
       def index
-#       @comments = @capsule.comments
-        @comments = @capsule.test_comments
+        @comments = @capsule.comments
       end
 
       def create
