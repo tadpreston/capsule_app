@@ -23,6 +23,10 @@ class Comment < ActiveRecord::Base
   has_many :replies, as: :commentable, class_name: 'Comment'   # Allows replies to the current comment
   has_many :objections, as: :objectionable, dependent: :destroy
 
+  delegate :first_name, to: :user, prefix: true
+  delegate :last_name, to: :user, prefix: true
+  delegate :profile_image, to: :user, prefix: true
+
   def liked_by?(user)
     if user
       likes.include?(user.id)
