@@ -211,6 +211,15 @@ class Capsule < ActiveRecord::Base
     self.incognito
   end
 
+  def watch(user)
+    watchers << user
+  end
+
+  def unwatch(user)
+    watchers.delete user
+    self.touch
+  end
+
   def test_comments
     [
       { id: 12345, body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', author_id: 34241, full_name: 'Gonzalo Roberts', profile_image: 'http://pbs.twimg.com/profile_images/459488281978093568/AobvGoBt_normal.jpeg' },
