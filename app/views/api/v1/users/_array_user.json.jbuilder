@@ -1,11 +1,8 @@
 json.id user.id
 json.email user.email
 json.username user.username
-if user.provider == 'facebook'
-  json.facebook_username user.username
-elsif user.provider == 'twitter'
-  json.twitter_username user.username
-end
+json.facebook_username (user.provider == 'facebook' ? user.username : '')
+json.twitter_username (user.provider == 'twitter' ? user.username : '')
 json.full_name user.full_name
 json.first_name user.first_name
 json.last_name user.last_name
