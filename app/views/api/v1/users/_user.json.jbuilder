@@ -2,6 +2,11 @@ json.user do
   json.id user.id
   json.email user.email
   json.username user.username
+  if user.provider == 'facebook'
+    json.facebook_username user.username
+  elsif user.provider == 'twitter'
+    json.twitter_username user.username
+  end
   json.full_name user.full_name
   json.first_name user.first_name
   json.last_name user.last_name
@@ -15,6 +20,8 @@ json.user do
   json.tutorial_progress user.tutorial_progress
   json.settings user.settings
   json.email_confirmed (user.confirmed? ? true : false)
+  json.watching_count user.watching_count
+  json.watchers_count user.watchers_count
   json.created_at user.created_at
   json.updated_at user.updated_at
 end
