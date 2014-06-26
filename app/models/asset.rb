@@ -24,7 +24,7 @@ class Asset < ActiveRecord::Base
   validates :resource, presence: true
 
   def resource_path
-    if self.resource.include?('/')
+    if self.resource.include?('/') && self.complete
       "https://#{ENV['CDN_HOST']}/#{self.resource}"
     else
       "https://#{ENV['CDN_HOST']}/default/waiting.png"

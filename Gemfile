@@ -15,6 +15,7 @@ gem 'oj_mimic_json', '~> 1.0.0'
 gem 'transloadit', '~> 1.1.1'
 gem 'aws-sdk', '~> 1.42.0'
 gem 'kaminari', '~> 0.16.1'
+gem 'fastimage', '~> 1.6.3'
 
 gem 'sass-rails', '~> 4.0.3'
 gem 'uglifier', '~> 2.5.0'
