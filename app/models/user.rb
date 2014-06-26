@@ -63,6 +63,14 @@ class User < ActiveRecord::Base
   has_many :location_watches
   has_many :objections
 
+  def watching_count
+    relationships.count
+  end
+
+  def watchers_count
+    reverse_relationships.count
+  end
+
   def self.find_or_create_by_oauth(oauth)
     User.find_or_create_by(provider: oauth[:provider], uid: oauth[:uid].to_s) do |user|
       user.oauth = oauth
