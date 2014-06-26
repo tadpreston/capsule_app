@@ -28,6 +28,8 @@
 #  tutorial_progress    :integer          default(0)
 #  recipient_token      :string(255)
 #  comments_count       :integer          default(0)
+#  facebook_username    :string(255)
+#  twitter_username     :string(255)
 #
 
 require 'spec_helper'
