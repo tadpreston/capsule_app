@@ -95,13 +95,13 @@ module API
 
       def watch
         @capsule = Capsule.find params[:id]
-        @capsule.watchers << current_user
+        @capsule.watch current_user
         render :show
       end
 
       def unwatch
         @capsule = Capsule.find params[:id]
-        @capsule.watchers.delete current_user
+        @capsule.unwatch current_user
         render :show
       end
 
