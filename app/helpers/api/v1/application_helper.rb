@@ -2,9 +2,19 @@ module API
   module V1
     module ApplicationHelper
 
-      def envelope(json, status, errors = nil)
+      def envelope(json, status, errors = nil, alert = true)
         json.status status.to_s.humanize
         json.set! :response do
+          if alert
+            json.set! :alert do
+              json.text 'Test alert text body'
+              json.title 'Test alert title'
+              json.action_url 'capsule://actionUrl'
+              json.action_title 'Take Action'
+              json.cancel_url 'capsule://cancelUrl'
+              json.cancel_title 'Cancel'
+            end
+          end
           yield if block_given?
 
           if errors
@@ -12,6 +22,7 @@ module API
               json.set! key, value
             end
           end
+
         end
 
       end
