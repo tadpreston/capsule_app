@@ -12,5 +12,6 @@ envelope(json, :success) do
     json.west_long -179.9
     json.north_lat 72
     json.east_long 179.9
+    json.dmca_url 'http://capsuleapp.net/dmca'
   end
 end
