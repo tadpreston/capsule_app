@@ -17,7 +17,7 @@ module API
       private
 
         def objection_params
-          params.required(:objection).permit(:comment)
+          params.required(:objection).permit(:comment, :is_dmca, :is_criminal, :is_obscene)
         end
     end
 

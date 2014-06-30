@@ -21,4 +21,27 @@ class Objection < ActiveRecord::Base
   belongs_to :user
   belongs_to :admin_user
 
+  def is_dmca=(value)
+    self.dmca = value
+  end
+
+  def is_dmca
+    self.dmca
+  end
+
+  def is_criminal=(value)
+    self.criminal = value
+  end
+
+  def is_criminal
+    self.criminal
+  end
+
+  def is_obscene=(value)
+    self.obscene = value
+  end
+
+  def is_obscene
+    self.obscene
+  end
 end
