@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140626194450) do
+ActiveRecord::Schema.define(version: 20140630150522) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -193,6 +193,7 @@ ActiveRecord::Schema.define(version: 20140626194450) do
     t.datetime "handled_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "obscene"
   end
 
   add_index "objections", ["admin_user_id"], name: "index_objections_on_admin_user_id", using: :btree

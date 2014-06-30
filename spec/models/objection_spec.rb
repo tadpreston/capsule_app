@@ -13,6 +13,7 @@
 #  handled_at         :datetime
 #  created_at         :datetime
 #  updated_at         :datetime
+#  obscene            :boolean
 #
 
 require 'spec_helper'
