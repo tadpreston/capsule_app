@@ -11,6 +11,7 @@
 #  comments_count   :integer          default(0)
 #  created_at       :datetime
 #  updated_at       :datetime
+#  status           :string(255)
 #
 
 class Comment < ActiveRecord::Base
