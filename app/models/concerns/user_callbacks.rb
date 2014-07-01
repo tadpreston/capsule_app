@@ -9,7 +9,7 @@ class UserCallbacks
   end
 
   def self.after_commit(user)
-    FriendsWorker.perform_async(user.id)
+#   FriendsWorker.perform_async(user.id)
   end
 
   def self.after_create(user)
