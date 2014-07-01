@@ -1,6 +1,7 @@
 json.id user.id
 json.email user.email
 json.username user.username
+json.motto user.motto || ''
 json.facebook_username user.facebook_username || ''
 json.twitter_username user.twitter_username || ''
 json.full_name user.full_name
@@ -13,6 +14,7 @@ json.timezone user.time_zone || ''
 json.provider user.provider || ''
 json.uid user.uid || ''
 json.profile_image user.profile_image || ''
+json.background_image user.background_image || ''
 json.tutorial_progress user.tutorial_progress
 json.settings user.settings
 json.email_confirmed (user.confirmed? ? true : false)
