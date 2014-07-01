@@ -76,7 +76,7 @@ class Explorer
         sql = <<-SQL
           SELECT (trunc(latitude / #{@box_span}) * #{@box_span}) as lat, (trunc(longitude / #{@box_span}) * #{@box_span}) as lon, median(latitude) as med_lat, median(longitude) as med_long, count(*)
           FROM capsules
-          WHERE (latitude BETWEEN #{@start_lat} AND #{@end_lat}) AND (longitude BETWEEN #{@start_long} AND #{@end_long}) AND (incognito = FALSE)
+          WHERE (latitude BETWEEN #{@start_lat} AND #{@end_lat}) AND (longitude BETWEEN #{@start_long} AND #{@end_long}) AND (incognito = FALSE) AND (TRIM(status) IS NULL)
           GROUP BY lat, lon
           ORDER BY lat,lon;
         SQL
@@ -84,7 +84,9 @@ class Explorer
         sql = <<-SQL
           SELECT (trunc(latitude / #{@box_span}) * #{@box_span}) as lat, (trunc(longitude / #{@box_span}) * #{@box_span}) as lon, median(latitude) as med_lat, median(longitude) as med_long, count(*)
           FROM capsules
-          WHERE (latitude BETWEEN #{@start_lat} AND #{@end_lat}) AND (longitude BETWEEN #{@start_long} AND #{@end_long}) AND (title ilike '%#{@hashtag}%') AND (incognito = FALSE)
+          WHERE (latitude BETWEEN #{@start_lat} AND #{@end_lat}) AND (longitude BETWEEN #{@start_long} AND #{@end_long}) AND (title ilike '%#{@hashtag}%')
+                AND (incognito = FALSE)
+                AND (TRIM(status) IS NULL)
           GROUP BY lat, lon
           ORDER BY lat,lon;
         SQL
@@ -93,7 +95,7 @@ class Explorer
       sql = <<-SQL
         SELECT *
         FROM capsules
-        WHERE (trunc(latitude,1) BETWEEN #{@start_lat} AND #{@end_lat}) AND (trunc(longitude,1) BETWEEN #{@start_long} AND #{@end_long}) AND (incognito = FALSE)
+        WHERE (trunc(latitude,1) BETWEEN #{@start_lat} AND #{@end_lat}) AND (trunc(longitude,1) BETWEEN #{@start_long} AND #{@end_long}) AND (incognito = FALSE) AND (TRIM(status) IS NULL)
       SQL
 
       sql += " AND (title ilike '%#{@hashtag}%')" unless @hashtag.blank?

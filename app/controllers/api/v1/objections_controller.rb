@@ -7,9 +7,8 @@ module API
           objectionable = Capsule.find params[:capsule_id]
         elsif params[:comment_id]
           objectionable = Comment.find params[:comment_id]
-        else
-          render json: { status: 'Unknown entity' }
         end
+        objectionable.update_attribute(:status, 'objection')
         objectionable.objections.create(objection_params.merge({user_id: current_user.id}))
         render json: { status: 'Success' }
       end

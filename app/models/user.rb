@@ -46,22 +46,22 @@ class User < ActiveRecord::Base
   validates :password, confirmation: true, length: { minimum: 6 }, unless: Proc.new { |u| u.password.blank? && u.password_confirmation.blank? }
 
   has_many :devices, dependent: :destroy
-  has_many :capsules, dependent: :destroy
+  has_many :capsules, -> { where 'TRIM(status) IS NULL' }, dependent: :destroy
   has_many :favorites, dependent: :destroy
-  has_many :favorite_capsules, through: :favorites, source: :capsule
+  has_many :favorite_capsules, -> { where 'TRIM(status) IS NULL' }, through: :favorites, source: :capsule
   has_many :relationships, foreign_key: "follower_id", dependent: :destroy
   has_many :followed_users, through: :relationships, source: :followed
   has_many :reverse_relationships, foreign_key: "followed_id", class_name: "Relationship", dependent: :destroy
   has_many :followers, through: :reverse_relationships
-  has_many :comments, dependent: :destroy
+  has_many :comments, -> { where 'TRIM(status) IS NULL' }, dependent: :destroy
   has_many :recipient_users, dependent: :destroy
-  has_many :received_capsules, through: :recipient_users, source: :capsule
+  has_many :received_capsules, -> { where 'TRIM(status) IS NULL' }, through: :recipient_users, source: :capsule
   has_many :contact_users
   has_many :contacts, through: :contact_users
   has_many :reads, class_name: 'CapsuleRead'
-  has_many :read_capsules, through: :reads, source: :capsule
+  has_many :read_capsules, -> { where 'TRIM(status) IS NULL' }, through: :reads, source: :capsule
   has_many :capsule_watches
-  has_many :watched_capsules, through: :capsule_watches, source: :capsule
+  has_many :watched_capsules, -> { where 'TRIM(status) IS NULL' }, through: :capsule_watches, source: :capsule
   has_many :location_watches
   has_many :objections
 

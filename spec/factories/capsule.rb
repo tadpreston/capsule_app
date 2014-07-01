@@ -5,7 +5,6 @@ FactoryGirl.define do
     location { { latitude: '33.18953', longitude: '-96.8909', radius: '.02341' } }
     latitude 33.18953
     longitude -96.8909
-    status 'new'
     payload_type 'image'
     incognito false
   end

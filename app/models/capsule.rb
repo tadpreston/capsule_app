@@ -48,8 +48,8 @@ class Capsule < ActiveRecord::Base
   has_many :assets, dependent: :destroy
   has_many :recipient_users, dependent: :destroy
   has_many :recipients, through: :recipient_users, source: :user
-  has_many :replies, class_name: "Capsule", foreign_key: "in_reply_to"
-  belongs_to :replied_to, class_name: "Capsule", foreign_key: "in_reply_to", touch: true
+  has_many :replies, -> { where 'TRIM(status) IS NULL' }, class_name: "Capsule", foreign_key: "in_reply_to"
+  belongs_to :replied_to, -> { where 'TRIM(status) IS NULL' }, class_name: "Capsule", foreign_key: "in_reply_to", touch: true
   has_many :reads, class_name: 'CapsuleRead'
   has_many :read_by, through: :reads, source: :user
   has_many :capsule_watches
@@ -73,11 +73,12 @@ class Capsule < ActiveRecord::Base
   scope :not_hidden, -> { where(incognito: false) }
   scope :absolute_location, -> { where(relative_location: nil) }
   scope :public_capsules, -> { joins('LEFT OUTER JOIN recipient_users r ON r.capsule_id = capsules.id').where('r.id IS NULL') }
+  scope :without_objections, -> { where('TRIM(status) IS NULL') }
 
   def self.find_in_rec(origin, span)
     east_bound = origin[:long] + span[:long]
     south_bound = origin[:lat] - span[:lat]
-    where(longitude: (origin[:long]..east_bound), latitude: (south_bound..origin[:lat]))
+    where(longitude: (origin[:long]..east_bound), latitude: (south_bound..origin[:lat])).without_objections
   end
 
   def self.find_from_center(origin, span)
@@ -85,15 +86,15 @@ class Capsule < ActiveRecord::Base
     east_bound = origin[:long] + span[:long]
     north_bound = origin[:lat] + span[:lat]
     south_bound = origin[:lat] - span[:lat]
-    where(longitude: (west_bound..east_bound), latitude: (south_bound..north_bound))
+    where(longitude: (west_bound..east_bound), latitude: (south_bound..north_bound)).without_objections
   end
 
   def self.with_hash_tag(tag)
-    where('hash_tags ilike ?', "%#{tag}%")
+    where('hash_tags ilike ?', "%#{tag}%").without_objections
   end
 
   def self.public_with_user(user_id)
-    joins('LEFT OUTER JOIN recipient_users r ON r.capsule_id = capsules.id').where('r.id IS NULL OR r.user_id = ?', user_id)
+    joins('LEFT OUTER JOIN recipient_users r ON r.capsule_id = capsules.id').where('r.id IS NULL OR r.user_id = ?', user_id).without_objections
   end
 
   def self.find_location_hash_tags(origin, span, tag = nil)
@@ -116,6 +117,7 @@ class Capsule < ActiveRecord::Base
       SELECT regexp_matches(hash_tags, '[^[:space:]]*#{hashtag}[^[:space:]]*') as tag_match, count(*) AS tag_count
       FROM capsules
       WHERE (trunc(latitude,1) BETWEEN #{start_lat} AND #{end_lat}) AND (trunc(longitude,1) BETWEEN #{start_long} AND #{end_long}) AND (hash_tags like '%#{hashtag}%')
+            AND (TRIM(status) IN NULL)
       GROUP BY tag_match
       ORDER BY tag_count DESC;
     SQL
