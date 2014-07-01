@@ -30,6 +30,8 @@
 #  comments_count       :integer          default(0)
 #  facebook_username    :string(255)
 #  twitter_username     :string(255)
+#  motto                :string(255)
+#  background_image     :string(255)
 #
 
 class User < ActiveRecord::Base

@@ -250,6 +250,8 @@ ActiveRecord::Schema.define(version: 20140630204218) do
     t.integer  "comments_count",       default: 0
     t.string   "facebook_username"
     t.string   "twitter_username"
+    t.string   "motto"
+    t.string   "background_image"
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", using: :btree
