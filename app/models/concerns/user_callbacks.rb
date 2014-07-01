@@ -9,11 +9,11 @@ class UserCallbacks
   end
 
   def self.after_commit(user)
-#   FriendsWorker.perform_async(user.id)
   end
 
   def self.after_create(user)
 #   user.send_confirmation_email
+    FriendsWorker.perform_in(5.seconds, user.id)
   end
 
   private
