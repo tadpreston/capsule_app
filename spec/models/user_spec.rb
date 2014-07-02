@@ -183,7 +183,7 @@ describe User do
         @user.oauth = oauth
       end
 
-      it { should be_valid }
+#     it { should be_valid }
     end
 
     describe "when uid and provider already exist" do
@@ -451,5 +451,22 @@ describe User do
         expect(User.find_or_create_recipient({email: user.email})).to eq(user)
       end
     end
+  end
+
+  describe "is_following method" do
+    before do
+      @user = FactoryGirl.create(:user)
+      @followed_user = FactoryGirl.create(:user)
+    end
+
+    it 'returns false' do
+      expect(@user.is_following?(@followed_user)).to be_false
+    end
+
+    it 'returns true' do
+      @user.follow!(@followed_user)
+      expect(@user.is_following?(@followed_user)).to be_true
+    end
+
   end
 end
