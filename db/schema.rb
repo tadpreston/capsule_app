@@ -11,12 +11,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140630204218) do
+ActiveRecord::Schema.define(version: 20140701151827) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pg_stat_statements"
-  enable_extension "pg_trgm"
-  enable_extension "fuzzystrmatch"
   enable_extension "plpgsql"
   enable_extension "hstore"
   enable_extension "uuid-ossp"
@@ -157,6 +154,19 @@ ActiveRecord::Schema.define(version: 20140630204218) do
 
   add_index "hashtags", ["longitude", "latitude"], name: "index_hashtags_on_longitude_and_latitude", using: :btree
   add_index "hashtags", ["tag"], name: "index_hashtags_on_tag", using: :btree
+
+  create_table "location_boxes", force: true do |t|
+    t.decimal  "latitude"
+    t.decimal  "longitude"
+    t.decimal  "lat_median"
+    t.decimal  "long_median"
+    t.hstore   "capsule_store", default: {"ids"=>"[]"}
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "location_boxes", ["latitude"], name: "index_location_boxes_on_latitude", using: :btree
+  add_index "location_boxes", ["longitude"], name: "index_location_boxes_on_longitude", using: :btree
 
   create_table "location_watches", force: true do |t|
     t.integer  "user_id"
