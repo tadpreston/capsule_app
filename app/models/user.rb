@@ -42,7 +42,7 @@ class User < ActiveRecord::Base
 
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 # validates :email, presence: true, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }, if: "oauth.nil?"
-  validates :email, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }, :if => Proc.new { |user| user.email_changed?}
+  validates :email, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }, :if => Proc.new { |user| user.email_changed? }
   validate :uid_and_provider_are_unique, if: "oauth"
   has_secure_password
   validates :password, confirmation: true, length: { minimum: 6 }, unless: Proc.new { |u| u.password.blank? && u.password_confirmation.blank? }
@@ -220,6 +220,14 @@ class User < ActiveRecord::Base
 
   def cached_capsules
     Rails.cache.fetch([self, "capsules"]) { capsules.by_updated_at }
+  end
+
+  def cached_followed_users
+    Rails.cache.fetch([self, "followed_users"]) { followed_users.to_a }
+  end
+
+  def is_following?(user)
+    cached_followed_users.include?(user)
   end
 
   protected
