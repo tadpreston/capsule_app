@@ -1,6 +1,6 @@
 class MinCapsuleSerializer < ActiveModel::Serializer
-  cached
-  delegate :cache_key, to: :object
+#  cached
+#  delegate :cache_key, to: :object
 
   attributes :id, :title, :hash_tags, :location, :relative_location, :thumbnail
   attributes :incognito, :is_portable, :is_processed, :comments_count, :creator
