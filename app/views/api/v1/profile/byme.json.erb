@@ -1,0 +1,14 @@
+{
+  "status":"Success",
+  "response": {
+    "alert": {
+      "text": "Test alert text body",
+      "title": "Test alert title",
+      "action_url": "capsule://actionUrl",
+      "action_title": "Take Action",
+      "cancel_url": "capsule://cancelUrl",
+      "cancel_title": "Cancel"
+    },
+    "byme": <%= ActiveModel::ArraySerializer.new(@capsules, root: false, each_serializer: ProfileSerializer).to_json.html_safe %>
+  }
+}

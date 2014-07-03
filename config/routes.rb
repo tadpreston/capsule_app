@@ -72,6 +72,9 @@ Rails.application.routes.draw do
       resources :location_watches, only: [:create, :destroy]
 
       get 'profile/loadtest/(:id)', to: 'profile#loadtest', as: 'profile_loadtest'
+      get 'profile/byme/(:id)', to: 'profile#byme', as: 'profile_byme'
+      get 'profile/watched/(:id)', to: 'profile#watched', as: 'profile_watched'
+      get 'profile/followers/(:id)', to: 'profile#followers', as: 'profile_followers'
       get 'profile/(:id)', to: 'profile#index', as: 'profile'
       post 'capsules/:capsule_id/objections', to: 'objections#create', as: 'capsule_objections'
       post 'comments/:comment_id/objections', to: 'objections#create', as: 'comment_objections'
