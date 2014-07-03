@@ -13,6 +13,14 @@ module API
         @followers = @user.followers
       end
 
+      def loadtest
+        @capsules = @user.cached_capsules
+        @watched_capsules = @user.cached_watched_capsules
+        @watched_locations = @user.cached_location_watches
+        @following = @user.cached_followed_users
+        @followers = @user.cached_followers
+      end
+
       private
 
         def set_user
