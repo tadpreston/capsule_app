@@ -71,6 +71,7 @@ Rails.application.routes.draw do
       resources :hashtags, only: [:index]
       resources :location_watches, only: [:create, :destroy]
 
+      get 'profile/loadtest/(:id)', to: 'profile#loadtest', as: 'profile_loadtest'
       get 'profile/(:id)', to: 'profile#index', as: 'profile'
       post 'capsules/:capsule_id/objections', to: 'objections#create', as: 'capsule_objections'
       post 'comments/:comment_id/objections', to: 'objections#create', as: 'comment_objections'

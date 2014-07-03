@@ -193,15 +193,15 @@ class User < ActiveRecord::Base
   end
 
   def watch_capsule(capsule)
-    self.watched_capsules << capsule
+    watched_capsules << capsule
   end
 
   def unwatch_capsule(capsule)
-    self.watched_capsules.delete(capsule)
+    watched_capsules.delete(capsule)
   end
 
   def is_watching_capsule?(capsule)
-    self.watched_capsules.exists? capsule
+    cached_watched_capsules.exists? capsule
   end
 
   def flush_cache
@@ -211,15 +211,31 @@ class User < ActiveRecord::Base
   end
 
   def cached_favorite_capsules
-    Rails.cache.fetch([self, "favorite_capsules"]) { favorite_capsules.by_updated_at }
+    Rails.cache.fetch(["user/favorite_capsules", self]) { favorite_capsules.by_updated_at.to_a }
   end
 
   def cached_received_capsules
-    Rails.cache.fetch([self, "received_capsules"]) { received_capsules }
+    Rails.cache.fetch(["user/received_capsules", self]) { received_capsules.to_a }
   end
 
   def cached_capsules
-    Rails.cache.fetch([self, "capsules"]) { capsules.by_updated_at }
+    Rails.cache.fetch(["user/capsules", self]) { capsules.by_updated_at.to_a }
+  end
+
+  def cached_watched_capsules
+    Rails.cache.fetch(["user/watched_capsules", self]) { watched_capsules.by_updated_at.to_a }
+  end
+
+  def cached_location_watches
+    Rails.cache.fetch(["user/location_watches", self]) { location_watches.to_a }
+  end
+
+  def cached_followed_users
+    Rails.cache.fetch(["user/followed_users", self]) { followed_users.to_a }
+  end
+
+  def cached_followers
+    Rails.cache.fetch(["users/followers", self]) { followers.to_a }
   end
 
   def cached_followed_users
