@@ -3,7 +3,7 @@ class ProcessResponsesController < ApplicationController
 
   def create
 
-    Rails.logger.debug "<<<<<<<<<<< #{params["transloadit"].inspect} >>>>>>>>>>>>>>>"
+    Rails.logger.error "<<<<<<<<<<< #{params["transloadit"].inspect} >>>>>>>>>>>>>>>"
 
     job_id = params["transloadit"]["assembly_id"]
     asset = Asset.find_by(job_id: job_id)
