@@ -40,7 +40,14 @@ class Explorer
     singles.delete_if { |box| box.count > 1 }
     singles.map do |box|
       Rails.cache.fetch(["single/capsule/#{box.lat},#{box.lon}"]) do
-        Capsule.where(latitude: box.lat.to_f..box.lat.to_f+@box_span, longitude: box.lon.to_f-@box_span..box.lon.to_f).take
+        if box.lat.to_f < 0
+          lat_end = box.lat.to_f
+          lat_start = box.lat.to_f-@box_span
+        else
+          lat_start = box.lat.to_f
+          lat_end = box.lat.to_f+@box_span
+        end
+        Capsule.where(latitude: lat_start..lat_end, longitude: box.lon.to_f-@box_span..box.lon.to_f).take
       end
     end
   end
@@ -61,6 +68,11 @@ class Explorer
       end_lat = truncate_decimals(@origin[:lat].to_f) + 0.1
       start_long = truncate_decimals(@origin[:long].to_f) - 0.1
       end_long = truncate_decimals(@origin[:long].to_f + @span[:long].to_f)
+    end
+    if start_lat > end_lat
+      tmp = start_lat
+      start_lat = end_lat
+      end_lat = tmp
     end
     { start_lat: start_lat, start_long: start_long, end_lat: end_lat, end_long: end_long }
   end
