@@ -3,11 +3,11 @@ class ProcessResponsesController < ApplicationController
 
   def create
 
-    Rails.logger.error "<<<<<<<<<<< #{params["transloadit"].inspect} >>>>>>>>>>>>>>>"
+    transloadit = eval(params["transloadit"])
 
-    job_id = params["transloadit"]["assembly_id"]
+    job_id = transloadit["assembly_id"]
     asset = Asset.find_by(job_id: job_id)
-    asset.update_attributes(complete: true, metadata: params["transloadit"])
+    asset.update_attributes(complete: true, metadata: transloadit)
 
     s3 = AWS::S3.new(
       access_key_id: ENV['AWS_ACCESS_KEY'],
