@@ -19,6 +19,6 @@ class ProcessResponsesController < ApplicationController
   private
 
     def transloadit_params
-      params.required(:transloadit).permit!
+      params.require(:transloadit).permit!
     end
 end
