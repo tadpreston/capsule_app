@@ -2,9 +2,12 @@ class ProcessResponsesController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def create
-    job_id = transloadit_params[:assembly_id]
+
+    Rails.logger.debug "<<<<<<<<<<< #{params["transloadit"].inspect} >>>>>>>>>>>>>>>"
+
+    job_id = params["transloadit"]["assembly_id"]
     asset = Asset.find_by(job_id: job_id)
-    asset.update_attributes(complete: true, metadata: transloadit_params)
+    asset.update_attributes(complete: true, metadata: params["transloadit"])
 
     s3 = AWS::S3.new(
       access_key_id: ENV['AWS_ACCESS_KEY'],
