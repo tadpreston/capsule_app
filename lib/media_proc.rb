@@ -122,7 +122,7 @@ class MediaProc
   private
 
     def notify_url
-      Rails.env == 'development' ? 'http://localhost/' : process_response_url(id, host: ENV['URL_HOST'], protocol: 'https')
+      Rails.env == 'development' ? 'http://localhost/' : process_response_url(host: ENV['URL_HOST'], protocol: 'https')
     end
 
     def submit_assembly(steps)
