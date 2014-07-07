@@ -17,7 +17,7 @@ class AssetWorker
         media_proc = MediaProc.new(asset.resource)
         proc_response = media_proc.process
 
-        source_bucket.objects.delete(asset.resource)
+#       source_bucket.objects.delete(asset.resource)
 
         asset.update_attributes(resource: media_proc.storage_path + asset.resource, job_id: proc_response["assembly_id"])
       else
