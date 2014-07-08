@@ -1,0 +1,20 @@
+{
+  "status":"Success",
+  "response": {
+    "alert": {
+      "text": "Test alert text body",
+      "title": "Test alert title",
+      "action_url": "capsule://actionUrl",
+      "action_title": "Take Action",
+      "cancel_url": "capsule://cancelUrl",
+      "cancel_title": "Cancel"
+    },
+    "byme": <%= ActiveModel::ArraySerializer.new(@capsules, root: false, each_serializer: API::V1::ProfileSerializer, scope: current_user).to_json.html_safe %>,
+    "watched": {
+      "capsules": <%= ActiveModel::ArraySerializer.new(@watched_capsules, root: false, each_serializer: API::V1::ProfileSerializer, scope: current_user).to_json.html_safe %>,
+      "locations": <%= ActiveModel::ArraySerializer.new(@watched_locations, root: false, each_serializer: API::V1::WatchedLocationSerializer).to_json.html_safe %>,
+      "users": <%= ActiveModel::ArraySerializer.new(@following, root: false, each_serializer: API::V1::UserSerializer).to_json.html_safe %>
+    },
+    "followers": <%= ActiveModel::ArraySerializer.new(@followers, root: false, each_serializer: API::V1::UserSerializer).to_json.html_safe %>
+  }
+}

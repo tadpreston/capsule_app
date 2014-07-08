@@ -3,9 +3,9 @@ class API::V1::ApplicationController < ActionController::Base
   before_action :verify_api_token
   before_action :authorize_auth_token
 
-  serialization_scope :current_user
+  serialization_scope :view_context
 
-  private
+  protected
 
     def verify_api_token
       authorize_api_token || render_api_unauthorized
