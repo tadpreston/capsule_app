@@ -28,8 +28,10 @@ module CapsuleLocationWatch
 
     LocationWatch.find_each do |location|
       if in_range? capsule, location
-        user = location.user
-        user.watch_capsule capsule
+        unless location.user_id == capsule.user_id
+          user = location.user
+          user.watch_capsule capsule
+        end
       end
     end
   end

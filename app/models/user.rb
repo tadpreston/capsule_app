@@ -193,7 +193,7 @@ class User < ActiveRecord::Base
   end
 
   def watch_capsule(capsule)
-    watched_capsules << capsule
+    watched_capsules << capsule unless capsule.user_id == id
   end
 
   def unwatch_capsule(capsule)
