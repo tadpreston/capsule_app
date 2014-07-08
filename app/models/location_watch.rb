@@ -12,7 +12,6 @@
 #
 
 class LocationWatch < ActiveRecord::Base
-  after_create LocationWatchCallbacks
   after_destroy LocationWatchCallbacks
 
   belongs_to :user, touch: true
