@@ -201,7 +201,7 @@ class User < ActiveRecord::Base
   end
 
   def is_watching_capsule?(capsule)
-    cached_watched_capsules.exists? capsule
+    cached_watched_capsules.include? capsule
   end
 
   def flush_cache
