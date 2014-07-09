@@ -154,13 +154,13 @@ describe Location::GeoBox do
   describe 'to_where to generate a where clause for sql' do
     it 'returns with single lat and long range clause' do
       geo_box = Location::GeoBox.new(37.178, -96.054, 1.032, 1.109)
-      comp_where = 'latitude BETWEEN 36.146 AND 37.178 AND longitude BETWEEN -96.054 AND -94.94500000000001'
+      comp_where = '(latitude BETWEEN 36.146 AND 37.178) AND (longitude BETWEEN -96.054 AND -94.94500000000001)'
       expect(geo_box.to_where).to eq(comp_where)
     end
 
     it 'returns with single lat and two long range clause' do
       geo_box = Location::GeoBox.new(37.178, 178.054, 10.032, 10.109)
-      comp_where = 'latitude BETWEEN 27.145999999999997 AND 37.178 AND (longitude BETWEEN 178.054 AND 180) OR (longitude BETWEEN -180 AND -171.837)'
+      comp_where = '(latitude BETWEEN 27.145999999999997 AND 37.178) AND (longitude BETWEEN 178.054 AND 180 OR longitude BETWEEN -180 AND -171.837)'
       expect(geo_box.to_where).to eq(comp_where)
     end
   end

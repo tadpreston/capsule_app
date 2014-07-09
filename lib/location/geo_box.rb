@@ -19,11 +19,11 @@ module Location
 
     def to_where
       where_clause = []
-      where_clause << "latitude BETWEEN #{@range[:south_lat]} AND #{@range[:north_lat]}"
+      where_clause << "(latitude BETWEEN #{@range[:south_lat]} AND #{@range[:north_lat]})"
       if @range[:west_long].is_a? Float
-        where_clause << "longitude BETWEEN #{@range[:west_long]} AND #{@range[:east_long]}"
+        where_clause << "(longitude BETWEEN #{@range[:west_long]} AND #{@range[:east_long]})"
       else
-        where_clause << "(longitude BETWEEN #{@range[:west_long][0]} AND #{@range[:west_long][1]}) OR (longitude BETWEEN #{@range[:east_long][0]} AND #{@range[:east_long][1]})"
+        where_clause << "(longitude BETWEEN #{@range[:west_long][0]} AND #{@range[:west_long][1]} OR longitude BETWEEN #{@range[:east_long][0]} AND #{@range[:east_long][1]})"
       end
       where_clause.join(' AND ')
     end

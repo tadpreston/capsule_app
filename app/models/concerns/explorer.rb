@@ -10,11 +10,7 @@ class Explorer
     @use_boxes = span[:lat] > BOX_THRESHOLD ? true : false
     @box_span = @span[:lat].to_f >= 2 ? 0.5 : 0.2 if @use_boxes
 
-    @geo_range = geo_range
-    @start_lat = @geo_range[:start_lat]
-    @end_lat = @geo_range[:end_lat]
-    @start_long = @geo_range[:start_long]
-    @end_long = @geo_range[:end_long]
+    @geo_box = Location::GeoBox.new(@origin[:lat], @origin[:long], @span[:lat], @span[:long])
 
   end
 
@@ -47,7 +43,14 @@ class Explorer
           lat_start = box.lat.to_f
           lat_end = box.lat.to_f+@box_span
         end
-        Capsule.where(latitude: lat_start..lat_end, longitude: box.lon.to_f-@box_span..box.lon.to_f).take
+        if box.lon.to_f < 0
+          start_long = box.lon.to_f - @box_span
+          end_long = box.lon.to_f
+        else
+          start_long = box.lon.to_f
+          end_long = box.lon.to_f + @box_span
+        end
+        Capsule.where(latitude: lat_start..lat_end, longitude: start_long..end_long).take
       end
     end
   end
@@ -55,26 +58,6 @@ class Explorer
   def without_singles(capsule_boxes_array)
     boxes = capsule_boxes_array.clone.delete_if { |box| box.count == 1 }
     boxes.map { |bc| { name: "#{bc.lat},#{bc.lon}", center_lat: bc.med_lat, center_long: bc.med_long, count: bc.count } }
-  end
-
-  def geo_range
-    if @use_boxes
-      start_lat = (truncate_decimals((@origin[:lat] - @span[:lat]) / @box_span, 0) * @box_span).round(1)
-      end_lat = (truncate_decimals(@origin[:lat].to_f / @box_span, 0) * @box_span).round(1)
-      start_long = (truncate_decimals(@origin[:long].to_f / @box_span, 0) * @box_span) - @box_span
-      end_long = truncate_decimals((@origin[:long].to_f + @span[:long].to_f) / @box_span, 0) * @box_span
-    else
-      start_lat = truncate_decimals(@origin[:lat].to_f - @span[:lat].to_f)
-      end_lat = truncate_decimals(@origin[:lat].to_f) + 0.1
-      start_long = truncate_decimals(@origin[:long].to_f) - 0.1
-      end_long = truncate_decimals(@origin[:long].to_f + @span[:long].to_f)
-    end
-    if start_lat > end_lat
-      tmp = start_lat
-      start_lat = end_lat
-      end_lat = tmp
-    end
-    { start_lat: start_lat, start_long: start_long, end_lat: end_lat, end_long: end_long }
   end
 
   def truncate_decimals(value, places = 1)
@@ -88,7 +71,7 @@ class Explorer
         sql = <<-SQL
           SELECT (trunc(latitude / #{@box_span}) * #{@box_span}) as lat, (trunc(longitude / #{@box_span}) * #{@box_span}) as lon, median(latitude) as med_lat, median(longitude) as med_long, count(*)
           FROM capsules
-          WHERE (latitude BETWEEN #{@start_lat} AND #{@end_lat}) AND (longitude BETWEEN #{@start_long} AND #{@end_long}) AND (incognito = FALSE) AND (TRIM(status) IS NULL)
+          WHERE #{@geo_box.to_where} AND (incognito = FALSE) AND (TRIM(status) IS NULL)
           GROUP BY lat, lon
           ORDER BY lat,lon;
         SQL
@@ -96,7 +79,7 @@ class Explorer
         sql = <<-SQL
           SELECT (trunc(latitude / #{@box_span}) * #{@box_span}) as lat, (trunc(longitude / #{@box_span}) * #{@box_span}) as lon, median(latitude) as med_lat, median(longitude) as med_long, count(*)
           FROM capsules
-          WHERE (latitude BETWEEN #{@start_lat} AND #{@end_lat}) AND (longitude BETWEEN #{@start_long} AND #{@end_long}) AND (title ilike '%#{@hashtag}%')
+          WHERE #{@geo_box.to_where} AND (title ilike '%#{@hashtag}%')
                 AND (incognito = FALSE)
                 AND (TRIM(status) IS NULL)
           GROUP BY lat, lon
@@ -107,7 +90,7 @@ class Explorer
       sql = <<-SQL
         SELECT *
         FROM capsules
-        WHERE (trunc(latitude,1) BETWEEN #{@start_lat} AND #{@end_lat}) AND (trunc(longitude,1) BETWEEN #{@start_long} AND #{@end_long}) AND (incognito = FALSE) AND (TRIM(status) IS NULL)
+        WHERE #{@geo_box.to_where} AND (incognito = FALSE) AND (TRIM(status) IS NULL)
       SQL
 
       sql += " AND (title ilike '%#{@hashtag}%')" unless @hashtag.blank?
