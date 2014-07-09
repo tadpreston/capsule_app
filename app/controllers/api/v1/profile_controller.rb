@@ -36,7 +36,8 @@ module API
       end
 
       def loadtest
-        @capsules = @user.cached_capsules
+        @capsules = Capsule.all.includes(:assets, :capsule_watches, :user)
+#       @capsules = @user.cached_capsules
         @watched_capsules = @user.cached_watched_capsules
         @watched_locations = @user.cached_location_watches
         @following = @user.cached_followed_users
