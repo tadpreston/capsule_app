@@ -204,26 +204,20 @@ class User < ActiveRecord::Base
     cached_watched_capsules.include? capsule
   end
 
-  def flush_cache
-    Rails.cache.delete([self.class.name, "favorite_capsules"])
-    Rails.cache.delete([self.class.name, "received_capsules"])
-    Rails.cache.delete([self.class.name, "capsules"])
-  end
-
   def cached_favorite_capsules
-    Rails.cache.fetch(["user/favorite_capsules", self]) { favorite_capsules.by_updated_at.to_a }
+    Rails.cache.fetch(["favorite_capsules", self]) { favorite_capsules.by_updated_at.to_a }
   end
 
   def cached_received_capsules
-    Rails.cache.fetch(["user/received_capsules", self]) { received_capsules.to_a }
+    Rails.cache.fetch(["received_capsules", self]) { received_capsules.to_a }
   end
 
   def cached_capsules
-    Rails.cache.fetch(["user/capsules", self]) { capsules.by_updated_at.to_a }
+    Rails.cache.fetch(["capsules", self]) { capsules.by_updated_at.to_a }
   end
 
   def cached_min_capsules
-    Rails.cache.fetch(["user/min_capsules", self]) do
+    Rails.cache.fetch(["min_capsules", self]) do
       sql = <<-SQL
         SELECT row_to_json(c) AS capsule_json
         FROM (
@@ -245,23 +239,23 @@ class User < ActiveRecord::Base
   end
 
   def cached_watched_capsules
-    Rails.cache.fetch(["user/watched_capsules", self]) { watched_capsules.by_updated_at.to_a }
+    Rails.cache.fetch(["watched_capsules", self]) { watched_capsules.by_updated_at.to_a }
   end
 
   def cached_location_watches
-    Rails.cache.fetch(["user/location_watches", self]) { location_watches.to_a }
+    Rails.cache.fetch(["location_watches", self]) { location_watches.to_a }
   end
 
   def cached_followed_users
-    Rails.cache.fetch(["user/followed_users", self]) { followed_users.to_a }
+    Rails.cache.fetch(["followed_users", self]) { followed_users.to_a }
   end
 
   def cached_followers
-    Rails.cache.fetch(["users/followers", self]) { followers.to_a }
+    Rails.cache.fetch(["followers", self]) { followers.to_a }
   end
 
   def cached_followed_users
-    Rails.cache.fetch([self, "followed_users"]) { followed_users.to_a }
+    Rails.cache.fetch(["followed_users", self]) { followed_users.to_a }
   end
 
   def is_following?(user)
