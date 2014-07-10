@@ -28,20 +28,7 @@ module API
       end
 
       def loadtest
-        @capsules = @user.cached_capsules
-        @watched_capsules = @user.cached_watched_capsules
-        @watched_locations = @user.cached_location_watches
-        @following = @user.cached_followed_users
-        @followers = @user.cached_followers
-      end
-
-      def loadtest
-        @capsules = Capsule.all.includes(:assets, :capsule_watches, :user)
-#       @capsules = @user.cached_capsules
-        @watched_capsules = @user.cached_watched_capsules
-        @watched_locations = @user.cached_location_watches
-        @following = @user.cached_followed_users
-        @followers = @user.cached_followers
+        @capsules = @user.cached_min_capsules
       end
 
       private

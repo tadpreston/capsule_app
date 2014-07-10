@@ -222,6 +222,28 @@ class User < ActiveRecord::Base
     Rails.cache.fetch(["user/capsules", self]) { capsules.by_updated_at.to_a }
   end
 
+  def cached_min_capsules
+    Rails.cache.fetch(["user/min_capsules", self]) do
+      sql = <<-SQL
+        SELECT row_to_json(c) AS capsule_json
+        FROM (
+          SELECT id, user_id, title, hash_tags, location, relative_location, thumbnail, incognito, is_portable, comments_count, created_at, updated_at,
+                 (
+                   SELECT row_to_json(u)
+                   FROM (
+                     SELECT id, first_name, last_name, profile_image
+                     FROM users
+                     WHERE id = capsules.user_id
+                   ) u
+                 ) AS creator, capsules.user_id = 1 AS is_owned
+          FROM capsules
+        ) c;
+      SQL
+      capsules = Capsule.find_by_sql sql
+      capsules.map { |c| c.capsule_json.to_json }.join(',')
+    end
+  end
+
   def cached_watched_capsules
     Rails.cache.fetch(["user/watched_capsules", self]) { watched_capsules.by_updated_at.to_a }
   end
