@@ -151,11 +151,11 @@ class Capsule < ActiveRecord::Base
       if self.thumbnail.include?('/')
         "https://#{ENV['CDN_HOST']}/#{self.thumbnail}"
       else
-        "https://#{ENV['CDN_HOST']}/default/waiting.png"
-#       "http://res.cloudinary.com/demo/image/upload/w_320,h_313,c_thumb,g_face/butterfly.jpg"
+        "https://#{ENV['CDN_HOST']}/default/waiting-001.png"
       end
     else
-      "http://res.cloudinary.com/demo/image/upload/w_320,h_313,c_thumb,g_face/butterfly.jpg"
+      "https://#{ENV['CDN_HOST']}/default/waiting-001.png"
+#     "http://res.cloudinary.com/demo/image/upload/w_320,h_313,c_thumb,g_face/butterfly.jpg"
     end
   end
 
