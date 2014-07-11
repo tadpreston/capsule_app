@@ -231,6 +231,7 @@ class User < ActiveRecord::Base
                    ) u
                  ) AS creator, capsules.user_id = #{id} AS is_owned
           FROM capsules
+          LIMIT 1500
         ) c;
       SQL
       capsules = Capsule.find_by_sql sql
