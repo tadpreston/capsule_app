@@ -18,7 +18,7 @@ module API
       end
 
       def loadtest_jbuilder
-        @capsules = Capsule.all.limit(2000).includes(:user, :watchers, :read_by)
+        @capsules = Capsule.all.limit(2750).includes(:user, :watchers, :read_by)
       end
 
       private
