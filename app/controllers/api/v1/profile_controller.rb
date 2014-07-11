@@ -13,22 +13,12 @@ module API
         @followers = @user.cached_followers
       end
 
-      def byme
-        @capsules = @user.cached_capsules
-      end
-
-      def watched
-        @watched_capsules = @user.cached_watched_capsules
-        @watched_locations = @user.cached_location_watches
-        @following = @user.cached_followed_users
-      end
-
-      def followers
-        @followers = @user.cached_followers
-      end
-
       def loadtest
         @capsules = @user.cached_min_capsules
+      end
+
+      def loadtest_jbuilder
+        @capsules = Capsule.all.includes(:user, :watchers, :read_by)
       end
 
       private

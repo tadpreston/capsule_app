@@ -229,7 +229,7 @@ class User < ActiveRecord::Base
                      FROM users
                      WHERE id = capsules.user_id
                    ) u
-                 ) AS creator, capsules.user_id = 1 AS is_owned
+                 ) AS creator, capsules.user_id = #{id} AS is_owned
           FROM capsules
         ) c;
       SQL
