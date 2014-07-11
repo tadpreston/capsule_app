@@ -19,6 +19,10 @@ module API
         @capsules = Capsule.all.limit(1000)
       end
 
+      def loadtest_jbuilder
+        @capsules = Capsule.all.includes(:user, :watchers, :read_by)
+      end
+
       private
 
         def set_user
