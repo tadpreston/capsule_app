@@ -1,7 +1,7 @@
 class UserCallbacks
   def self.before_save(user)
-    create_oauth(user) if user.oauth
-    user.email.downcase! if user.email
+    create_oauth(user) if user.oauth_changed?
+    user.email.downcase! if user.email_changed?
   end
 
   def self.before_validation(user)
