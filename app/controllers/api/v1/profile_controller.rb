@@ -6,7 +6,7 @@ module API
       before_action :set_user
 
       def index
-        @capsules = @user.cached_json_capsules
+        @capsules = @user.json_capsules
         @watched_capsules = @user.cached_watched_capsules
         @watched_locations = @user.cached_location_watches
         @following = @user.cached_followed_users

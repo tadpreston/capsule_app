@@ -216,16 +216,18 @@ class User < ActiveRecord::Base
     Rails.cache.fetch(["capsules", self]) { capsules.by_updated_at.to_a }
   end
 
+  def json_capsules
+    cached_json_capsules.map do |c|
+      capsule_json = c.capsule_json
+      capsule_json["is_watched"] = c.watched_by?(id)
+      capsule_json["is_read"] = c.read_by?(id)
+      capsule_json.to_json
+    end.join(',')
+  end
+
   def cached_json_capsules
     Rails.cache.fetch([self, "json_capsules"]) do
-      capsules = Capsule.users_capsules(id).map do |c|
-        capsule_json = c.capsule_json
-        capsule_json["is_watched"] = c.watched_by?(id)
-        capsule_json["is_read"] = c.read_by?(id)
-        capsule_json.to_json
-      end
-      Rails.logger.debug "capsules[0] = #{capsules[0].inspect}"
-      capsules.join(',')
+      Capsule.users_capsules(id).to_a
     end
   end
 
