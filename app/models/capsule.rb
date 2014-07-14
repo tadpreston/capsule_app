@@ -215,10 +215,13 @@ class Capsule < ActiveRecord::Base
 
   def watch(user)
     watchers << user
+    user.touch
+    self.touch
   end
 
   def unwatch(user)
     watchers.delete user
+    user.touch
     self.touch
   end
 
