@@ -142,6 +142,26 @@ class Capsule < ActiveRecord::Base
       .select("id, regexp_matches(hash_tags, '[^[:space:]]*#{hashtag}[^[:space:]]*') as hash_tags, latitude, longitude").order(hash_tags: :desc)
   end
 
+  def self.users_capsules(user_id)
+    sql = <<-SQL
+      SELECT id, user_id, updated_at, row_to_json(c) AS capsule_json
+      FROM (
+        SELECT id, user_id, title, hash_tags, location, relative_location, thumbnail, incognito, is_portable, comments_count, created_at, updated_at,
+               (
+                 SELECT row_to_json(u)
+                 FROM (
+                   SELECT id, first_name, last_name, profile_image
+                   FROM users
+                   WHERE id = capsules.user_id
+                 ) u
+               ) AS creator, capsules.user_id = #{user_id} AS is_owned
+        FROM capsules
+        WHERE user_id = #{user_id}
+      ) c;
+    SQL
+    find_by_sql sql
+  end
+
   def purged_title
     title.slice(/^[^#]*\b/)
   end

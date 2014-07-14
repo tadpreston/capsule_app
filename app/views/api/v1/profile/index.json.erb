@@ -1,0 +1,20 @@
+{
+  "status":"Success",
+  "response": {
+    "alert": {
+      "text": "Test alert text body",
+      "title": "Test alert title",
+      "action_url": "capsule://actionUrl",
+      "action_title": "Take Action",
+      "cancel_url": "capsule://cancelUrl",
+      "cancel_title": "Cancel"
+    },
+    "byme": [ <%= @capsules.html_safe %> ],
+    "watched": {
+      "capsules": [],
+      "locations": [],
+      "users": []
+    },
+    "followers": []
+  }
+}

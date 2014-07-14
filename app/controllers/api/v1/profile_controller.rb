@@ -6,7 +6,7 @@ module API
       before_action :set_user
 
       def index
-        @capsules = @user.cached_capsules
+        @capsules = @user.cached_json_capsules
         @watched_capsules = @user.cached_watched_capsules
         @watched_locations = @user.cached_location_watches
         @following = @user.cached_followed_users
@@ -28,7 +28,9 @@ module API
       end
 
       def loadtest
-        @capsules = @user.cached_min_capsules
+#       @capsules = @user.cached_capsules
+#       @capsules = Capsule.where(user_id: @user.id)
+        @capsules = Capsule.all.limit(1000)
       end
 
       private
