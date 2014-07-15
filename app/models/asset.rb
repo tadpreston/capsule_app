@@ -19,7 +19,7 @@
 class Asset < ActiveRecord::Base
   after_create AssetCallbacks
 
-  belongs_to :capsule, touch: true
+  belongs_to :assetable, polymorphic: true, touch: true
 
   validates :media_type, presence: true
   validates :resource, presence: true
