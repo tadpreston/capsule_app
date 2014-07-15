@@ -13,7 +13,7 @@ json.locale user.locale
 json.timezone user.time_zone || ''
 json.provider user.provider || ''
 json.uid user.uid || ''
-json.profile_image user.profile_image || ''
+json.profile_image user.profile_image_path
 json.background_image user.background_image || ''
 json.tutorial_progress user.tutorial_progress
 json.settings user.settings

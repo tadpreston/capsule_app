@@ -25,6 +25,8 @@
 #  is_portable       :boolean
 #  thumbnail         :string(255)
 #  start_date        :datetime
+#  watches_store     :hstore
+#  reads_store       :hstore
 #
 
 require 'spec_helper'

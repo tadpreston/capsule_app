@@ -32,10 +32,13 @@
 #  twitter_username     :string(255)
 #  motto                :string(255)
 #  background_image     :string(255)
+#  job_id               :string(255)
+#  complete             :boolean          default(FALSE)
 #
 
 class User < ActiveRecord::Base
   before_save UserCallbacks
+  after_save UserCallbacks
   before_validation UserCallbacks, unless: Proc.new { |user| user.persisted? }
   after_commit UserCallbacks
   after_create UserCallbacks, unless: Proc.new { |user| user.provider == 'contact' }
@@ -261,6 +264,16 @@ class User < ActiveRecord::Base
 
   def is_following?(user)
     cached_followed_users.include?(user)
+  end
+
+  def profile_image_path
+    if job_id && complete
+      "https://#{ENV['CDN_HOST']}/#{profile_image}"
+    elsif job_id
+      "https://#{ENV['CDN_HOST']}/default/waiting.png"
+    else
+      profile_image
+    end
   end
 
   protected
