@@ -18,7 +18,11 @@ class ProcessResponsesController < ApplicationController
       secret_access_key: ENV['AWS_SECRET_KEY']
     )
     source_bucket = s3.buckets[ENV['S3_BUCKET_UPLOAD']]
-    source_bucket.objects.delete asset.resource.split('/')[-1]
+    if asset.respond_to? :resource
+      source_bucket.objects.delete asset.resource.split('/')[-1]
+    else
+      source_bucket.objects.delete asset.profile_image.split('/')[-1]
+    end
 
     render nothing: true
   end
