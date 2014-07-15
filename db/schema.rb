@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140715140825) do
+ActiveRecord::Schema.define(version: 20140715182958) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,7 +28,6 @@ ActiveRecord::Schema.define(version: 20140715140825) do
   end
 
   create_table "assets", force: true do |t|
-    t.integer  "capsule_id"
     t.string   "media_type"
     t.string   "resource"
     t.hstore   "metadata"
@@ -38,9 +37,11 @@ ActiveRecord::Schema.define(version: 20140715140825) do
     t.string   "storage_path"
     t.hstore   "process_response"
     t.boolean  "complete",         default: false
+    t.integer  "assetable_id"
+    t.string   "assetable_type"
   end
 
-  add_index "assets", ["capsule_id"], name: "index_assets_on_capsule_id", using: :btree
+  add_index "assets", ["assetable_id", "assetable_type"], name: "index_assets_on_assetable_id_and_assetable_type", using: :btree
   add_index "assets", ["job_id"], name: "index_assets_on_job_id", using: :btree
 
   create_table "capsule_reads", force: true do |t|
