@@ -28,7 +28,7 @@ class Asset < ActiveRecord::Base
     if self.resource.include?('/') && self.complete
       "https://#{ENV['CDN_HOST']}/#{self.resource}"
     else
-      "https://#{ENV['CDN_HOST']}/default/waiting.png"
+      "https://#{ENV['CDN_HOST']}/default/waiting-001.png"
     end
   end
 

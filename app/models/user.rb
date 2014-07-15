@@ -265,7 +265,7 @@ class User < ActiveRecord::Base
       if profile_image.include?('/')
         "https://#{ENV['CDN_HOST']}/#{profile_image}"
       else
-        "https://#{ENV['CDN_HOST']}/default/waiting.png"
+        "https://#{ENV['CDN_HOST']}/default/waiting-001.png"
       end
     else
       ''
@@ -277,7 +277,7 @@ class User < ActiveRecord::Base
       if background_image.include?('/')
         "https://#{ENV['CDN_HOST']}/#{background_image}"
       else
-        "https://#{ENV['CDN_HOST']}/default/waiting.png"
+        "https://#{ENV['CDN_HOST']}/default/waiting-001.png"
       end
     else
       ''
