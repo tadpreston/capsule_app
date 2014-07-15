@@ -69,6 +69,7 @@ class User < ActiveRecord::Base
   has_many :watched_capsules, -> { where 'TRIM(status) IS NULL' }, through: :capsule_watches, source: :capsule
   has_many :location_watches
   has_many :objections
+  has_many :assets, as: :assetable, dependent: :destroy
 
   def watching_count
     relationships.count
@@ -267,13 +268,35 @@ class User < ActiveRecord::Base
   end
 
   def profile_image_path
-    if job_id && complete
-      "https://#{ENV['CDN_HOST']}/#{profile_image}"
-    elsif job_id
-      "https://#{ENV['CDN_HOST']}/default/waiting.png"
+    unless profile_image.blank?
+      if profile_image.include?('/')
+        "https://#{ENV['CDN_HOST']}/#{profile_image}"
+      else
+        "https://#{ENV['CDN_HOST']}/default/waiting.png"
+      end
     else
-      profile_image
+      ''
     end
+  end
+
+  def background_image_path
+    unless background_image.blank?
+      if background_image.include?('/')
+        "https://#{ENV['CDN_HOST']}/#{background_image}"
+      else
+        "https://#{ENV['CDN_HOST']}/default/waiting.png"
+      end
+    else
+      ''
+    end
+  end
+
+  def profile_asset
+    assets.where(media_type: 'profile').take
+  end
+
+  def background_asset
+    assets.where(media_type: 'background').take
   end
 
   protected

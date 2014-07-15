@@ -14,8 +14,8 @@ json.user do
   json.timezone user.time_zone || ''
   json.provider user.provider || ''
   json.uid user.uid || ''
-  json.profile_image user.profile_image || ''
-  json.background_image user.background_image || ''
+  json.profile_image user.profile_image_path
+  json.background_image user.background_image_path
   json.tutorial_progress user.tutorial_progress
   json.settings user.settings
   json.email_confirmed (user.confirmed? ? true : false)

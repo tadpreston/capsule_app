@@ -5,7 +5,18 @@ class UserCallbacks
   end
 
   def self.after_save(user)
-    UserProfileImageWorker.perform_in(5.seconds, user.id) if user.profile_image_changed?
+    if user.profile_image_changed?
+      if asset = user.profile_asset
+        asset.destroy
+      end
+      user.assets.create(resource: user.profile_image, media_type: 'profile')
+    end
+    if user.background_image_changed?
+      if asset = user.background_asset
+        asset.destroy
+      end
+      user.assets.create(resource: user.background_image, media_type: 'background')
+    end
   end
 
   def self.before_validation(user)
