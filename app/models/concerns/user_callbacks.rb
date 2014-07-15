@@ -4,6 +4,10 @@ class UserCallbacks
     user.email.downcase! if user.email_changed?
   end
 
+  def self.after_save(user)
+    UserProfileImageWorker.perform_in(5.seconds, user.id) if user.profile_image_changed?
+  end
+
   def self.before_validation(user)
     create_oauth(user) if user.oauth
   end

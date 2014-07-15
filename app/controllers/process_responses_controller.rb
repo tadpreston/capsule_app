@@ -6,8 +6,12 @@ class ProcessResponsesController < ApplicationController
     transloadit = JSON.parse params["transloadit"]
 
     job_id = transloadit["assembly_id"]
-    asset = Asset.find_by(job_id: job_id)
-    asset.update_attributes(complete: true, metadata: transloadit)
+    asset = image_container(job_id)
+    if asset.respond_to? :metadata
+      asset.update_attributes(complete: true, metadata: transloadit)
+    else
+      asset.update_column(:complete, true)
+    end
 
     s3 = AWS::S3.new(
       access_key_id: ENV['AWS_ACCESS_KEY'],
@@ -20,6 +24,14 @@ class ProcessResponsesController < ApplicationController
   end
 
   private
+
+    def image_container(job_id)
+      object = Asset.find_by(job_id: job_id)
+      unless object
+        object = User.find_by(job_id: job_id)
+      end
+      object
+    end
 
     def transloadit_params
       params.require(:transloadit).permit!
