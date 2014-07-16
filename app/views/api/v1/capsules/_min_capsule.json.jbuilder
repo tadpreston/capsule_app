@@ -12,5 +12,5 @@ json.set! :creator do
   json.id capsule.cached_user.id
   json.first_name capsule.cached_user.first_name
   json.last_name capsule.cached_user.last_name
-  json.profile_image capsule.cached_user.profile_image
+  json.profile_image capsule.cached_user.profile_image_path
 end

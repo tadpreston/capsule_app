@@ -4,7 +4,7 @@ json.set! :creator do
   json.id capsule.cached_user.id
   json.first_name capsule.cached_user.first_name
   json.last_name capsule.cached_user.last_name
-  json.profile_image capsule.cached_user.profile_image
+  json.profile_image capsule.cached_user.profile_image_path
 end
 json.is_owned is_owned?(capsule.user_id)
 json.title capsule.title
@@ -35,7 +35,7 @@ json.recipients capsule.cached_recipients do |recipient|
   json.timezone recipient.time_zone
   json.provider recipient.provider
   json.uid recipient.uid
-  json.profile_image recipient.profile_image
+  json.profile_image recipient.profile_image_path
   json.recipient_token recipient.recipient_token
 end
 json.is_watched capsule.watched_by?(current_user)
@@ -50,7 +50,7 @@ json.comments capsule.comments do |comment|
   json.set! :author do
     json.id comment.user_id
     json.full_name comment.user.full_name
-    json.profile_image comment.user.profile_image
+    json.profile_image comment.user.profile_image_path
   end
 end
 json.is_portable capsule.is_portable || false
