@@ -115,7 +115,7 @@ class Capsule < ActiveRecord::Base
       SELECT regexp_matches(hash_tags, '[^[:space:]]*#{hashtag}[^[:space:]]*') as tag_match, count(*) AS tag_count
       FROM capsules
       WHERE (trunc(latitude,1) BETWEEN #{start_lat} AND #{end_lat}) AND (trunc(longitude,1) BETWEEN #{start_long} AND #{end_long}) AND (hash_tags like '%#{hashtag}%')
-            AND (TRIM(status) IN NULL)
+            AND (TRIM(status) IS NULL)
       GROUP BY tag_match
       ORDER BY tag_count DESC;
     SQL
