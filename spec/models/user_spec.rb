@@ -32,6 +32,8 @@
 #  twitter_username     :string(255)
 #  motto                :string(255)
 #  background_image     :string(255)
+#  job_id               :string(255)
+#  complete             :boolean          default(FALSE)
 #
 
 require 'spec_helper'

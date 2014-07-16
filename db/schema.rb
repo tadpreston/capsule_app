@@ -11,11 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140701151827) do
+ActiveRecord::Schema.define(version: 20140716142017) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_trgm"
+  enable_extension "fuzzystrmatch"
   enable_extension "plpgsql"
   enable_extension "hstore"
+  enable_extension "pg_stat_statements"
   enable_extension "uuid-ossp"
 
   create_table "admin_users", force: true do |t|
@@ -28,7 +31,6 @@ ActiveRecord::Schema.define(version: 20140701151827) do
   end
 
   create_table "assets", force: true do |t|
-    t.integer  "capsule_id"
     t.string   "media_type"
     t.string   "resource"
     t.hstore   "metadata"
@@ -38,9 +40,11 @@ ActiveRecord::Schema.define(version: 20140701151827) do
     t.string   "storage_path"
     t.hstore   "process_response"
     t.boolean  "complete",         default: false
+    t.integer  "assetable_id"
+    t.string   "assetable_type"
   end
 
-  add_index "assets", ["capsule_id"], name: "index_assets_on_capsule_id", using: :btree
+  add_index "assets", ["assetable_id", "assetable_type"], name: "index_assets_on_assetable_id_and_assetable_type", using: :btree
   add_index "assets", ["job_id"], name: "index_assets_on_job_id", using: :btree
 
   create_table "capsule_reads", force: true do |t|
@@ -86,6 +90,7 @@ ActiveRecord::Schema.define(version: 20140701151827) do
     t.boolean  "is_portable"
     t.string   "thumbnail"
     t.datetime "start_date"
+    t.integer  "watchers",          default: [], array: true
   end
 
   add_index "capsules", ["in_reply_to"], name: "index_capsules_on_in_reply_to", using: :btree
@@ -154,19 +159,6 @@ ActiveRecord::Schema.define(version: 20140701151827) do
 
   add_index "hashtags", ["longitude", "latitude"], name: "index_hashtags_on_longitude_and_latitude", using: :btree
   add_index "hashtags", ["tag"], name: "index_hashtags_on_tag", using: :btree
-
-  create_table "location_boxes", force: true do |t|
-    t.decimal  "latitude"
-    t.decimal  "longitude"
-    t.decimal  "lat_median"
-    t.decimal  "long_median"
-    t.hstore   "capsule_store", default: {"ids"=>"[]"}
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "location_boxes", ["latitude"], name: "index_location_boxes_on_latitude", using: :btree
-  add_index "location_boxes", ["longitude"], name: "index_location_boxes_on_longitude", using: :btree
 
   create_table "location_watches", force: true do |t|
     t.integer  "user_id"
@@ -251,11 +243,14 @@ ActiveRecord::Schema.define(version: 20140701151827) do
     t.string   "twitter_username"
     t.string   "motto"
     t.string   "background_image"
+    t.string   "job_id"
+    t.boolean  "complete",             default: false
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", using: :btree
   add_index "users", ["email"], name: "index_users_on_email", using: :btree
   add_index "users", ["facebook_username"], name: "index_users_on_facebook_username", using: :btree
+  add_index "users", ["job_id"], name: "index_users_on_job_id", using: :btree
   add_index "users", ["phone_number"], name: "index_users_on_phone_number", using: :btree
   add_index "users", ["provider", "uid"], name: "index_users_on_provider_and_uid", unique: true, using: :btree
   add_index "users", ["public_id"], name: "index_users_on_public_id", unique: true, using: :btree

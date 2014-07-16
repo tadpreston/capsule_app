@@ -86,25 +86,29 @@ module API
 
       def read
         @capsule = Capsule.find params[:id]
-        @capsule.read_by << current_user
+        @capsule.reads << current_user.id
+        @capsule.save
         render :show
       end
 
       def unread
         @capsule = Capsule.find params[:id]
-        @capsule.read_by.delete current_user
+        @capsule.reads.delete current_user.id
+        @capsule.save
         render :show
       end
 
       def watch
         @capsule = Capsule.find params[:id]
         @capsule.watch current_user
+        @capsule.save
         render :show
       end
 
       def unwatch
         @capsule = Capsule.find params[:id]
         @capsule.unwatch current_user
+        @capsule.save
         render :show
       end
 

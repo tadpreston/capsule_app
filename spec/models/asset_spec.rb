@@ -3,7 +3,6 @@
 # Table name: assets
 #
 #  id               :integer          not null, primary key
-#  capsule_id       :integer
 #  media_type       :string(255)
 #  resource         :string(255)
 #  metadata         :hstore
@@ -13,6 +12,8 @@
 #  storage_path     :string(255)
 #  process_response :hstore
 #  complete         :boolean          default(FALSE)
+#  assetable_id     :integer
+#  assetable_type   :string(255)
 #
 
 require 'spec_helper'

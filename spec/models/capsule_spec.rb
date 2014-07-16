@@ -25,6 +25,7 @@
 #  is_portable       :boolean
 #  thumbnail         :string(255)
 #  start_date        :datetime
+#  watchers          :integer          default([]), is an Array
 #
 
 require 'spec_helper'

@@ -25,6 +25,7 @@
 #  is_portable       :boolean
 #  thumbnail         :string(255)
 #  start_date        :datetime
+#  watchers          :integer          default([]), is an Array
 #
 
 class Capsule < ActiveRecord::Base
@@ -50,10 +51,10 @@ class Capsule < ActiveRecord::Base
   has_many :recipients, through: :recipient_users, source: :user
   has_many :replies, -> { where 'TRIM(status) IS NULL' }, class_name: "Capsule", foreign_key: "in_reply_to"
   belongs_to :replied_to, -> { where 'TRIM(status) IS NULL' }, class_name: "Capsule", foreign_key: "in_reply_to", touch: true
-  has_many :reads, class_name: 'CapsuleRead'
-  has_many :read_by, through: :reads, source: :user
-  has_many :capsule_watches
-  has_many :watchers, through: :capsule_watches, source: :user
+#  has_many :reads, class_name: 'CapsuleRead'
+#  has_many :read_by, through: :reads, source: :user
+#  has_many :capsule_watches
+#  has_many :watchers, through: :capsule_watches, source: :user
   has_many :portable_capsules
   has_many :objections, as: :objectionable, dependent: :destroy
 
@@ -196,11 +197,11 @@ class Capsule < ActiveRecord::Base
   end
 
   def read_by?(user)
-    cached_read_by.include?(user)
+    read_by.include?(user.id)
   end
 
   def watched_by?(user)
-    cached_watchers.include?(user)
+    watchers.include?(user.id)
   end
 
   def is_processed?
@@ -234,12 +235,11 @@ class Capsule < ActiveRecord::Base
   end
 
   def watch(user)
-    watchers << user
+    update_attributes(watchers: watchers + [user.id])
   end
 
   def unwatch(user)
-    watchers.delete user
-    self.touch
+    update_attributes(watchers: watchers - [user.id])
   end
 
   def test_comments
