@@ -2,7 +2,7 @@ module API
   module V1
 
     class CapsulesController < API::V1::ApplicationController
-      before_action :set_capsule, only: [:show, :update, :destroy, :portable, :remove_portable]
+      before_action :set_capsule, only: [:show, :update, :destroy, :portable, :remove_portable, :read, :unread, :watch, :unwatch, :like, :unlike]
       before_action :set_origin_span, only: [:explorer, :hidden, :locationtags]
       skip_before_action :authorize_auth_token, only: [:index, :explorer, :locationtags, :library, :read, :unread, :loadtest, :hidden, :show]
 
@@ -85,42 +85,32 @@ module API
       end
 
       def read
-        @capsule = Capsule.find params[:id]
-        @capsule.reads << current_user.id
-        @capsule.save
+        @capsule.read current_user
         render :show
       end
 
       def unread
-        @capsule = Capsule.find params[:id]
-        @capsule.reads.delete current_user.id
-        @capsule.save
+        @capsule.unread current_user.id
         render :show
       end
 
       def watch
-        @capsule = Capsule.find params[:id]
         @capsule.watch current_user
-        @capsule.save
         render :show
       end
 
       def unwatch
-        @capsule = Capsule.find params[:id]
         @capsule.unwatch current_user
-        @capsule.save
         render :show
       end
 
       def like
-        @capsule = Capsule.find params[:id]
         @capsule.likes << current_user.id
         @capsule.save
         render :show
       end
 
       def unlike
-        @capsule = Capsule.find params[:id]
         @capsule.likes.delete current_user.id
         @capsule.save
         render :show

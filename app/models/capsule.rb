@@ -26,6 +26,7 @@
 #  thumbnail         :string(255)
 #  start_date        :datetime
 #  watchers          :integer          default([]), is an Array
+#  readers           :integer          default([]), is an Array
 #
 
 class Capsule < ActiveRecord::Base
@@ -197,7 +198,7 @@ class Capsule < ActiveRecord::Base
   end
 
   def read_by?(user)
-    read_by.include?(user.id)
+    readers.include?(user.id)
   end
 
   def watched_by?(user)
@@ -240,6 +241,14 @@ class Capsule < ActiveRecord::Base
 
   def unwatch(user)
     update_attributes(watchers: watchers - [user.id])
+  end
+
+  def read(user)
+    update_attributes(readers: readers + [user.id])
+  end
+
+  def unread(user)
+    update_attributes(readers: readers - [user.id])
   end
 
   def test_comments

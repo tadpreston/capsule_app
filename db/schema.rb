@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140716142017) do
+ActiveRecord::Schema.define(version: 20140716191335) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -91,6 +91,7 @@ ActiveRecord::Schema.define(version: 20140716142017) do
     t.string   "thumbnail"
     t.datetime "start_date"
     t.integer  "watchers",          default: [], array: true
+    t.integer  "readers",           default: [], array: true
   end
 
   add_index "capsules", ["in_reply_to"], name: "index_capsules_on_in_reply_to", using: :btree
