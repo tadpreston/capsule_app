@@ -3,9 +3,9 @@ envelope(json, :success) do
     json.capsule_count @capsule_boxes[:capsules].size
     json.set! :capsules do
       json.array! @capsule_boxes[:capsules] do |capsule|
-        json.cache! ['api/v1/_min_capsule', capsule] do
-          json.partial! 'api/v1/capsules/min_capsule', capsule: capsule
-        end
+        json.partial! 'api/v1/capsules/min_capsule', capsule: capsule
+#        json.cache! ['api/v1/_min_capsule', capsule] do
+#        end
         unless capsule.start_date.nil?
           json.start_date capsule.start_date
         end
