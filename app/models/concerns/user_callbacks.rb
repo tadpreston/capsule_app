@@ -6,16 +6,20 @@ class UserCallbacks
 
   def self.after_save(user)
     if user.profile_image_changed?
-      if asset = user.profile_asset
-        asset.destroy
+      unless user.profile_image.include?('/')
+        if asset = user.profile_asset
+          asset.destroy
+        end
+        user.assets.create(resource: user.profile_image, media_type: 'profile')
       end
-      user.assets.create(resource: user.profile_image, media_type: 'profile')
     end
     if user.background_image_changed?
-      if asset = user.background_asset
-        asset.destroy
+      unless user.background_image.include?('/')
+        if asset = user.background_asset
+          asset.destroy
+        end
+        user.assets.create(resource: user.background_image, media_type: 'background')
       end
-      user.assets.create(resource: user.background_image, media_type: 'background')
     end
   end
 
