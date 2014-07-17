@@ -16,4 +16,15 @@ class LocationWatch < ActiveRecord::Base
 
   belongs_to :user, touch: true
 
+  def self.location_watches(user_id)
+    sql = <<-SQL
+      SELECT row_to_json(c) AS watch_json
+      FROM (
+        SELECT id, latitude, longitude, radius, created_at, updated_at
+        FROM location_watches
+        WHERE user_id = 1
+      ) c;
+    SQL
+    find_by_sql sql
+  end
 end

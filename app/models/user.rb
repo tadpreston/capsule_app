@@ -64,9 +64,9 @@ class User < ActiveRecord::Base
   has_many :contacts, through: :contact_users
   has_many :reads, class_name: 'CapsuleRead'
   has_many :read_capsules, -> { where 'TRIM(status) IS NULL' }, through: :reads, source: :capsule
-  has_many :capsule_watches
-  has_many :watched_capsules, -> { where 'TRIM(status) IS NULL' }, through: :capsule_watches, source: :capsule
-  has_many :location_watches
+# has_many :capsule_watches, dependent: :destroy
+# has_many :watched_capsules, -> { where 'TRIM(status) IS NULL' }, through: :capsule_watches, source: :capsule
+# has_many :location_watches
   has_many :objections
 
   def watching_count
@@ -218,27 +218,32 @@ class User < ActiveRecord::Base
     Rails.cache.fetch(["capsules", self]) { capsules.by_updated_at.to_a }
   end
 
-  def json_capsules
-    cached_json_capsules.map do |c|
-      capsule_json = c.capsule_json
-      capsule_json["is_watched"] = c.watched_by?(id)
-      capsule_json["is_read"] = c.read_by?(id)
-      capsule_json.to_json
-    end.join(',')
+  def my_capsules
+    cached_capsules.collect { |c| c.capsule_json.to_json }.join(',')
   end
 
-  def cached_json_capsules
-    Rails.cache.fetch([self, "json_capsules"]) do
-      Capsule.users_capsules(id).to_a
+  def cached_capsules
+    Rails.cache.fetch([self, "capsules"]) do
+      Capsule.capsules(id).to_a
     end
   end
 
+  def watched_capsules
+    cached_watched_capsules.collect { |c| c.capsule_json.to_json }.join(',')
+  end
+
   def cached_watched_capsules
-    Rails.cache.fetch(["watched_capsules", self]) { watched_capsules.by_updated_at.to_a }
+    Rails.cache.fetch([self, "watched_capsules"]) do
+      Capsule.watched_capsules(id).to_a
+    end
+  end
+
+  def location_watches
+    cached_location_watches.collect { |l| l.watch_json.to_json }.join(',')
   end
 
   def cached_location_watches
-    Rails.cache.fetch(["location_watches", self]) { location_watches.to_a }
+    Rails.cache.fetch([self, 'location_watches']) { LocationWatch.location_watches(id).to_a }
   end
 
   def cached_followed_users

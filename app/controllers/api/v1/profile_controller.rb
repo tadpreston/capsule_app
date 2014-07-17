@@ -6,25 +6,11 @@ module API
       before_action :set_user
 
       def index
-        @capsules = @user.json_capsules
-        @watched_capsules = @user.cached_watched_capsules
-        @watched_locations = @user.cached_location_watches
-        @following = @user.cached_followed_users
-        @followers = @user.cached_followers
-      end
-
-      def byme
-        @capsules = @user.cached_capsules
-      end
-
-      def watched
-        @watched_capsules = @user.cached_watched_capsules
-        @watched_locations = @user.cached_location_watches
-        @following = @user.cached_followed_users
-      end
-
-      def followers
-        @followers = @user.cached_followers
+        @capsules = @user.my_capsules
+        @watched_capsules = @user.watched_capsules
+        @watched_locations = @user.location_watches
+#        @following = @user.cached_followed_users
+#        @followers = @user.cached_followers
       end
 
       def loadtest

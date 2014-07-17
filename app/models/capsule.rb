@@ -144,9 +144,9 @@ class Capsule < ActiveRecord::Base
       .select("id, regexp_matches(hash_tags, '[^[:space:]]*#{hashtag}[^[:space:]]*') as hash_tags, latitude, longitude").order(hash_tags: :desc)
   end
 
-  def self.users_capsules(user_id)
+  def self.capsules(user_id)
     sql = <<-SQL
-      SELECT id, user_id, updated_at, row_to_json(c) AS capsule_json
+      SELECT row_to_json(c) AS capsule_json
       FROM (
         SELECT id, user_id, title, hash_tags, location, relative_location, thumbnail, incognito, is_portable, comments_count, created_at, updated_at,
                (
@@ -156,9 +156,29 @@ class Capsule < ActiveRecord::Base
                    FROM users
                    WHERE id = capsules.user_id
                  ) u
-               ) AS creator, capsules.user_id = #{user_id} AS is_owned
+               ) AS creator, capsules.user_id = #{user_id} AS is_owned, #{user_id} = ANY(watchers) AS is_watched, #{user_id} = ANY(readers) AS is_read
         FROM capsules
-        WHERE user_id = #{user_id}
+        WHERE TRIM(status) IS NULL AND user_id = #{user_id}
+      ) c;
+    SQL
+    find_by_sql sql
+  end
+
+  def self.watched_capsules(user_id)
+    sql = <<-SQL
+      SELECT row_to_json(c) AS capsule_json
+      FROM (
+        SELECT id, user_id, title, hash_tags, location, relative_location, thumbnail, incognito, is_portable, comments_count, created_at, updated_at,
+              (
+                SELECT row_to_json(u)
+                FROM (
+                      SELECT id, first_name, last_name, profile_image
+                      FROM users
+                      WHERE id = capsules.user_id
+                ) u
+              ) AS creator, capsules.user_id = 1 AS is_owned, watchers @> ARRAY[1] AS is_watched, readers @> ARRAY[1] AS is_read
+        FROM capsules
+        WHERE TRIM(status) IS NULL AND watchers @> ARRAY[1]
       ) c;
     SQL
     find_by_sql sql
