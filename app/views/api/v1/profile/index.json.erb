@@ -13,8 +13,12 @@
     "watched": {
       "capsules": [ <%= @watched_capsules.html_safe %> ],
       "locations": [ <%= @watched_locations.html_safe %> ],
-      "users": []
+      "users": [
+        <%= @following.collect { |user| render(partial: 'api/v1/users/array_user', locals: { user: user }) }.join(',').html_safe %>
+      ]
     },
-    "followers": []
+    "followers": [
+      <%= @followers.collect { |user|  render(partial: 'api/v1/users/array_user', locals: { user: user }) }.join(',').html_safe %>
+    ]
   }
 }

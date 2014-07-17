@@ -9,8 +9,8 @@ module API
         @capsules = @user.my_capsules
         @watched_capsules = @user.watched_capsules
         @watched_locations = @user.location_watches
-#        @following = @user.cached_followed_users
-#        @followers = @user.cached_followers
+        @following = @user.followed_users
+        @followers = @user.followers
       end
 
       def loadtest

@@ -64,11 +64,11 @@ class User < ActiveRecord::Base
   has_many :objections
 
   def watching_count
-    relationships.count
+    following.size
   end
 
   def watchers_count
-    reverse_relationships.count
+    cached_followers.size
   end
 
   def self.find_or_create_by_oauth(oauth)
@@ -240,20 +240,26 @@ class User < ActiveRecord::Base
     Rails.cache.fetch([self, 'location_watches']) { LocationWatch.location_watches(id).to_a }
   end
 
+  def followed_users
+    cached_followed_users
+  end
+
   def cached_followed_users
-    Rails.cache.fetch(["followed_users", self]) { followed_users.to_a }
+    Rails.cache.fetch([self, "followed_users"]) do
+      User.where(id: following).to_a
+    end
+  end
+
+  def followers
+    cached_followers
   end
 
   def cached_followers
-    Rails.cache.fetch(["followers", self]) { followers.to_a }
-  end
-
-  def cached_followed_users
-    Rails.cache.fetch(["followed_users", self]) { followed_users.to_a }
+    Rails.cache.fetch([self, "followers"]) { User.where("following @> ARRAY[#{id}]").to_a }
   end
 
   def is_following?(user)
-    cached_followed_users.include?(user)
+    following.include? user.id
   end
 
   protected
