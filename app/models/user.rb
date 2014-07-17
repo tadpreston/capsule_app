@@ -68,7 +68,7 @@ class User < ActiveRecord::Base
   end
 
   def watchers_count
-    cached_followers.size
+    followers.count
   end
 
   def self.find_or_create_by_oauth(oauth)
@@ -251,11 +251,7 @@ class User < ActiveRecord::Base
   end
 
   def followers
-    cached_followers
-  end
-
-  def cached_followers
-    Rails.cache.fetch([self, "followers"]) { User.where("following @> ARRAY[#{id}]").to_a }
+    User.where("following @> ARRAY[#{id}]").to_a
   end
 
   def is_following?(user)
