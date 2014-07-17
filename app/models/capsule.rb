@@ -52,10 +52,6 @@ class Capsule < ActiveRecord::Base
   has_many :recipients, through: :recipient_users, source: :user
   has_many :replies, -> { where 'TRIM(status) IS NULL' }, class_name: "Capsule", foreign_key: "in_reply_to"
   belongs_to :replied_to, -> { where 'TRIM(status) IS NULL' }, class_name: "Capsule", foreign_key: "in_reply_to", touch: true
-#  has_many :reads, class_name: 'CapsuleRead'
-#  has_many :read_by, through: :reads, source: :user
-#  has_many :capsule_watches
-#  has_many :watchers, through: :capsule_watches, source: :user
   has_many :portable_capsules
   has_many :objections, as: :objectionable, dependent: :destroy
 
@@ -256,7 +252,7 @@ class Capsule < ActiveRecord::Base
   end
 
   def watch(user)
-    update_attributes(watchers: watchers + [user.id])
+    update_attributes(watchers: watchers + [user.id]) unless watched_by?(user)
   end
 
   def unwatch(user)
@@ -264,7 +260,7 @@ class Capsule < ActiveRecord::Base
   end
 
   def read(user)
-    update_attributes(readers: readers + [user.id])
+    update_attributes(readers: readers + [user.id]) unless read_by?(user)
   end
 
   def unread(user)
