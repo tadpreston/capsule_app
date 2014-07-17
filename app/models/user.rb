@@ -292,6 +292,38 @@ class User < ActiveRecord::Base
     assets.where(media_type: 'background').take
   end
 
+  def profile_image_path
+    unless profile_image.blank?
+      if profile_image.include?('/')
+        "https://#{ENV['CDN_HOST']}/#{profile_image}"
+      else
+        "https://#{ENV['CDN_HOST']}/default/waiting-001.png"
+      end
+    else
+      ''
+    end
+  end
+
+  def background_image_path
+    unless background_image.blank?
+      if background_image.include?('/')
+        "https://#{ENV['CDN_HOST']}/#{background_image}"
+      else
+        "https://#{ENV['CDN_HOST']}/default/waiting-001.png"
+      end
+    else
+      ''
+    end
+  end
+
+  def profile_asset
+    assets.where(media_type: 'profile').take
+  end
+
+  def background_asset
+    assets.where(media_type: 'background').take
+  end
+
   protected
 
     def uid_and_provider_are_unique
