@@ -34,6 +34,7 @@
 #  background_image     :string(255)
 #  job_id               :string(255)
 #  complete             :boolean          default(FALSE)
+#  following            :integer          default([]), is an Array
 #
 
 require 'spec_helper'

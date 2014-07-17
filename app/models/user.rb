@@ -34,6 +34,7 @@
 #  background_image     :string(255)
 #  job_id               :string(255)
 #  complete             :boolean          default(FALSE)
+#  following            :integer          default([]), is an Array
 #
 
 class User < ActiveRecord::Base
@@ -53,10 +54,6 @@ class User < ActiveRecord::Base
   has_many :capsules, -> { where 'TRIM(status) IS NULL' }, dependent: :destroy
   has_many :favorites, dependent: :destroy
   has_many :favorite_capsules, -> { where 'TRIM(status) IS NULL' }, through: :favorites, source: :capsule
-  has_many :relationships, foreign_key: "follower_id", dependent: :destroy
-  has_many :followed_users, through: :relationships, source: :followed
-  has_many :reverse_relationships, foreign_key: "followed_id", class_name: "Relationship", dependent: :destroy
-  has_many :followers, through: :reverse_relationships
   has_many :comments, -> { where 'TRIM(status) IS NULL' }, dependent: :destroy
   has_many :recipient_users, dependent: :destroy
   has_many :received_capsules, -> { where 'TRIM(status) IS NULL' }, through: :recipient_users, source: :capsule
@@ -64,9 +61,6 @@ class User < ActiveRecord::Base
   has_many :contacts, through: :contact_users
   has_many :reads, class_name: 'CapsuleRead'
   has_many :read_capsules, -> { where 'TRIM(status) IS NULL' }, through: :reads, source: :capsule
-# has_many :capsule_watches, dependent: :destroy
-# has_many :watched_capsules, -> { where 'TRIM(status) IS NULL' }, through: :capsule_watches, source: :capsule
-# has_many :location_watches
   has_many :objections
 
   def watching_count
@@ -153,19 +147,19 @@ class User < ActiveRecord::Base
   end
 
   def following?(other_user)
-    relationships.find_by(followed_id: other_user.id)
+    following.include?(other_user.id)
   end
 
   def follow!(other_user)
-    relationships.create!(followed_id: other_user.id) unless following?(other_user)
-  end
-
-  def remove_follower!(other_user)
-    followers.delete(other_user)
+    update_attributes(following: following + [other_user.id]) unless following?(other_user)
   end
 
   def unfollow!(other_user)
-    relationships.find_by(followed_id: other_user.id).destroy
+    update_attributes(following: following - [other_user.id])
+  end
+
+  def remove_follower!(other_user)
+    other_user.update_attributes(following: following - [id])
   end
 
   def add_as_contact(contact)
