@@ -214,11 +214,19 @@ class Capsule < ActiveRecord::Base
   end
 
   def read_by?(user)
-    readers.include?(user.id)
+    if user
+      readers.include?(user.id)
+    else
+      false
+    end
   end
 
   def watched_by?(user)
-    watchers.include?(user.id)
+    if user
+      watchers.include?(user.id)
+    else
+      false
+    end
   end
 
   def is_processed?
