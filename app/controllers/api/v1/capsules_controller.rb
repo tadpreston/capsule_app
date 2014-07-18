@@ -90,7 +90,7 @@ module API
       end
 
       def unread
-        @capsule.unread current_user.id
+        @capsule.unread current_user
         render :show
       end
 

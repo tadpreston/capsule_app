@@ -172,9 +172,9 @@ class Capsule < ActiveRecord::Base
                       FROM users
                       WHERE id = capsules.user_id
                 ) u
-              ) AS creator, capsules.user_id = 1 AS is_owned, watchers @> ARRAY[1] AS is_watched, readers @> ARRAY[1] AS is_read
+              ) AS creator, capsules.user_id = #{user_id} AS is_owned, watchers @> ARRAY[#{user_id}] AS is_watched, readers @> ARRAY[#{user_id}] AS is_read
         FROM capsules
-        WHERE TRIM(status) IS NULL AND watchers @> ARRAY[1]
+        WHERE TRIM(status) IS NULL AND watchers @> ARRAY[#{user_id}]
       ) c;
     SQL
     find_by_sql sql
@@ -253,18 +253,22 @@ class Capsule < ActiveRecord::Base
 
   def watch(user)
     update_attributes(watchers: watchers + [user.id]) unless watched_by?(user)
+    user.touch
   end
 
   def unwatch(user)
     update_attributes(watchers: watchers - [user.id])
+    user.touch
   end
 
   def read(user)
     update_attributes(readers: readers + [user.id]) unless read_by?(user)
+    user.touch
   end
 
   def unread(user)
     update_attributes(readers: readers - [user.id])
+    user.touch
   end
 
   def test_comments
