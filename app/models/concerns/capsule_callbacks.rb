@@ -27,7 +27,7 @@ class CapsuleCallbacks
   end
 
   def self.after_create(capsule)
-    CapsuleLocationWatchWorker.perform_async(capsule.id)
+    CapsuleLocationWatchWorker.perform_in(2.seconds, capsule.id)
     CapsuleWorker.perform_in(15.seconds, capsule.id)
   end
 end
