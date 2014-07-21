@@ -42,6 +42,17 @@ class Capsule < ActiveRecord::Base
   after_create CapsuleCallbacks
 
   validates :title, presence: true
+  validates_each :recipients_attributes, allow_blank: true do |record, attr, value|
+    value.each do |recipient|
+      if recipient[:email].blank? && recipient[:phone_number].blank?
+        record.errors.add attr, "Recipient key is missing"
+      else
+        unless recipient[:email].blank?
+          record.errors.add attr, 'Recipient email address is invalid' unless recipient[:email] =~ User::VALID_EMAIL_REGEX
+        end
+      end
+    end
+  end
 
   belongs_to :user, touch: true
   has_many :favorites
@@ -59,6 +70,7 @@ class Capsule < ActiveRecord::Base
 
   accepts_nested_attributes_for :comments, allow_destroy: true
   accepts_nested_attributes_for :assets, allow_destroy: true
+  accepts_nested_attributes_for :recipients
 
   PAYLOAD_TYPES = [NO_VALUE_TYPE = 'NoValue', AUDIO_TYPE = 'Audio', VIDEO_TYPE = 'Video', PICTURE_TYPE = 'Picture', TEXT_TYPE = 'Text']
   PROMOTIONAL_STATES = ["NoValue", "Promo State One", "Promo State Two", "Promo State Three", "Promo State Four"]
@@ -236,7 +248,7 @@ class Capsule < ActiveRecord::Base
   end
 
   def hash_tags_array
-    self.hash_tags.split(' ')
+    self.hash_tags.split(' ') unless hash_tags.blank?
   end
 
   def liked_by?(user)
