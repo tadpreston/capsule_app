@@ -8,7 +8,7 @@ json.set! :creator do
 end
 json.is_owned is_owned?(capsule.user_id)
 json.title capsule.title
-json.set! :hash_tags, capsule.hash_tags.split(' ')
+json.set! :hash_tags, capsule.hash_tags_array
 json.location capsule.location
 json.relative_location capsule.relative_location
 json.payload_type capsule.payload_type || 0

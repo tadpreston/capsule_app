@@ -1,6 +1,6 @@
 json.id capsule.id
 json.title capsule.title
-json.set! :hash_tags, capsule.hash_tags.split(' ')
+json.set! :hash_tags, capsule.hash_tags_array
 json.location capsule.location
 json.relative_location capsule.relative_location
 json.thumbnail capsule.thumbnail_path
