@@ -5,7 +5,7 @@ if @capsule.errors.messages.any?
     end
   end
 else
-  envelope(json, :updated) do
+  envelope(json, :created) do
     json.capsule do
       json.partial! 'api/v1/capsules/capsule', capsule: @capsule
     end
