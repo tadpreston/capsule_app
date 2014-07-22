@@ -24,11 +24,15 @@ class Asset < ActiveRecord::Base
   validates :media_type, presence: true
   validates :resource, presence: true
 
+  WAITING_PATH = "https://#{ENV['CDN_HOST']}/default/waiting-001.png"
+
   def resource_path
-    if self.resource.include?('/') && self.complete
-      "https://#{ENV['CDN_HOST']}/#{self.resource}"
+    if resource =~ /http|https/
+      resource
+    elsif complete
+       "https://#{ENV['CDN_HOST']}/#{self.resource}"
     else
-      "https://#{ENV['CDN_HOST']}/default/waiting-001.png"
+       WAITING_PATH
     end
   end
 
