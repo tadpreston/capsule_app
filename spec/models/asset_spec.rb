@@ -23,7 +23,7 @@ describe Asset do
 
   subject { @asset }
 
-  it { should belong_to(:capsule) }
+  it { should belong_to(:assetable) }
 
   it { should validate_presence_of(:media_type) }
   it { should validate_presence_of(:resource) }

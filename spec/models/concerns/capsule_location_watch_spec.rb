@@ -13,7 +13,8 @@ describe CapsuleLocationWatch do
   describe 'watch_capsules_at_location method' do
     it 'creates watches for the capsules' do
       CapsuleLocationWatch.watch_capsules_at_location(@location_watch.to_param)
-      expect(@user.watched_capsules.count).to eq(2)
+      @user.reload
+      expect(@user.cached_watched_capsules.size).to eq(2)
     end
   end
 
@@ -26,7 +27,7 @@ describe CapsuleLocationWatch do
     end
 
     it 'removes the watch from the user' do
-      expect(@user.watched_capsules.count).to eq(0)
+      expect(@user.cached_watched_capsules.size).to eq(0)
     end
 
     it 'does not delete the capsule' do
@@ -37,9 +38,8 @@ describe CapsuleLocationWatch do
   describe 'add_to_watched_locations method' do
     it 'adds a watch to the the location watchers' do
       new_capsule = FactoryGirl.create(:capsule, location: { longitude: '-96.83103', latitude: '32.97028', radius: '.02341' })
-      expect {
-        CapsuleLocationWatch.add_to_watched_locations(new_capsule.id)
-      }.to change(CapsuleWatch, :count).by(1)
+      CapsuleLocationWatch.add_to_watched_locations(new_capsule.id)
+      expect(@user.cached_watched_capsules.size).to eq(1)
     end
   end
 end

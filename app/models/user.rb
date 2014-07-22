@@ -62,6 +62,7 @@ class User < ActiveRecord::Base
   has_many :contacts, through: :contact_users
   has_many :reads, class_name: 'CapsuleRead'
   has_many :read_capsules, -> { where 'TRIM(status) IS NULL' }, through: :reads, source: :capsule
+  has_many :location_watches
   has_many :objections
   has_many :assets, as: :assetable, dependent: :destroy
 
@@ -191,11 +192,11 @@ class User < ActiveRecord::Base
   end
 
   def watch_capsule(capsule)
-    watched_capsules << capsule unless capsule.user_id == id
+    capsule.watch self
   end
 
   def unwatch_capsule(capsule)
-    watched_capsules.delete(capsule)
+    capsule.unwatch self
   end
 
   def is_watching_capsule?(capsule)

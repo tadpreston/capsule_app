@@ -187,6 +187,7 @@ class Capsule < ActiveRecord::Base
               ) AS creator, capsules.user_id = #{user_id} AS is_owned, watchers @> ARRAY[#{user_id}] AS is_watched, readers @> ARRAY[#{user_id}] AS is_read
         FROM capsules
         WHERE TRIM(status) IS NULL AND watchers @> ARRAY[#{user_id}]
+        ORDER BY updated_at DESC
       ) c;
     SQL
     find_by_sql sql

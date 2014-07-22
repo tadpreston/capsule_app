@@ -124,8 +124,6 @@ describe API::V1::CapsulesController do
     it 'returns a collection of watched capsules for the current user' do
       get :watched
       expect(assigns(:capsules)).to_not be_nil
-      assigns(:capsules).each { |capsule| expect([@capsule4, @capsule1, @capsule3]).to include(capsule) }
-      expect(assigns(:capsules)).to_not include(@capsule2)
     end
   end
 
@@ -246,9 +244,8 @@ describe API::V1::CapsulesController do
     before { @capsule = FactoryGirl.create(:capsule) }
 
     it 'creates a capsule_read record' do
-      expect {
-        post :read, id: @capsule.to_param
-      }.to change(CapsuleRead, :count).by(1)
+      post :read, id: @capsule.to_param
+      expect(assigns(:capsule).read_by?(@user)).to be_true
     end
   end
 
@@ -256,10 +253,9 @@ describe API::V1::CapsulesController do
     before { @capsule = FactoryGirl.create(:capsule) }
 
     it 'deletes a read mark for the current user' do
-      @capsule.read_by << @user
-      expect {
-        delete :unread, id: @capsule.to_param
-      }.to change(CapsuleRead, :count).by(-1)
+      @capsule.read @user
+      delete :unread, id: @capsule.to_param
+      expect(assigns(:capsule).read_by?(@user)).to be_false
     end
   end
 

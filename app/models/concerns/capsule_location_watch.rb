@@ -19,8 +19,8 @@ module CapsuleLocationWatch
     north_bound = location['lat'] + location['radius']
     south_bound = location['lat'] - location['radius']
 
-    capsules = user.watched_capsules.where(longitude: (west_bound..east_bound), latitude: (south_bound..north_bound))
-    capsules.each { |capsule| user.unwatch_capsule(capsule) }
+    capsules = Capsule.where("watchers @> ARRAY[#{user_id}]").where(longitude: (west_bound..east_bound), latitude: (south_bound..north_bound))
+    capsules.each { |capsule| capsule.unwatch user }
   end
 
   def self.add_to_watched_locations(capsule_id)
