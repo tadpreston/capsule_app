@@ -156,7 +156,7 @@ class Capsule < ActiveRecord::Base
     sql = <<-SQL
       SELECT row_to_json(c) AS capsule_json
       FROM (
-        SELECT id, user_id, title, hash_tags, location, relative_location, thumbnail, incognito, is_portable, comments_count, created_at, updated_at,
+        SELECT id, user_id, title, string_to_array(hash_tags, ' ') as hash_tags, location, relative_location, thumbnail, incognito, is_portable, comments_count, created_at, updated_at,
                (
                  SELECT row_to_json(u)
                  FROM (

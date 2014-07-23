@@ -249,7 +249,7 @@ ActiveRecord::Schema.define(version: 20140723151147) do
     t.string   "job_id"
     t.boolean  "complete",             default: false
     t.integer  "following",            default: [],                   array: true
-    t.integer  "watched_capsules",     default: [],                   array: true
+    t.integer  "watching",             default: [],                   array: true
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", using: :btree

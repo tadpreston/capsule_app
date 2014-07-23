@@ -217,24 +217,24 @@ class User < ActiveRecord::Base
   end
 
   def my_capsules
-    cached_capsules.collect { |c| c.capsule_json.to_json }.join(',')
+    cached_my_capsules.collect { |c| c.capsule_json.to_json }.join(',')
   end
 
-  def cached_capsules
+  def cached_my_capsules
     Rails.cache.fetch([self, "capsules"]) do
       Capsule.capsules(id).to_a
     end
   end
 
-#  def watched_capsules
-#    cached_watched_capsules.collect { |c| c.capsule_json.to_json }.join(',')
-#  end
+  def watched_capsules
+    cached_watched_capsules.collect { |c| c.capsule_json.to_json }.join(',')
+  end
 
-#  def cached_watched_capsules
-#    Rails.cache.fetch([self, "watched_capsules"]) do
-#      Capsule.watched_capsules(id).to_a
-#    end
-#  end
+  def cached_watched_capsules
+    Rails.cache.fetch([self, "watched_capsules"]) do
+      Capsule.watched_capsules(id).to_a
+    end
+  end
 
   def location_watches
     cached_location_watches.collect { |l| l.watch_json.to_json }.join(',')

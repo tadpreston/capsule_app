@@ -20,9 +20,9 @@ class LocationWatch < ActiveRecord::Base
     sql = <<-SQL
       SELECT row_to_json(c) AS watch_json
       FROM (
-        SELECT id, latitude, longitude, radius, created_at, updated_at
+        SELECT id, latitude::Text, longitude::Text, radius::Text, created_at, updated_at
         FROM location_watches
-        WHERE user_id = 1
+        WHERE user_id = #{user_id}
       ) c;
     SQL
     find_by_sql sql
