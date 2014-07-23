@@ -35,6 +35,7 @@
 #  job_id               :string(255)
 #  complete             :boolean          default(FALSE)
 #  following            :integer          default([]), is an Array
+#  watched_capsules     :integer          default([]), is an Array
 #
 
 class User < ActiveRecord::Base
@@ -225,15 +226,15 @@ class User < ActiveRecord::Base
     end
   end
 
-  def watched_capsules
-    cached_watched_capsules.collect { |c| c.capsule_json.to_json }.join(',')
-  end
+#  def watched_capsules
+#    cached_watched_capsules.collect { |c| c.capsule_json.to_json }.join(',')
+#  end
 
-  def cached_watched_capsules
-    Rails.cache.fetch([self, "watched_capsules"]) do
-      Capsule.watched_capsules(id).to_a
-    end
-  end
+#  def cached_watched_capsules
+#    Rails.cache.fetch([self, "watched_capsules"]) do
+#      Capsule.watched_capsules(id).to_a
+#    end
+#  end
 
   def location_watches
     cached_location_watches.collect { |l| l.watch_json.to_json }.join(',')
