@@ -12,6 +12,10 @@ envelope(json, :success) do
         unless capsule.lock_question.blank?
           json.lock_question capsule.lock_question
           json.lock_answer capsule.lock_answer
+        else
+          unless capsule.lock_answer.blank?
+            json.lock_answer capsule.lock_answer
+          end
         end
         json.is_watched capsule.watched_by?(current_user)
         json.is_read capsule.read_by?(current_user)
