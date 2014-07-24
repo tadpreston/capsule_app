@@ -7,7 +7,8 @@ json.thumbnail capsule.thumbnail_path
 json.is_incognito capsule.incognito || false
 json.is_portable capsule.is_portable || false
 json.is_processed capsule.is_processed?
-json.comments_count capsule.comments_count
+json.comments_count capsule.comments_count unless capsule.comments_count == 0
+json.likes_count capsule.likes_count unless capsule.likes_count == 0
 json.set! :creator do
   json.id capsule.cached_user.id
   json.first_name capsule.cached_user.first_name
