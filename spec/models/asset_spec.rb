@@ -58,6 +58,7 @@ describe Asset do
       it 'returns the source image with the CDN' do
         expect(@asset.resource_path).to include('filename.png')
         expect(@asset.resource_path).to include('https')
+        expect(@asset.resource_path).to eq("#{Asset::CDN_HOST}/filename.png")
       end
     end
   end

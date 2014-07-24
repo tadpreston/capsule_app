@@ -63,7 +63,6 @@ class Capsule < ActiveRecord::Base
   has_many :recipients, through: :recipient_users, source: :user
   has_many :replies, -> { where 'TRIM(status) IS NULL' }, class_name: "Capsule", foreign_key: "in_reply_to"
   belongs_to :replied_to, -> { where 'TRIM(status) IS NULL' }, class_name: "Capsule", foreign_key: "in_reply_to", touch: true
-  has_many :portable_capsules
   has_many :objections, as: :objectionable, dependent: :destroy
 
   delegate :full_name, to: :user, prefix: true

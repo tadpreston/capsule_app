@@ -45,11 +45,82 @@ describe Capsule do
   it { should have_many(:recipients).through(:recipient_users) }
   it { should have_many(:replies) }
   it { should belong_to(:replied_to) }
+  it { should have_many(:objections) }
 
   it { should validate_presence_of(:title) }
 
   it { should accept_nested_attributes_for(:comments).allow_destroy(true) }
   it { should accept_nested_attributes_for(:assets).allow_destroy(true) }
+  it { should accept_nested_attributes_for(:recipients) }
+
+  it { should delegate(:full_name).to(:user).with_prefix }
+
+  describe 'recipients_attributes validation' do
+    describe 'without any recipients' do
+      it 'returns a valid capsule' do
+        expect(@capsule).to be_valid
+      end
+    end
+
+    describe 'with recipients' do
+      it 'returns a valid capsule with a phone_number' do
+        @capsule.recipients_attributes = [ { phone_number: '9728675309', first_name: 'Bob', last_name: 'Smith' } ]
+        expect(@capsule).to be_valid
+      end
+
+      it 'returns a valid capsule with a valid email' do
+        @capsule.recipients_attributes = [ { email: 'test@email.com', first_name: 'Bob', last_name: 'Smith' } ]
+        expect(@capsule).to be_valid
+      end
+
+      it 'is not valid without an email and a phone number' do
+        @capsule.recipients_attributes = [ { first_name: 'Bob', last_name: 'Smith' } ]
+        expect(@capsule).to_not be_valid
+        expect(@capsule.errors.messages[:recipients_attributes]).to eq(['Recipient key is missing'])
+      end
+
+      it 'is not valid with an invalid formatted email' do
+        @capsule.recipients_attributes = [ { email: 'invalidemail', first_name: 'Bob', last_name: 'Smith' } ]
+        expect(@capsule).to_not be_valid
+        expect(@capsule.errors.messages[:recipients_attributes]).to eq(['Recipient email address is invalid'])
+      end
+    end
+
+    describe 'with multiple recipients' do
+      it 'returns a valid capsule with phone_numbers' do
+        @capsule.recipients_attributes = [ { phone_number: '9728675309', first_name: 'Bob', last_name: 'Smith' }, { phone_number: '9728675309', first_name: 'Bob', last_name: 'Smith' } ]
+        expect(@capsule).to be_valid
+      end
+
+      it 'returns a valid capsule with valid emails' do
+        @capsule.recipients_attributes = [ { email: 'test@email.com', first_name: 'Bob', last_name: 'Smith' }, { email: 'test@email.com', first_name: 'Bob', last_name: 'Smith' } ]
+        expect(@capsule).to be_valid
+      end
+
+      it 'returns a valid capsule with valid emails and phone number' do
+        @capsule.recipients_attributes = [ { email: 'test@email.com', first_name: 'Bob', last_name: 'Smith' }, { phone_number: '8178675309', first_name: 'Bob', last_name: 'Smith' } ]
+        expect(@capsule).to be_valid
+      end
+
+      it 'is not valid without an email and a phone number' do
+        @capsule.recipients_attributes = [ { email: 'test@email.com', first_name: 'Bob', last_name: 'Smith' }, { first_name: 'Bob', last_name: 'Smith' } ]
+        expect(@capsule).to_not be_valid
+        expect(@capsule.errors.messages[:recipients_attributes]).to eq(['Recipient key is missing'])
+        @capsule.recipients_attributes = [ { first_name: 'Bob', last_name: 'Smith' }, { phone_number: '8178675309', first_name: 'Bob', last_name: 'Smith' } ]
+        expect(@capsule).to_not be_valid
+        expect(@capsule.errors.messages[:recipients_attributes]).to eq(['Recipient key is missing'])
+      end
+
+      it 'is not valid with an invalid formatted email' do
+        @capsule.recipients_attributes = [ { email: 'test@email.com', first_name: 'Bob', last_name: 'Smith' }, { email: 'invalidemail', first_name: 'Bob', last_name: 'Smith' } ]
+        expect(@capsule).to_not be_valid
+        expect(@capsule.errors.messages[:recipients_attributes]).to eq(['Recipient email address is invalid'])
+        @capsule.recipients_attributes = [ { phone_number: '9992340987', first_name: 'Bob', last_name: 'Smith' }, { email: 'invalidemail', first_name: 'Bob', last_name: 'Smith' } ]
+        expect(@capsule).to_not be_valid
+        expect(@capsule.errors.messages[:recipients_attributes]).to eq(['Recipient email address is invalid'])
+      end
+    end
+  end
 
   describe 'before_save callback' do
     describe 'with hash_tags in the title' do
