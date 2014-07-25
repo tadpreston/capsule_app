@@ -33,8 +33,10 @@ module IsLikeable
 
     def delete(id)
       ids_array = get_array
-      ids_array.delete id
-      @object[@likes_store] = { "ids" => ids_array }
+      if ids_array.include? id
+        ids_array.delete id
+        @object[@likes_store] = { "ids" => ids_array }
+      end
     end
 
     def to_s
