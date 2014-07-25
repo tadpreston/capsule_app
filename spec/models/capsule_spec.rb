@@ -191,15 +191,14 @@ describe Capsule do
       @capsule1 = FactoryGirl.create(:capsule, location: { latitude: '33.167111', longitude: '-96.663793', radius: '20000' })
       @capsule2 = FactoryGirl.create(:capsule, location: { latitude: '33.013300', longitude: '-96.823046', radius: '20000' })
       @capsule3 = FactoryGirl.create(:capsule, location: { latitude: '30.089326', longitude: '-96.231873', radius: '20000' })
+      @capsules = Capsule.find_in_rec(@origin, @span)
     end
 
     it 'gets the correct capsules in the rectangle' do
-      Capsule.find_in_rec(@origin, @span).each { |capsule| expect([@capsule2, @capsule1]).to include(capsule) }
+      expect(@capsules).to match_array([@capsule2, @capsule1])
+      expect(@capsules).to_not include(@capsule3)
     end
 
-    it 'does not include capsules outside of the rectangle' do
-      expect(Capsule.find_in_rec(@origin, @span)).to_not include(@capsule3)
-    end
   end
 
   describe 'find_from_center' do
@@ -209,14 +208,12 @@ describe Capsule do
       @capsule1 = FactoryGirl.create(:capsule, location: { latitude: '33.167111', longitude: '-96.163793', radius: '20000' })
       @capsule2 = FactoryGirl.create(:capsule, location: { latitude: '34.013300', longitude: '-97.623046', radius: '20000' })
       @capsule3 = FactoryGirl.create(:capsule, location: { latitude: '30.089326', longitude: '-96.231873', radius: '20000' })
+      @capsules = Capsule.find_from_center(@origin, @span)
     end
 
     it 'gets the correct capsules in the rectangle' do
-      Capsule.find_from_center(@origin, @span).each { |capsule| expect([@capsule2, @capsule1]).to include(capsule) }
-    end
-
-    it 'does not include capsules outside of the rectangle' do
-      expect(Capsule.find_from_center(@origin, @span)).to_not include(@capsule3)
+      expect(@capsules).to match_array([@capsule2, @capsule1])
+      expect(@capsules).to_not include(@capsule3)
     end
   end
 
@@ -227,7 +224,7 @@ describe Capsule do
       capsule3 = FactoryGirl.create(:capsule, title: 'Title with #tag1 #tag4')
       capsules = Capsule.with_hash_tag('#tag1')
       expect(capsules.size).to eq(2)
-      capsules.each { |capsule| expect([capsule1, capsule3]).to include(capsule) }
+      expect(capsules).to match_array([capsule1, capsule3])
       expect(capsules).to_not include(capsule2)
     end
   end
@@ -244,7 +241,7 @@ describe Capsule do
     it 'gets the correct capsules without a hashtag' do
       capsules = Capsule.find_location_hash_tags(@origin, @span)
       expect(capsules.size).to eq(2)
-      capsules.each { |capsule| expect([@capsule1, @capsule2]).to include(capsule) }
+      expect(capsules).to match_array([@capsule1, @capsule2])
       expect(capsules).to_not include(@capsule3)
     end
 
@@ -286,7 +283,7 @@ describe Capsule do
 
       capsules = Capsule.absolute_location
       expect(capsules.count).to eq(1)
-      expect(capsules[0]).to eq(capsule1)
+      expect(capsules).to eq([capsule1])
     end
   end
 
@@ -299,7 +296,7 @@ describe Capsule do
 
       capsules = Capsule.public_capsules
       expect(capsules.count).to eq(2)
-      capsules.each { |capsule| expect([capsule1, capsule3]).to include(capsule) }
+      expect(capsules).to match_array([capsule1, capsule3])
       expect(capsules).to_not include(capsule2)
     end
   end
@@ -316,8 +313,21 @@ describe Capsule do
 
       capsules = Capsule.public_with_user(user.id)
       expect(capsules.count).to eq(3)
-      capsules.each { |capsule| expect([capsule1,capsule3,capsule4]).to include(capsule) }
+      expect(capsules).to match_array([capsule1,capsule3,capsule4])
       expect(capsules).to_not include(capsule2)
+    end
+  end
+
+  describe 'without_objections scope' do
+    it 'returns only capsules without an objection' do
+      capsule1 = FactoryGirl.create(:capsule)
+      capsule2 = FactoryGirl.create(:capsule, status: 'objection')
+      capsule3 = FactoryGirl.create(:capsule)
+
+      capsules = Capsule.without_objections
+
+      expect(capsules).to_not include(capsule2)
+      expect(capsules).to match_array([capsule1, capsule3])
     end
   end
 
@@ -516,13 +526,13 @@ describe Capsule do
     it 'returns the correct capsules' do
       capsules = Capsule.search_hashtags('#withhashtags')
       expect(capsules.to_a.size).to eq(2)
-      capsules.each { |c| expect([@capsule1, @capsule2]).to include(c) }
+      expect(capsules).to match_array([@capsule1, @capsule2])
     end
 
     it 'returns a partial match' do
       capsules = Capsule.search_hashtags('#intheresu')
       expect(capsules.to_a.size).to eq(1)
-      expect(capsules[0]).to eq(@capsule3)
+      expect(capsules).to eq([@capsule3])
     end
 
     it 'returns the matching hashtag' do
