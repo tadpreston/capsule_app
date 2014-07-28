@@ -30,16 +30,6 @@ ActiveRecord::Schema.define(version: 20140728184905) do
     t.datetime "updated_at"
   end
 
-  create_table "api_keys", force: true do |t|
-    t.integer  "tenant_id"
-    t.string   "name"
-    t.string   "token"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "api_keys", ["tenant_id"], name: "index_api_keys_on_tenant_id", using: :btree
-
   create_table "assets", force: true do |t|
     t.string   "media_type"
     t.string   "resource"
@@ -225,6 +215,16 @@ ActiveRecord::Schema.define(version: 20140728184905) do
 
   add_index "relationships", ["followed_id"], name: "index_relationships_on_followed_id", using: :btree
   add_index "relationships", ["follower_id"], name: "index_relationships_on_follower_id", using: :btree
+
+  create_table "tenant_keys", force: true do |t|
+    t.integer  "tenant_id"
+    t.string   "name"
+    t.string   "token"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "tenant_keys", ["tenant_id"], name: "index_tenant_keys_on_tenant_id", using: :btree
 
   create_table "tenants", force: true do |t|
     t.string   "name"

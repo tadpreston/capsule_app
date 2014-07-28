@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: api_keys
+# Table name: tenant_keys
 #
 #  id         :integer          not null, primary key
 #  tenant_id  :integer
@@ -12,6 +12,6 @@
 
 require 'spec_helper'
 
-describe APIKey do
-  pending "add some examples to (or delete) #{__FILE__}"
+describe TenantKey do
+# it { should belong_to(:tenant) }
 end

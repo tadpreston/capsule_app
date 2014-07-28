@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: api_keys
+# Table name: tenant_keys
 #
 #  id         :integer          not null, primary key
 #  tenant_id  :integer
@@ -10,6 +10,6 @@
 #  updated_at :datetime
 #
 
-class APIKey < ActiveRecord::Base
+class TenantKey < ActiveRecord::Base
   belongs_to :tenant
 end

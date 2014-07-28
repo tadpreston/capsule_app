@@ -1,6 +1,6 @@
-class CreateAPIKeys < ActiveRecord::Migration
+class CreateTenantKeys < ActiveRecord::Migration
   def change
-    create_table :api_keys do |t|
+    create_table :tenant_keys do |t|
       t.references :tenant, index: true
       t.string :name
       t.string :token
