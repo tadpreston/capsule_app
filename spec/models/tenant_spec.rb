@@ -11,14 +11,14 @@
 require 'spec_helper'
 
 describe Tenant do
-#  it { should have_many(:api_keys) }
-#
-#  describe 'generate_api_key method' do
-#    it 'creates an api_key record' do
-#      tenant = Tenant.create(name: 'Test Tenant')
-#      expect {
-#        tenant.generate_api_key('iOS')
-#      }.to change(ApiKey, :count).by(1)
-#    end
-#  end
+  it { should have_many(:tenant_keys) }
+
+  describe 'generate_tenant_key method' do
+    it 'creates an tenant_key record' do
+      tenant = Tenant.create(name: 'Test Tenant')
+      expect {
+        tenant.generate_tenant_key('iOS')
+      }.to change(TenantKey, :count).by(1)
+    end
+  end
 end

@@ -14,9 +14,9 @@
 ActiveRecord::Schema.define(version: 20140728184905) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
   enable_extension "pg_trgm"
   enable_extension "fuzzystrmatch"
-  enable_extension "plpgsql"
   enable_extension "hstore"
   enable_extension "pg_stat_statements"
   enable_extension "uuid-ossp"
@@ -225,6 +225,7 @@ ActiveRecord::Schema.define(version: 20140728184905) do
   end
 
   add_index "tenant_keys", ["tenant_id"], name: "index_tenant_keys_on_tenant_id", using: :btree
+  add_index "tenant_keys", ["token"], name: "index_tenant_keys_on_token", using: :btree
 
   create_table "tenants", force: true do |t|
     t.string   "name"

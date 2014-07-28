@@ -7,5 +7,7 @@ class CreateTenantKeys < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_index :tenant_keys, :token
   end
 end

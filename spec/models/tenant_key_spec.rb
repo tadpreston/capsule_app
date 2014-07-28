@@ -13,5 +13,12 @@
 require 'spec_helper'
 
 describe TenantKey do
-# it { should belong_to(:tenant) }
+  it { should belong_to(:tenant) }
+
+  describe 'before_create callback' do
+    it 'generates a tenant access token' do
+      tenant_key = TenantKey.create(id: 1, name: 'test key')
+      expect(tenant_key.token).to_not be_blank
+    end
+  end
 end
