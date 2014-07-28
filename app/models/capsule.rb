@@ -27,6 +27,7 @@
 #  start_date        :datetime
 #  watchers          :integer          default([]), is an Array
 #  readers           :integer          default([]), is an Array
+#  tenant_id         :integer
 #
 
 class Capsule < ActiveRecord::Base
@@ -55,6 +56,7 @@ class Capsule < ActiveRecord::Base
   end
 
   belongs_to :user, touch: true
+  belongs_to :tenant
   has_many :favorites
   has_many :favorite_users, through: :favorites, source: :user
   has_many :comments, -> { where('TRIM(status) IS NULL').order(created_at: :asc) }, as: :commentable, dependent: :destroy

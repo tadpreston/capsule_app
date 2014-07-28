@@ -27,6 +27,7 @@
 #  start_date        :datetime
 #  watchers          :integer          default([]), is an Array
 #  readers           :integer          default([]), is an Array
+#  tenant_id         :integer
 #
 
 require 'spec_helper'
@@ -46,6 +47,7 @@ describe Capsule do
   it { should have_many(:replies) }
   it { should belong_to(:replied_to) }
   it { should have_many(:objections) }
+  it { should belong_to(:tenant) }
 
   it { should validate_presence_of(:title) }
 
