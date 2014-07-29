@@ -27,6 +27,7 @@
 #  start_date        :datetime
 #  watchers          :integer          default([]), is an Array
 #  readers           :integer          default([]), is an Array
+#  creator           :hstore
 #
 
 require 'spec_helper'
@@ -161,6 +162,15 @@ describe Capsule do
         expect(@capsule.latitude).to be_blank
         expect(@capsule.longitude).to be_blank
       end
+    end
+  end
+
+  describe 'before_create callback' do
+    it 'stores the creating user in the capsule' do
+      @capsule.save
+      expect(@capsule.creator).to_not be_blank
+      expect(@capsule.creator["id"]).to eq(@capsule.user_id.to_s)
+      expect(@capsule.creator["first_name"]).to eq(@capsule.user.first_name)
     end
   end
 

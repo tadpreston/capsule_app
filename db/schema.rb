@@ -14,9 +14,9 @@
 ActiveRecord::Schema.define(version: 20140729172350) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
   enable_extension "pg_trgm"
   enable_extension "fuzzystrmatch"
-  enable_extension "plpgsql"
   enable_extension "hstore"
   enable_extension "pg_stat_statements"
   enable_extension "uuid-ossp"
@@ -92,6 +92,7 @@ ActiveRecord::Schema.define(version: 20140729172350) do
     t.datetime "start_date"
     t.integer  "watchers",          default: [], array: true
     t.integer  "readers",           default: [], array: true
+    t.integer  "tenant_id"
     t.hstore   "creator"
   end
 
@@ -100,6 +101,7 @@ ActiveRecord::Schema.define(version: 20140729172350) do
   add_index "capsules", ["latitude"], name: "index_capsules_on_latitude", using: :btree
   add_index "capsules", ["longitude"], name: "index_capsules_on_longitude", using: :btree
   add_index "capsules", ["readers"], name: "index_capsules_on_readers", using: :gin
+  add_index "capsules", ["tenant_id"], name: "index_capsules_on_tenant_id", using: :btree
   add_index "capsules", ["user_id"], name: "index_capsules_on_user_id", using: :btree
   add_index "capsules", ["watchers"], name: "index_capsules_on_watchers", using: :gin
 
@@ -216,6 +218,17 @@ ActiveRecord::Schema.define(version: 20140729172350) do
 
   add_index "relationships", ["followed_id"], name: "index_relationships_on_followed_id", using: :btree
   add_index "relationships", ["follower_id"], name: "index_relationships_on_follower_id", using: :btree
+
+  create_table "tenant_keys", force: true do |t|
+    t.integer  "tenant_id"
+    t.string   "name"
+    t.string   "token"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "tenant_keys", ["tenant_id"], name: "index_tenant_keys_on_tenant_id", using: :btree
+  add_index "tenant_keys", ["token"], name: "index_tenant_keys_on_token", using: :btree
 
   create_table "tenants", force: true do |t|
     t.string   "name"
