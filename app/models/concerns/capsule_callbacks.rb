@@ -26,6 +26,11 @@ class CapsuleCallbacks
     end
   end
 
+  def self.before_create(capsule)
+    user = capsule.user
+    capsule.creator = { id: user.id, first_name: user.first_name, last_name: user.last_name, profile_image: user.profile_image }
+  end
+
   def self.after_create(capsule)
     CapsuleLocationWatchWorker.perform_in(2.seconds, capsule.id)
     CapsuleWorker.perform_in(15.seconds, capsule.id)

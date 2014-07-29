@@ -28,6 +28,7 @@
 #  watchers          :integer          default([]), is an Array
 #  readers           :integer          default([]), is an Array
 #  tenant_id         :integer
+#  creator           :hstore
 #
 
 class Capsule < ActiveRecord::Base
@@ -41,6 +42,7 @@ class Capsule < ActiveRecord::Base
   before_save CapsuleCallbacks
   after_save CapsuleCallbacks
   after_create CapsuleCallbacks
+  before_create CapsuleCallbacks
 
   validates :title, presence: true
   validates_each :recipients_attributes, allow_blank: true do |record, attr, value|
