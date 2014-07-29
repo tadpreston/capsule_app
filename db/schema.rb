@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140723151147) do
+ActiveRecord::Schema.define(version: 20140729172350) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -92,6 +92,7 @@ ActiveRecord::Schema.define(version: 20140723151147) do
     t.datetime "start_date"
     t.integer  "watchers",          default: [], array: true
     t.integer  "readers",           default: [], array: true
+    t.hstore   "creator"
   end
 
   add_index "capsules", ["in_reply_to"], name: "index_capsules_on_in_reply_to", using: :btree
@@ -215,6 +216,12 @@ ActiveRecord::Schema.define(version: 20140723151147) do
 
   add_index "relationships", ["followed_id"], name: "index_relationships_on_followed_id", using: :btree
   add_index "relationships", ["follower_id"], name: "index_relationships_on_follower_id", using: :btree
+
+  create_table "tenants", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "users", force: true do |t|
     t.uuid     "public_id",            default: "uuid_generate_v4()"
