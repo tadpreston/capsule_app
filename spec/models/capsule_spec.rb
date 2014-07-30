@@ -29,6 +29,7 @@
 #  readers           :integer          default([]), is an Array
 #  tenant_id         :integer
 #  creator           :hstore
+#  likes             :integer          default([]), is an Array
 #
 
 require 'spec_helper'
