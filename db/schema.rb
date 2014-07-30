@@ -93,7 +93,6 @@ ActiveRecord::Schema.define(version: 20140728210838) do
     t.integer  "watchers",          default: [], array: true
     t.integer  "readers",           default: [], array: true
     t.integer  "tenant_id"
-    t.hstore   "creator"
   end
 
   add_index "capsules", ["in_reply_to"], name: "index_capsules_on_in_reply_to", using: :btree
