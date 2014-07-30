@@ -6,7 +6,7 @@ module API
       before_action :set_user
 
       def index
-        @capsules = @user.my_capsules
+        @capsules = @user.created_capsules
         @watched_capsules = @user.watched_capsules
         @watched_locations = @user.location_watches
         @following = @user.followed_users

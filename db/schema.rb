@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140728210838) do
+ActiveRecord::Schema.define(version: 20140729172350) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -93,6 +93,7 @@ ActiveRecord::Schema.define(version: 20140728210838) do
     t.integer  "watchers",          default: [], array: true
     t.integer  "readers",           default: [], array: true
     t.integer  "tenant_id"
+    t.hstore   "creator"
   end
 
   add_index "capsules", ["in_reply_to"], name: "index_capsules_on_in_reply_to", using: :btree

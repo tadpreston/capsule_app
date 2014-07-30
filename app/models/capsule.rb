@@ -156,7 +156,7 @@ class Capsule < ActiveRecord::Base
   end
 
   def self.capsules(user_id)
-    find_by_sql json_capsule_sql(user_id) { "WHERE TRIM(status) IS NULL AND user_id = #{user_id}" }
+    capsules = find_by_sql json_capsule_sql(user_id) { "WHERE TRIM(status) IS NULL AND user_id = #{user_id}" }
   end
 
   def self.watched_capsules(user_id)
@@ -277,8 +277,8 @@ class Capsule < ActiveRecord::Base
       sql = <<-SQL
         SELECT row_to_json(c) AS capsule_json
         FROM (
-          SELECT id, user_id, title, string_to_array(hash_tags, ' ') as hash_tags, location, relative_location, thumbnail, incognito, is_portable, comments_count, created_at, updated_at,
-                 creator, capsules.user_id = #{user_id} AS is_owned, #{user_id} = ANY(watchers) AS is_watched, #{user_id} = ANY(readers) AS is_read
+          SELECT id, title, string_to_array(hash_tags, ' ') as hash_tags, location, relative_location, thumbnail, incognito AS is_incognito, is_portable, comments_count,
+                 created_at, updated_at, creator, capsules.user_id = #{user_id} AS is_owned, #{user_id} = ANY(watchers) AS is_watched, #{user_id} = ANY(readers) AS is_read
           FROM capsules
           #{yield}
         ) c;
