@@ -262,19 +262,6 @@ class Capsule < ActiveRecord::Base
     user.touch
   end
 
-  def test_comments
-    [
-      { id: 12345, body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', author_id: 34241, full_name: 'Gonzalo Roberts', profile_image: 'http://pbs.twimg.com/profile_images/459488281978093568/AobvGoBt_normal.jpeg' },
-      { id: 90321, body: 'Nunc tincidunt enim lacus, non imperdiet orci faucibus vel. Mauris mollis lacus eget iaculis consectetur. Aenean quis urna erat. Phasellus egestas turpis eu vestibulum sodales. Pellentesque vel rhoncus augue, sed lacinia magna. Morbi tristique sodales nisl, nec mattis lectus vehicula facilisis. Nulla fringilla orci urna, nec facilisis eros vehicula non. Nullam viverra nulla nec nisi blandit tempor.', author_id: 30241, full_name: 'Allene Treutel', profile_image: 'http://pbs.twimg.com/profile_images/459488281978093568/AobvGoBt_normal.jpeg' },
-      { id: 8072, body: 'Ut convallis lobortis augue', author_id: 918, full_name: 'Demetrius Schaden', profile_image: 'http://pbs.twimg.com/profile_images/459488281978093568/AobvGoBt_normal.jpeg' },
-      { id: 9872, body: 'Pellentesque ipsum libero, sollicitudin id purus eu, gravida lacinia libero', author_id: 34241, full_name: 'Gonzalo Roberts', profile_image: 'http://pbs.twimg.com/profile_images/459488281978093568/AobvGoBt_normal.jpeg' }
-    ]
-  end
-
-  def test_comments_count
-    test_comments.size
-  end
-
   private
 
     def self.truncate_decimals(value, places = 1)
