@@ -30,5 +30,15 @@ namespace :db do
       end
     end
 
+    task :fix_radius => :environment do
+      Capsule.all.each do |capsule|
+        if capsule.location['radius'] == '99999.0'
+          puts "Updating Capsule ID - #{capsule.id}"
+          location = { radius: 9999, latitude: capsule.location['latitude'].to_f, longitude: capsule.location['longitude'] }
+          capsule.update_attribute(:location, location)
+        end
+      end
+    end
+
   end
 end
