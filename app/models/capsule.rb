@@ -28,15 +28,13 @@
 #  watchers          :integer          default([]), is an Array
 #  readers           :integer          default([]), is an Array
 #  creator           :hstore
+#  likes             :integer          default([]), is an Array
 #
 
 class Capsule < ActiveRecord::Base
-  include IsLikeable
   include CapsuleCachedAssociations
 
   attr_reader :recipients_attributes
-
-  is_likeable :likes_store
 
   before_save CapsuleCallbacks
   after_save CapsuleCallbacks
@@ -230,6 +228,16 @@ class Capsule < ActiveRecord::Base
 
   def likes_count
     likes.size
+  end
+
+  def like(user)
+    update_attributes(likes: likes + [user.id]) unless liked_by?(user)
+    user.touch
+  end
+
+  def unlike(user)
+    update_attributes(likes: likes - [user.id])
+    user.touch
   end
 
   def is_incognito=(value)

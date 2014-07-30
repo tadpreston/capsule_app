@@ -28,6 +28,7 @@
 #  watchers          :integer          default([]), is an Array
 #  readers           :integer          default([]), is an Array
 #  creator           :hstore
+#  likes             :integer          default([]), is an Array
 #
 
 require 'spec_helper'

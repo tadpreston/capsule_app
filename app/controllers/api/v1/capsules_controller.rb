@@ -105,14 +105,12 @@ module API
       end
 
       def like
-        @capsule.likes << current_user.id
-        @capsule.save
+        @capsule.like current_user
         render :show
       end
 
       def unlike
-        @capsule.likes.delete current_user.id
-        @capsule.save
+        @capsule.unlike current_user
         render :show
       end
 
