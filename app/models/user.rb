@@ -216,12 +216,12 @@ class User < ActiveRecord::Base
     Rails.cache.fetch(["capsules", self]) { capsules.by_updated_at.to_a }
   end
 
-  def my_capsules
-    cached_my_capsules.collect { |c| c.capsule_json.to_json }.join(',')
+  def created_capsules
+    cached_created_capsules.collect { |c| c.capsule_json.to_json }.join(',')
   end
 
-  def cached_my_capsules
-    Rails.cache.fetch([self, "capsules"]) do
+  def cached_created_capsules
+    Rails.cache.fetch([self, "created_capsules"]) do
       Capsule.capsules(id).to_a
     end
   end
