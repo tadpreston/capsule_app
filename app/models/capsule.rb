@@ -154,44 +154,11 @@ class Capsule < ActiveRecord::Base
   end
 
   def self.capsules(user_id)
-    sql = <<-SQL
-      SELECT row_to_json(c) AS capsule_json
-      FROM (
-        SELECT id, user_id, title, string_to_array(hash_tags, ' ') as hash_tags, location, relative_location, thumbnail, incognito, is_portable, comments_count, created_at, updated_at,
-               (
-                 SELECT row_to_json(u)
-                 FROM (
-                   SELECT id, first_name, last_name, profile_image
-                   FROM users
-                   WHERE id = capsules.user_id
-                 ) u
-               ) AS creator, capsules.user_id = #{user_id} AS is_owned, #{user_id} = ANY(watchers) AS is_watched, #{user_id} = ANY(readers) AS is_read
-        FROM capsules
-        WHERE TRIM(status) IS NULL AND user_id = #{user_id}
-      ) c;
-    SQL
-    find_by_sql sql
+    find_by_sql json_capsule_sql(user_id) { "WHERE TRIM(status) IS NULL AND user_id = #{user_id}" }
   end
 
   def self.watched_capsules(user_id)
-    sql = <<-SQL
-      SELECT row_to_json(c) AS capsule_json
-      FROM (
-        SELECT id, user_id, title, hash_tags, location, relative_location, thumbnail, incognito, is_portable, comments_count, created_at, updated_at,
-              (
-                SELECT row_to_json(u)
-                FROM (
-                      SELECT id, first_name, last_name, profile_image
-                      FROM users
-                      WHERE id = capsules.user_id
-                ) u
-              ) AS creator, capsules.user_id = #{user_id} AS is_owned, watchers @> ARRAY[#{user_id}] AS is_watched, readers @> ARRAY[#{user_id}] AS is_read
-        FROM capsules
-        WHERE TRIM(status) IS NULL AND watchers @> ARRAY[#{user_id}]
-        ORDER BY updated_at DESC
-      ) c;
-    SQL
-    find_by_sql sql
+    find_by_sql json_capsule_sql(user_id) { "WHERE TRIM(status) IS NULL AND watchers @> ARRAY[#{user_id}] ORDER BY updated_at DESC" }
   end
 
   def purged_title
@@ -315,6 +282,20 @@ class Capsule < ActiveRecord::Base
 
     def self.promoted_tags
       [ '#hometown', '#dallas', '#fishboy' ]
+    end
+
+    def self.json_capsule_sql(user_id)
+      sql = <<-SQL
+        SELECT row_to_json(c) AS capsule_json
+        FROM (
+          SELECT id, user_id, title, string_to_array(hash_tags, ' ') as hash_tags, location, relative_location, thumbnail, incognito, is_portable, comments_count, created_at, updated_at,
+                 creator, capsules.user_id = #{user_id} AS is_owned, #{user_id} = ANY(watchers) AS is_watched, #{user_id} = ANY(readers) AS is_read
+          FROM capsules
+          #{yield}
+        ) c;
+      SQL
+
+      sql
     end
 
 end
