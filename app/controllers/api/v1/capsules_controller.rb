@@ -139,7 +139,7 @@ module API
                                            :visibility, :thumbnail, :in_reply_to, :is_portable, :start_date, :lock_question, :lock_answer, :is_incognito,
                                            { relative_location: [:radius] },
                                            comments_attributes: [:user_id, :body],
-                                           assets_attributes: [:media_type, :resource, :metadata]
+                                           assets_attributes: [:media_type, :resource, :metadata],
                                            recipients_attributes: [:phone_number, :email, :first_name, :last_name, :profile_image, :can_send_text])
         end
     end
