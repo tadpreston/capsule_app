@@ -146,6 +146,10 @@ class User < ActiveRecord::Base
     end
   end
 
+  def current_device
+    devices.order(last_sign_in_at: :desc).limit(1).take
+  end
+
   def full_name
     "#{first_name} #{last_name}"
   end

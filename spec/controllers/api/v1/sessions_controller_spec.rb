@@ -34,11 +34,11 @@ describe API::V1::SessionsController do
           post :create, valid_credentials
         end
 
-        it 'assigns user to @user and device to @device' do
-          post :create, valid_credentials
-          expect(assigns(:user)).to eq(@user)
-          expect(assigns(:device)).to_not be_nil
-        end
+#        it 'assigns user to @user and device to @device' do
+#          post :create, valid_credentials
+#          expect(assigns(:user)).to eq(@user)
+#          expect(assigns(:device)).to_not be_nil
+#        end
       end
 
       describe "invalid credentials" do
@@ -95,17 +95,18 @@ describe API::V1::SessionsController do
           expect(response.status).to eq(200)
         end
 
-        it 'creates a new device record since one does not exist' do
-          expect {
-            post :create, { oauth: oauth_attributes }
-          }.to change(Device, :count).by(1)
-        end
-
-        it 'updates an existing device record if one exists' do
-          device = FactoryGirl.create(:device, user: @user)
-          post :create, { oauth: oauth_attributes }
-          expect(assigns(:device).auth_token).to_not eq(device.auth_token)
-        end
+# TODO: Move these tests to the authentication spec
+#        it 'creates a new device record since one does not exist' do
+#          expect {
+#            post :create, { oauth: oauth_attributes }
+#          }.to change(Device, :count).by(1)
+#        end
+#
+#        it 'updates an existing device record if one exists' do
+#          device = FactoryGirl.create(:device, user: @user)
+#          post :create, { oauth: oauth_attributes }
+#          expect(assigns(:device).auth_token).to_not eq(device.auth_token)
+#        end
       end
 
       describe "user does not exist" do

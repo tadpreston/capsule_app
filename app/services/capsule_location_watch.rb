@@ -1,4 +1,4 @@
-module CapsuleLocationWatch
+class CapsuleLocationWatch
   def self.watch_capsules_at_location(location_watch_id)
     location_watch = LocationWatch.find location_watch_id
     user = location_watch.user
