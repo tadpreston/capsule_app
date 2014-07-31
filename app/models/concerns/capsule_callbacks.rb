@@ -19,7 +19,7 @@ class CapsuleCallbacks
         capsule.add_as_recipient user
         capsule.user.add_as_contact user
 
-        if user.phone_number.blank?
+        if user.phone_number.blank? || !user.can_send_text
           RecipientWorker.perform_in(5.seconds, user.id, capsule.id)
         end
       end
