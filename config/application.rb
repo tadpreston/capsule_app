@@ -21,6 +21,6 @@ module CapsuleApp
     # config.i18n.default_locale = :de
     # config.active_record.schema_format = :sql
 
-    config.autoload_paths += %W(#{config.root}/lib)
+    config.autoload_paths += %W(#{config.root}/lib #{Rails.root}/app/services)
   end
 end
