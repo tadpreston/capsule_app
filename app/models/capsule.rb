@@ -286,8 +286,15 @@ class Capsule < ActiveRecord::Base
         SELECT row_to_json(c) AS capsule_json
         FROM (
           SELECT id, user_id, title, string_to_array(hash_tags, ' ') as hash_tags, location, relative_location, thumbnail, incognito AS is_incognito, is_portable, comments_count,
-                 coalesce(array_length(likes,1),0) AS likes_count, created_at, updated_at, creator, capsules.user_id = #{user_id} AS is_owned, #{user_id} = ANY(watchers) AS is_watched,
-                 #{user_id} = ANY(readers) AS is_read
+                 coalesce(array_length(likes,1),0) AS likes_count, created_at, updated_at,
+                 (
+                   SELECT row_to_json(u)
+                   FROM (
+                     SELECT id, first_name, last_name, profile_image
+                     FROM users
+                     WHERE id = capsules.user_id
+                   ) u
+                 ) AS creator, capsules.user_id = #{user_id} AS is_owned, #{user_id} = ANY(watchers) AS is_watched, #{user_id} = ANY(readers) AS is_read
           FROM capsules
           #{yield}
         ) c;
