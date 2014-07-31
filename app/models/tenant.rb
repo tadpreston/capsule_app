@@ -9,7 +9,7 @@
 #
 
 class Tenant < ActiveRecord::Base
-  has_many :tenant_keys
+  has_many :tenant_keys, dependent: :destroy
 
   def generate_tenant_key(name)
     tenant_keys.create(name: name)
