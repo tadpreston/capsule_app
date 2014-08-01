@@ -9,6 +9,8 @@
 #
 
 class Tenant < ActiveRecord::Base
+  cattr_accessor :current_id
+
   has_many :tenant_keys, dependent: :destroy
 
   def generate_tenant_key(name)

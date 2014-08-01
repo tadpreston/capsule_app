@@ -4,7 +4,8 @@ describe 'Sessions API' do
   before(:each) do
     @user = FactoryGirl.create(:user, email: 'test@email.com', password: 'supersecret', password_confirmation: 'supersecret')
   end
-  let(:token) { 'Token token="yd18uk_gsB7xYByZ03CX_TkgYjfGdxPRNhNswXjNLajw9itey64rlt9A-m7K4yQSC_-DHkicd9oVUvErRav48w"' }
+  let(:tenant) { FactoryGirl.create(:tenant) }
+  let(:token) { "Token token=\"#{tenant.tenant_keys[0].token}\"" }
 
   describe "POST 'create'" do
     describe 'valid authentication' do

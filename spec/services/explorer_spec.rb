@@ -12,8 +12,10 @@ describe Explorer do
 
   describe '#find_capsules' do
     before do
-      FactoryGirl.create(:capsule, location: { latitude: 32.190242286789, longitude: -96.729577804588985 })
-      FactoryGirl.create(:capsule, location: { latitude: 32.190382287689, longitude: -96.722517003598985 })
+      tenant = FactoryGirl.create(:tenant)
+      FactoryGirl.create(:capsule, location: { latitude: 32.190242286789, longitude: -96.729577804588985 }, tenant_id: tenant.id)
+      FactoryGirl.create(:capsule, location: { latitude: 32.190382287689, longitude: -96.722517003598985 }, tenant_id: tenant.id)
+      Tenant.current_id = tenant.id
     end
 
     it 'returns capsule boxes in a hash' do

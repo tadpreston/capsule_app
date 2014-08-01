@@ -1,8 +1,9 @@
 require 'spec_helper'
 
 describe API::V1::ContactsController do
+  let(:tenant) { FactoryGirl.create(:tenant) }
   let(:valid_attributes) { FactoryGirl.attributes_for(:user) }
-  let(:token) { 'Token token="yd18uk_gsB7xYByZ03CX_TkgYjfGdxPRNhNswXjNLajw9itey64rlt9A-m7K4yQSC_-DHkicd9oVUvErRav48w"' }
+  let(:token) { "Token token=\"#{tenant.tenant_keys[0].token}\"" }
   let(:user) { FactoryGirl.create(:user) }
   let(:device) { FactoryGirl.create(:device, user: user) }
 

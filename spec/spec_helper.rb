@@ -55,6 +55,8 @@ Spork.prefork do
 
     config.after(:each) { ActionMailer::Base.deliveries.clear }
 
+    config.include FactoryGirl::Syntax::Methods
+
     config.before(:each) do |example_method|
       Sidekiq::Worker.clear_all
 

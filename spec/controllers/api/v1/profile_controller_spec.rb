@@ -1,10 +1,11 @@
 require 'spec_helper'
 
 describe API::V1::ProfileController do
-  let(:token) { 'Token token="yd18uk_gsB7xYByZ03CX_TkgYjfGdxPRNhNswXjNLajw9itey64rlt9A-m7K4yQSC_-DHkicd9oVUvErRav48w"' }
 
   before do
-    @request.env['HTTP_AUTHORIZATION'] = token
+    @tenant = FactoryGirl.create(:tenant)
+    @token = @tenant.tenant_keys[0].token
+    @request.env['HTTP_AUTHORIZATION'] = "Token token=\"#{@token}\""
     @request.env["CONTENT_TYPE"] = "application/json"
     @user = FactoryGirl.create(:user)
     @device = FactoryGirl.create(:device, user: @user)

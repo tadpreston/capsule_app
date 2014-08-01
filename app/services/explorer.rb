@@ -73,7 +73,7 @@ class Explorer
           sql = <<-SQL
             SELECT (trunc(latitude / #{@box_span}) * #{@box_span}) as lat, (trunc(longitude / #{@box_span}) * #{@box_span}) as lon, median(latitude) as med_lat, median(longitude) as med_long, count(*)
             FROM capsules
-            WHERE #{@geo_box.to_where} AND (incognito = FALSE) AND (TRIM(status) IS NULL)
+            WHERE #{@geo_box.to_where} AND (incognito = FALSE) AND (TRIM(status) IS NULL) AND tenant_id = #{Tenant.current_id}
             GROUP BY lat, lon
             ORDER BY lat,lon;
           SQL
@@ -84,6 +84,7 @@ class Explorer
             WHERE #{@geo_box.to_where} AND (title ilike '%#{@hashtag}%')
                   AND (incognito = FALSE)
                   AND (TRIM(status) IS NULL)
+                  AND tenant_id = #{Tenant.current_id}
             GROUP BY lat, lon
             ORDER BY lat,lon;
           SQL
@@ -92,7 +93,7 @@ class Explorer
         sql = <<-SQL
           SELECT *
           FROM capsules
-          WHERE #{@geo_box.to_where} AND (incognito = FALSE) AND (TRIM(status) IS NULL)
+          WHERE #{@geo_box.to_where} AND (incognito = FALSE) AND (TRIM(status) IS NULL) AND tenant_id = #{Tenant.current_id}
         SQL
 
         sql += " AND (title ilike '%#{@hashtag}%')" unless @hashtag.blank?

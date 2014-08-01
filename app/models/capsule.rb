@@ -79,6 +79,8 @@ class Capsule < ActiveRecord::Base
 
   # Capsule scopes
 
+  default_scope -> { where(tenant_id: Tenant.current_id) }
+
   scope :by_updated_at, -> { order(updated_at: :desc) }
   scope :hidden, -> { where(incognito: true) }
   scope :not_hidden, -> { where(incognito: false) }
@@ -128,7 +130,7 @@ class Capsule < ActiveRecord::Base
       SELECT regexp_matches(hash_tags, '[^[:space:]]*#{hashtag}[^[:space:]]*') as tag_match, count(*) AS tag_count
       FROM capsules
       WHERE (trunc(latitude,1) BETWEEN #{start_lat} AND #{end_lat}) AND (trunc(longitude,1) BETWEEN #{start_long} AND #{end_long}) AND (hash_tags like '%#{hashtag}%')
-            AND (TRIM(status) IS NULL)
+            AND (TRIM(status) IS NULL) AND tenant_id = #{Tenant.current_id}
       GROUP BY tag_match
       ORDER BY tag_count DESC;
     SQL

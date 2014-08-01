@@ -28,8 +28,9 @@ describe API::V1::UsersController do
       link: 'https:\/\/www.facebook.com\/steelyb',
     }
   end
+  let(:tenant) { FactoryGirl.create(:tenant) }
   let(:valid_attributes) { FactoryGirl.attributes_for(:user) }
-  let(:token) { 'Token token="yd18uk_gsB7xYByZ03CX_TkgYjfGdxPRNhNswXjNLajw9itey64rlt9A-m7K4yQSC_-DHkicd9oVUvErRav48w"' }
+  let(:token) { "Token token=\"#{tenant.tenant_keys[0].token}\"" }
 
   describe "GET 'index'" do
     it "returns http success" do

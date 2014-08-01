@@ -5,7 +5,8 @@ describe 'Capsules API' do
     @user = FactoryGirl.create(:user)
     @device = FactoryGirl.create(:device, user: @user)
   end
-  let(:token) { 'Token token="yd18uk_gsB7xYByZ03CX_TkgYjfGdxPRNhNswXjNLajw9itey64rlt9A-m7K4yQSC_-DHkicd9oVUvErRav48w"' }
+  let(:tenant) { FactoryGirl.create(:tenant) }
+  let(:token) { "Token token=\"#{tenant.tenant_keys[0].token}\"" }
   let(:auth_token) { @device.auth_token }
 
   describe 'with incorrect credentials' do
@@ -59,7 +60,7 @@ describe 'Capsules API' do
 
   describe "GET 'show'" do
     it 'returns the requested capsule' do
-      capsule = FactoryGirl.create(:capsule, user: @user)
+      capsule = FactoryGirl.create(:capsule, user: @user, tenant_id: tenant.id)
       get "/api/v1/capsules/#{capsule.to_param}", nil, { format: :json, 'HTTP_AUTHORIZATION' => token, 'HTTP_CAPSULE_AUTH_TOKEN' => auth_token }
       expect(response).to be_success
       expect(response.status).to eq(200)
@@ -71,9 +72,9 @@ describe 'Capsules API' do
     before do
       origin = { lat: 33.18953, long: -96.87909000000002 }
       span = { lat: 2.5359475904, long: 1.7578124096 }
-      @capsule1 = FactoryGirl.create(:capsule, location: { latitude: '33.167111', longitude: '-96.663793', radius: '999999' })
-      @capsule2 = FactoryGirl.create(:capsule, location: { latitude: '33.013300', longitude: '-96.823046', radius: '999999' })
-      @capsule3 = FactoryGirl.create(:capsule, location: { latitude: '33.089326', longitude: '-96.731873', radius: '999999' })
+      @capsule1 = FactoryGirl.create(:capsule, location: { latitude: '33.167111', longitude: '-96.663793', radius: '999999' }, tenant_id: tenant.id)
+      @capsule2 = FactoryGirl.create(:capsule, location: { latitude: '33.013300', longitude: '-96.823046', radius: '999999' }, tenant_id: tenant.id)
+      @capsule3 = FactoryGirl.create(:capsule, location: { latitude: '33.089326', longitude: '-96.731873', radius: '999999' }, tenant_id: tenant.id)
       get "/api/v1/capsules/locationtags", { latOrigin: origin[:lat], longOrigin: origin[:long], latSpan: span[:lat], longSpan: span[:long], hashtags: 'hellokitty' }, { format: :json, 'HTTP_AUTHORIZATION' => token, 'HTTP_CAPSULE_AUTH_TOKEN' => auth_token }
     end
 

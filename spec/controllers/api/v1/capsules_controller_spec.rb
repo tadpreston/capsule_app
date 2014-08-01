@@ -2,7 +2,9 @@ require 'spec_helper'
 
 describe API::V1::CapsulesController do
   before do
-    @request.env['HTTP_AUTHORIZATION'] = 'Token token="yd18uk_gsB7xYByZ03CX_TkgYjfGdxPRNhNswXjNLajw9itey64rlt9A-m7K4yQSC_-DHkicd9oVUvErRav48w"'
+    @tenant = FactoryGirl.create(:tenant)
+    @token = @tenant.tenant_keys[0].token
+    @request.env['HTTP_AUTHORIZATION'] = "Token token=\"#{@token}\""
     @request.env["CONTENT_TYPE"] = "application/json"
     @user = FactoryGirl.create(:user)
     @device = FactoryGirl.create(:device, user: @user)
@@ -16,7 +18,7 @@ describe API::V1::CapsulesController do
       it 'creates a new capsule' do
         expect {
           post :create, { capsule: valid_attributes.merge(user_id: @user.id) }
-        }.to change(Capsule, :count).by(1)
+        }.to change(Capsule.unscoped, :count).by(1)
       end
 
       it 'assigns a new capsule as @capsule' do
@@ -129,7 +131,7 @@ describe API::V1::CapsulesController do
 
   describe 'GET "show"' do
     before do
-      @capsule = FactoryGirl.create(:capsule, user: @user)
+      @capsule = FactoryGirl.create(:capsule, user: @user, tenant_id: @tenant.id)
       get :show, id: @capsule.to_param
     end
 
@@ -144,7 +146,7 @@ describe API::V1::CapsulesController do
   end
 
   describe 'PATCH "update"' do
-    before { @capsule = FactoryGirl.create(:capsule, user: @user) }
+    before { @capsule = FactoryGirl.create(:capsule, user: @user, tenant_id: @tenant.id) }
 
     describe 'with valid params' do
       it 'updates the requested capsule' do
@@ -169,7 +171,7 @@ describe API::V1::CapsulesController do
 
   describe 'GET "forme"' do
     before do
-      @capsule_list = FactoryGirl.create_list(:capsule, 3)
+      @capsule_list = FactoryGirl.create_list(:capsule, 3, tenant_id: @tenant.id)
       @capsule_list.each { |c| c.recipients << @user }
     end
 
@@ -187,14 +189,14 @@ describe API::V1::CapsulesController do
 
   describe 'GET "suggested"' do
     it 'returns a collection of suggested capsules for the current user' do
-      FactoryGirl.create_list(:capsule, 3, latitude: 32.7801399, longitude: -96.80045101)
-      FactoryGirl.create_list(:capsule, 3, latitude: 32.7554883, longitude: -97.3307658)
-      outside_capsules = FactoryGirl.create_list(:capsule, 3, latitude: 35.2219971, latitude: -101.83129689)
+      FactoryGirl.create_list(:capsule, 3, latitude: 32.7801399, longitude: -96.80045101, tenant_id: @tenant.id)
+      FactoryGirl.create_list(:capsule, 3, latitude: 32.7554883, longitude: -97.3307658, tenant_id: @tenant.id)
+      outside_capsules = FactoryGirl.create_list(:capsule, 3, latitude: 35.2219971, latitude: -101.83129689, tenant_id: @tenant.id)
 
       get :suggested
       expect(assigns(:capsules)).to_not be_nil
       expect(assigns(:capsules).size).to eq(5)
-    # outside_capsules.each { |capsule| expect(assigns(:capsules)).to include(capsule) }
+#     expect(outside_capsules).to match_array(assigns(:capsules))
     end
   end
 
@@ -208,14 +210,14 @@ describe API::V1::CapsulesController do
   end
 
   describe 'GET "replies"' do
-    before { @capsule = FactoryGirl.create(:capsule) }
+    before { @capsule = FactoryGirl.create(:capsule, tenant_id: @tenant.id) }
 
     it 'returns a collection of replied capsules' do
-      capsule_list = FactoryGirl.create_list(:capsule, 3, in_reply_to: @capsule.id)
+      capsule_list = FactoryGirl.create_list(:capsule, 3, in_reply_to: @capsule.id, tenant_id: @tenant.id)
 
       get :replies, id: @capsule.to_param
       expect(assigns(:capsules)).to_not be_nil
-      capsule_list.each { |capsule| expect(assigns(:capsules)).to include(capsule) }
+      expect(assigns(:capsules).to_a).to match_array(capsule_list)
     end
 
     it 'returns an empty collection' do
@@ -225,10 +227,10 @@ describe API::V1::CapsulesController do
   end
 
   describe "GET 'replied_to'" do
-    before { @capsule = FactoryGirl.create(:capsule) }
+    before { @capsule = FactoryGirl.create(:capsule, tenant_id: @tenant.id) }
 
     it 'returns the capsule that the current capsule replied to' do
-      reply_capsule = FactoryGirl.create(:capsule, in_reply_to: @capsule.id)
+      reply_capsule = FactoryGirl.create(:capsule, in_reply_to: @capsule.id, tenant_id: @tenant.id)
       get :replied_to, id: reply_capsule.to_param
       expect(assigns(:capsule)).to_not be_nil
       expect(assigns(:capsule)).to eq(@capsule)
@@ -241,7 +243,7 @@ describe API::V1::CapsulesController do
   end
 
   describe "POST 'read'" do
-    before { @capsule = FactoryGirl.create(:capsule) }
+    before { @capsule = FactoryGirl.create(:capsule, tenant_id: @tenant.id) }
 
     it 'creates a capsule_read record' do
       post :read, id: @capsule.to_param
@@ -250,7 +252,7 @@ describe API::V1::CapsulesController do
   end
 
   describe "DELETE 'unread'" do
-    before { @capsule = FactoryGirl.create(:capsule) }
+    before { @capsule = FactoryGirl.create(:capsule, tenant_id: @tenant.id) }
 
     it 'deletes a read mark for the current user' do
       @capsule.read @user

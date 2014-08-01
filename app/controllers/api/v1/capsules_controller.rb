@@ -75,8 +75,7 @@ module API
       end
 
       def replies
-        capsule = Capsule.find params[:id]
-        @capsules = capsule.replies
+        @capsules = Capsule.where('(TRIM(status) IS NULL)').where(in_reply_to: params[:id])
       end
 
       def replied_to
