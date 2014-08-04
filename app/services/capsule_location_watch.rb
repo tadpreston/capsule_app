@@ -20,10 +20,14 @@ class CapsuleLocationWatch
 
     user = User.find(user_id)
 
-    west_bound = location['long'] - location['radius']
-    east_bound = location['long'] + location['radius']
-    north_bound = location['lat'] + location['radius']
-    south_bound = location['lat'] - location['radius']
+    long = location['long'].to_f
+    lat = location['lat'].to_f
+    radius = location['radius'].to_f
+
+    west_bound = long - radius
+    east_bound = long + radius
+    north_bound = lat + radius
+    south_bound = lat - radius
 
     capsules = Capsule.where("watchers @> ARRAY[#{user_id}]").where(longitude: (west_bound..east_bound), latitude: (south_bound..north_bound))
     capsules.each { |capsule| capsule.unwatch user }
