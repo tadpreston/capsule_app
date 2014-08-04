@@ -11,6 +11,8 @@ class CapsuleLocationWatch
 
     capsules = Capsule.find_from_center({long: long, lat: lat}, {long: radius, lat: radius})
     capsules.each { |capsule| user.watch_capsule(capsule) unless user.is_watching_capsule?(capsule)  }
+
+    Tenant.current_id = nil
   end
 
   def self.unwatch_capsules_at_location(location, user_id, tenant_id = 1)
@@ -25,6 +27,8 @@ class CapsuleLocationWatch
 
     capsules = Capsule.where("watchers @> ARRAY[#{user_id}]").where(longitude: (west_bound..east_bound), latitude: (south_bound..north_bound))
     capsules.each { |capsule| capsule.unwatch user }
+
+    Tenant.current_id = nil
   end
 
   def self.add_to_watched_locations(capsule_id)
