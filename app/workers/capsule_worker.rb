@@ -2,7 +2,7 @@ class CapsuleWorker
   include Sidekiq::Worker
 
   def perform(capsule_id)
-    capsule = Capsule.find capsule_id
+    capsule = Capsule.unscoped.find capsule_id
 
     unless capsule.thumbnail.blank?
       s3 = AWS::S3.new(
