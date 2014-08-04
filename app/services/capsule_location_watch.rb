@@ -1,5 +1,7 @@
 class CapsuleLocationWatch
-  def self.watch_capsules_at_location(location_watch_id)
+  def self.watch_capsules_at_location(location_watch_id, tenant_id = 1)
+    Tenant.current_id = tenant_id
+
     location_watch = LocationWatch.find location_watch_id
     user = location_watch.user
 
@@ -11,7 +13,9 @@ class CapsuleLocationWatch
     capsules.each { |capsule| user.watch_capsule(capsule) unless user.is_watching_capsule?(capsule)  }
   end
 
-  def self.unwatch_capsules_at_location(location, user_id)
+  def self.unwatch_capsules_at_location(location, user_id, tenant_id = 1)
+    Tenant.current_id = tenant_id
+
     user = User.find(user_id)
 
     west_bound = location['long'] - location['radius']
@@ -24,7 +28,7 @@ class CapsuleLocationWatch
   end
 
   def self.add_to_watched_locations(capsule_id)
-    capsule = Capsule.find(capsule_id)
+    capsule = Capsule.unscoped.find(capsule_id)
 
     LocationWatch.find_each do |location|
       if in_range? capsule, location
