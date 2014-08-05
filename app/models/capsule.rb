@@ -156,11 +156,11 @@ class Capsule < ActiveRecord::Base
   end
 
   def self.capsules(user_id)
-    capsules = find_by_sql json_capsule_sql(user_id) { "WHERE TRIM(status) IS NULL AND user_id = #{user_id}" }
+    capsules = find_by_sql json_capsule_sql(user_id) { "WHERE TRIM(status) IS NULL AND user_id = #{user_id} AND tenant_id = #{Tenant.current_id}" }
   end
 
   def self.watched_capsules(user_id)
-    find_by_sql json_capsule_sql(user_id) { "WHERE TRIM(status) IS NULL AND watchers @> ARRAY[#{user_id}] ORDER BY updated_at DESC" }
+    find_by_sql json_capsule_sql(user_id) { "WHERE TRIM(status) IS NULL AND watchers @> ARRAY[#{user_id}] AND tenant_id = #{Tenant.current_id} ORDER BY updated_at DESC" }
   end
 
   def purged_title
@@ -288,7 +288,7 @@ class Capsule < ActiveRecord::Base
         SELECT row_to_json(c) AS capsule_json
         FROM (
           SELECT id, user_id, title, string_to_array(hash_tags, ' ') as hash_tags, location, relative_location, concat('https://#{ENV['CDN_HOST']}/',thumbnail) AS thumbnail,
-                 lock_answer, incognito AS is_incognito, is_portable, comments_count, coalesce(array_length(likes,1),0) AS likes_count, created_at, updated_at,
+                 lock_answer, incognito AS is_incognito, COALESCE(is_portable, 'false') AS is_portable, comments_count, coalesce(array_length(likes,1),0) AS likes_count, created_at, updated_at,
                  (
                    SELECT row_to_json(u)
                    FROM (
