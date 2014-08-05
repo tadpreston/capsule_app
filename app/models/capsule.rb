@@ -288,7 +288,7 @@ class Capsule < ActiveRecord::Base
         SELECT row_to_json(c) AS capsule_json
         FROM (
           SELECT id, user_id, title, string_to_array(hash_tags, ' ') as hash_tags, location, relative_location, concat('https://#{ENV['CDN_HOST']}/',thumbnail) AS thumbnail,
-                 incognito AS is_incognito, is_portable, comments_count, coalesce(array_length(likes,1),0) AS likes_count, created_at, updated_at,
+                 lock_answer, incognito AS is_incognito, is_portable, comments_count, coalesce(array_length(likes,1),0) AS likes_count, created_at, updated_at,
                  (
                    SELECT row_to_json(u)
                    FROM (
