@@ -21,12 +21,15 @@ gem 'active_model_serializers', '~> 0.8.1'
 gem 'sass-rails', '~> 4.0.3'
 gem 'uglifier', '~> 2.5.0'
 gem 'coffee-rails', '~> 4.0.1'
+
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer',  platforms: :ruby
 
 gem 'sinatra', '~> 1.4.5'
 gem 'memcachier'
 gem 'dalli'
+
+gem 'pubnub', '~> 3.5.7'
 
 gem 'newrelic_rpm', '~> 3.8.1.221', group: :production
 
