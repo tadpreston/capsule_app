@@ -8,7 +8,7 @@ module API
       def index
         @capsules = @user.created_capsules
         @watched_capsules = @user.watched_capsules
-        @watched_locations = @user.location_watches
+        @watched_locations = @user.location_watches_json
         @following = @user.followed_users
         @followers = @user.followers
       end

@@ -240,7 +240,7 @@ class User < ActiveRecord::Base
     end
   end
 
-  def location_watches
+  def location_watches_json
     cached_location_watches.collect { |l| l.watch_json.to_json }.join(',')
   end
 
