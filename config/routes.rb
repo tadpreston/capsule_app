@@ -6,6 +6,7 @@ Rails.application.routes.draw do
 
   get 'confirmations', to: 'confirmations#email', as: :confirmation
   get 'home/index'
+  get 'home/pubnub'
   root 'home#index'
   resources :users
   post 'process_response', to: 'process_responses#create', as: :process_response
