@@ -190,7 +190,7 @@ describe Capsule do
   end
 
   describe '#relative_location scope' do
-    before { @relative_capsules = FactoryGirl.create_list(:capsule, 3, latitude: nil, longitude: nil, location: nil, relative_location: { distance: 50, radius: 10 }) }
+    before { @relative_capsules = FactoryGirl.create_list(:capsule, 3, latitude: nil, longitude: nil, location: nil, relative_location: { distance: 50, radius: 10, tutorial_level: 0 }) }
 
     it 'returns only capsules with a relative location' do
       absolute_capsule = FactoryGirl.create(:capsule)
