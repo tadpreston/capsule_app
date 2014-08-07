@@ -11,12 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140731174529) do
+ActiveRecord::Schema.define(version: 20140807212158) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
   enable_extension "pg_trgm"
   enable_extension "fuzzystrmatch"
-  enable_extension "plpgsql"
   enable_extension "hstore"
   enable_extension "pg_stat_statements"
   enable_extension "uuid-ossp"
@@ -102,6 +102,7 @@ ActiveRecord::Schema.define(version: 20140731174529) do
   add_index "capsules", ["latitude"], name: "index_capsules_on_latitude", using: :btree
   add_index "capsules", ["longitude"], name: "index_capsules_on_longitude", using: :btree
   add_index "capsules", ["readers"], name: "index_capsules_on_readers", using: :gin
+  add_index "capsules", ["relative_location"], name: "capsules_relative_location", using: :gin
   add_index "capsules", ["tenant_id"], name: "index_capsules_on_tenant_id", using: :btree
   add_index "capsules", ["user_id"], name: "index_capsules_on_user_id", using: :btree
   add_index "capsules", ["watchers"], name: "index_capsules_on_watchers", using: :gin
