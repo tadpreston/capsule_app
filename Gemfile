@@ -29,8 +29,6 @@ gem 'sinatra', '~> 1.4.5'
 gem 'memcachier'
 gem 'dalli'
 
-gem 'pubnub', '~> 3.5.7'
-
 gem 'newrelic_rpm', '~> 3.8.1.221', group: :production
 
 gem 'jquery-rails', '~> 3.1.0'
