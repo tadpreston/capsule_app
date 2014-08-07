@@ -88,6 +88,10 @@ class Capsule < ActiveRecord::Base
   scope :public_capsules, -> { joins('LEFT OUTER JOIN recipient_users r ON r.capsule_id = capsules.id').where('r.id IS NULL') }
   scope :without_objections, -> { where('TRIM(status) IS NULL') }
 
+  def self.relative_location
+    where(longitude: nil, latitude: nil).without_objections
+  end
+
   def self.find_in_rec(origin, span)
     east_bound = origin[:long] + span[:long]
     south_bound = origin[:lat] - span[:lat]

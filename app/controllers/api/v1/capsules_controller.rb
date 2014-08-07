@@ -4,7 +4,7 @@ module API
     class CapsulesController < API::V1::ApplicationController
       before_action :set_capsule, only: [:show, :update, :destroy, :portable, :remove_portable, :read, :unread, :watch, :unwatch, :like, :unlike]
       before_action :set_origin_span, only: [:explorer, :hidden, :locationtags]
-      skip_before_action :authorize_auth_token, only: [:index, :explorer, :locationtags, :library, :read, :unread, :loadtest, :hidden, :show]
+      skip_before_action :authorize_auth_token, only: [:index, :explorer, :locationtags, :library, :read, :unread, :loadtest, :hidden, :show, :relative]
 
       def index
         @user = User.find params[:user_id]
@@ -72,6 +72,10 @@ module API
 
       def hidden
         @capsules = Capsule.find_hidden_in_rec(@origin, @span)
+      end
+
+      def relative
+        @capsules = Capsule.relative_location
       end
 
       def replies

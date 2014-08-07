@@ -189,6 +189,24 @@ describe Capsule do
     end
   end
 
+  describe '#relative_location scope' do
+    before { @relative_capsules = FactoryGirl.create_list(:capsule, 3, latitude: nil, longitude: nil, location: nil, relative_location: { distance: 50, radius: 10 }) }
+
+    it 'returns only capsules with a relative location' do
+      absolute_capsule = FactoryGirl.create(:capsule)
+      capsules = Capsule.relative_location
+      expect(capsules.size).to eq(3)
+      expect(capsules.to_a).to match_array(@relative_capsules)
+      expect(capsules.to_a).to_not include(absolute_capsule)
+    end
+
+    it 'does not return relative capsules with an objection' do
+      objected_capsule = FactoryGirl.create(:capsule, status: 'flagged')
+      capsules = Capsule.relative_location
+      expect(capsules.to_a).to_not include(objected_capsule)
+    end
+  end
+
   describe 'purged_title method' do
     it 'returns the title with no hash tags' do
       @capsule.title = "A title with hash tags #hashtagone #hashtagtwo"

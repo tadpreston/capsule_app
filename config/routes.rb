@@ -51,6 +51,7 @@ Rails.application.routes.draw do
           get :library
           get :loadtest
           get :hidden
+          get :relative
         end
         member do
           get    :replies
