@@ -75,7 +75,8 @@ module API
       end
 
       def relative
-        @capsules = Capsule.relative_location(params[:tutorial_level] || 0)
+        user_id = current_user ? current_user.id : nil
+        @capsules = Capsule.relative_location(params[:tutorial_level] || 0, user_id)
       end
 
       def replies
@@ -145,6 +146,7 @@ module API
                                            assets_attributes: [:media_type, :resource, :metadata],
                                            recipients_attributes: [:phone_number, :email, :first_name, :last_name, :profile_image, :can_send_text])
         end
+
     end
   end
 end

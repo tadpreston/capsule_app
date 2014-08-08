@@ -88,8 +88,8 @@ class Capsule < ActiveRecord::Base
   scope :public_capsules, -> { joins('LEFT OUTER JOIN recipient_users r ON r.capsule_id = capsules.id').where('r.id IS NULL') }
   scope :without_objections, -> { where('TRIM(status) IS NULL') }
 
-  def self.relative_location(tutorial_level = 0)
-    where(longitude: nil, latitude: nil).where("(relative_location -> 'tutorial_level')::int = #{tutorial_level}").without_objections
+  def self.relative_location(tutorial_level = 0, user_id = nil)
+    where(longitude: nil, latitude: nil).where("(relative_location -> 'tutorial_level')::int = #{tutorial_level}").public_with_user(user_id)
   end
 
   def self.find_in_rec(origin, span)
