@@ -1,5 +1,5 @@
 class CapsuleLocationWatch
-  def self.watch_capsules_at_location(location_watch_id, tenant_id = 1)
+  def self.watch_capsules_at_location(location_watch_id, tenant_id = Tenant.current_id)
     Tenant.current_id = tenant_id
 
     location_watch = LocationWatch.find location_watch_id
@@ -15,7 +15,7 @@ class CapsuleLocationWatch
     Tenant.current_id = nil
   end
 
-  def self.unwatch_capsules_at_location(location, user_id, tenant_id = 1)
+  def self.unwatch_capsules_at_location(location, user_id, tenant_id = Tenant.current_id)
     Tenant.current_id = tenant_id
 
     user = User.find(user_id)

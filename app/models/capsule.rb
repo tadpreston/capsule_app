@@ -163,8 +163,8 @@ class Capsule < ActiveRecord::Base
     capsules = find_by_sql json_capsule_sql(user_id) { "WHERE TRIM(status) IS NULL AND user_id = #{user_id} AND tenant_id = #{Tenant.current_id}" }
   end
 
-  def self.watched_capsules(user_id)
-    find_by_sql json_capsule_sql(user_id) { "WHERE TRIM(status) IS NULL AND watchers @> ARRAY[#{user_id}] AND tenant_id = #{Tenant.current_id} ORDER BY updated_at DESC" }
+  def self.watched_capsules(user_id, tenant_id = Tenant.current_id)
+    find_by_sql json_capsule_sql(user_id) { "WHERE TRIM(status) IS NULL AND watchers @> ARRAY[#{user_id}] AND tenant_id = #{tenant_id} ORDER BY updated_at DESC" }
   end
 
   def purged_title
