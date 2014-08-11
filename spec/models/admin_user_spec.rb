@@ -14,5 +14,8 @@
 require 'spec_helper'
 
 describe AdminUser do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it { should have_many(:objections) }
+
+  it { should validate_uniqueness_of(:email) }
+  it { should ensure_length_of(:password) }
 end
