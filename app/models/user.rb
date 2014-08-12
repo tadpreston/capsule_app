@@ -67,14 +67,6 @@ class User < ActiveRecord::Base
   has_many :objections
   has_many :assets, as: :assetable, dependent: :destroy
 
-  def watching_count
-    following.size
-  end
-
-  def watchers_count
-    followers.count
-  end
-
   def self.find_or_create_by_oauth(oauth)
     User.find_or_create_by(provider: oauth[:provider], uid: oauth[:uid].to_s) do |user|
       user.oauth = oauth
@@ -121,7 +113,7 @@ class User < ActiveRecord::Base
   def self.search_by_identity(query)
     user_query = query.split(' ').select { |s| s.include? '@' }.join
     if user_query[0] == '@'
-      where(username: user_query.match(/^.?(.*)/)[1])
+      where(username: user_query[/(?<=@).*/])
     else
       where(email: user_query)
     end
@@ -154,12 +146,14 @@ class User < ActiveRecord::Base
     "#{first_name} #{last_name}"
   end
 
-  def following?(other_user)
-    following.include?(other_user.id)
-  end
+  # Following and unfollowing
 
   def follow!(other_user)
     update_attributes(following: following + [other_user.id]) unless following?(other_user)
+  end
+
+  def following?(other_user)
+    following.include?(other_user.id)
   end
 
   def unfollow!(other_user)
@@ -169,6 +163,26 @@ class User < ActiveRecord::Base
   def remove_follower!(other_user)
     other_user.update_attributes(following: following - [id])
   end
+
+  # Who this users is following
+  def followed_users
+    cached_followed_users
+  end
+
+  # Who is following this user
+  def followers
+    User.where("following @> ARRAY[#{id}]").to_a
+  end
+
+  def watching_count
+    following.size
+  end
+
+  def watchers_count
+    followers.count
+  end
+
+# end of following
 
   def add_as_contact(contact)
     contacts << contact unless is_a_contact?(contact)
@@ -180,20 +194,17 @@ class User < ActiveRecord::Base
 
   def send_confirmation_email
     generate_token(:confirmation_token)
-    self.confirmation_sent_at = Time.now
-    self.confirmed_at = nil
-    save!
+    update_attributes(confirmation_sent_at: Time.now, confirmed_at: nil)
     UserMailerWorker.perform_async(self.id, :email_confirmation)
   end
 
   def email_confirmed!
-    self.confirmed_at = Time.now
-    save!
+    update_attribute(:confirmed_at, Time.now)
     update_columns(email: self.unconfirmed_email, unconfirmed_email: nil)
   end
 
   def confirmed?
-    self.confirmed_at
+    confirmed_at
   end
 
   def watch_capsule(capsule)
@@ -246,24 +257,6 @@ class User < ActiveRecord::Base
 
   def cached_location_watches
     Rails.cache.fetch([self, 'location_watches']) { LocationWatch.location_watches(id).to_a }
-  end
-
-  def followed_users
-    cached_followed_users
-  end
-
-  def cached_followed_users
-    Rails.cache.fetch([self, "followed_users"]) do
-      User.where(id: following).to_a
-    end
-  end
-
-  def followers
-    User.where("following @> ARRAY[#{id}]").to_a
-  end
-
-  def is_following?(user)
-    following.include? user.id
   end
 
   def profile_image_path
@@ -344,6 +337,12 @@ class User < ActiveRecord::Base
       begin
         self[column] = SecureRandom.urlsafe_base64
       end while User.exists?(column => self[column])
+    end
+
+    def cached_followed_users
+      Rails.cache.fetch([self, "followed_users"]) do
+        User.where(id: following).to_a
+      end
     end
 
 end

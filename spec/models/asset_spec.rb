@@ -19,46 +19,46 @@
 require 'spec_helper'
 
 describe Asset do
-  before { @asset = FactoryGirl.build(:asset) }
-
-  subject { @asset }
-
   it { should belong_to(:assetable) }
 
   it { should validate_presence_of(:media_type) }
   it { should validate_presence_of(:resource) }
 
-  describe 'resurce_path method' do
-    before { @asset.resource = 'http://www.someurl.com/image' }
+  def create_asset(*traits)
+    attrs = traits.extract_options!
+    traits.push({}.merge(attrs))
+    FactoryGirl.create(:asset, *traits)
+  end
 
-    describe 'with a full url' do
+  describe '#resurce_path' do
+
+    context 'with a full url' do
+      let(:asset) { create_asset(resource: 'http://www.someurl.com/image') }
+
       it 'returns the unchanged url when the complete flag is true' do
-        expect(@asset.resource_path).to eq('http://www.someurl.com/image')
+        expect(asset.resource_path).to eq('http://www.someurl.com/image')
       end
       it 'returns the unchanged url when the complete flag is false' do
-        @asset.complete = false
-        expect(@asset.resource_path).to eq('http://www.someurl.com/image')
+        asset.complete = false
+        expect(asset.resource_path).to eq('http://www.someurl.com/image')
       end
     end
 
-    describe 'with processing not complete' do
-      before do
-        @asset.complete = false
-        @asset.resource = 'filename.png'
-      end
+    context 'processing is not complete' do
+      let(:asset) { create_asset(resource: 'filename.png', complete: false) }
 
       it 'returns waiting image' do
-        expect(@asset.resource_path).to eq(Asset::WAITING_PATH)
+        expect(asset.resource_path).to eq(Asset::WAITING_PATH)
       end
     end
 
     describe 'with processing complete' do
-      before { @asset.resource = 'filename.png' }
+      let(:asset) { create_asset(resource: 'filename.png') }
 
       it 'returns the source image with the CDN' do
-        expect(@asset.resource_path).to include('filename.png')
-        expect(@asset.resource_path).to include('https')
-        expect(@asset.resource_path).to eq("#{Asset::CDN_HOST}/filename.png")
+        expect(asset.resource_path).to include('filename.png')
+        expect(asset.resource_path).to include('https')
+        expect(asset.resource_path).to eq("#{Asset::CDN_HOST}/filename.png")
       end
     end
   end

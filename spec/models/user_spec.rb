@@ -130,11 +130,6 @@ describe User do
   # Validations
   it { should be_valid }
 
-#  describe "when email is not present" do
-#    before { @user.email = "" }
-#    it { should_not be_valid }
-#  end
-
   describe "when email format is invalid" do
     it "should be invalid" do
       addresses = %w[user@foo,com user_at_foo.org example.user@foo. foo@bar_baz.com foo@bar+baz.com]
@@ -247,22 +242,7 @@ describe User do
     end
   end
 
-  # Scopes
-
-  # instance methods
-  describe "return value of authenticate method with oauth" do
-    before do
-      @user.oauth = oauth_attributes
-      @user.save
-    end
-    let(:found_user) { User.find_by(provider: 'facebook', uid: '1234567') }
-
-    describe 'return value of authenticate method' do
-      it { should eq found_user.authenticate }
-    end
-  end
-
-  describe "find_or_create_by_oauth class method" do
+  describe "#find_or_create_by_oauth(oauth)" do
     it 'finds an existing user' do
       user = FactoryGirl.create(:user, oauth: oauth_attributes)
       expect(User.find_or_create_by_oauth(oauth_attributes)).to eq(user)
@@ -282,7 +262,7 @@ describe User do
     end
   end
 
-  describe "find_or_create_by_phone_number class method" do
+  describe "#find_or_create_by_phone_number(phone_number, user_attributes)" do
     it "finds an existing user" do
       FactoryGirl.create(:user, phone_number: '2145551212')
       user = User.find_or_create_by_phone_number('2145551212')
@@ -303,116 +283,8 @@ describe User do
     end
   end
 
-  describe "full_name method" do
-    it "returns the first and last name as one string" do
-      user = FactoryGirl.create(:user, first_name: 'Russell', last_name: 'Wilson')
-      expect(user.full_name).to eq('Russell Wilson')
-    end
-  end
-
-  describe "following" do
-    let(:other_user) { FactoryGirl.create(:user) }
-    before do
-      @user.save
-      @user.follow!(other_user)
-    end
-
-    it { should be_following(other_user) }
-    its(:followed_users) { should include(other_user) }
-
-    describe "and unfollowing" do
-      before { @user.unfollow!(other_user) }
-
-      it { should_not be_following(other_user) }
-      its(:followed_users) { should_not include(other_user) }
-    end
-
-    describe "followed user" do
-      subject { other_user }
-      its(:followers) { should include(@user) }
-    end
-  end
-
-  describe "add as contact method" do
-    before do
-      @user.save
-      @contact = FactoryGirl.create(:user)
-    end
-
-    it "adds a user as a contact" do
-      @user.add_as_contact(@contact)
-      expect(@user.contacts).to include(@contact)
-    end
-
-    it "does not add a contact if it is already a contact" do
-      @user.contacts << @contact
-      @user.add_as_contact(@contact)
-      expect(@user.contacts.size).to eq(1)
-    end
-  end
-
-  describe "is_a_contact? method" do
-    before do
-      @user.save
-      @contact = FactoryGirl.create(:user)
-    end
-
-    it "returns false" do
-      expect(@user.is_a_contact?(@contact)).to be_false
-    end
-
-    it "returns true" do
-      @user.contacts << @contact
-      expect(@user.is_a_contact?(@contact)).to be_true
-    end
-  end
-
-  describe "send_confirmation_email method" do
-    before { @user.save }
-
-    it "generates a confirmation token" do
-      UserMailer.stub(:email_confirmation).and_return(double("Mailer", deliver: true))
-      @user.send_confirmation_email
-      expect(@user.confirmation_token).to_not be_nil
-      expect(@user.confirmation_sent_at).to_not be_nil
-    end
-
-    it "sends an email" do
-#      UserMailer.should_receive(:email_confirmation).and_return(double("Mailer", deliver: true))
-#      @user.send_confirmation_email
-    end
-  end
-
-  describe "confirmed? method" do
-    before { @user.save }
-
-    it "is not confirmed" do
-      expect(@user).to_not be_confirmed
-    end
-
-    it "is confirmed" do
-      @user.confirmed_at = Time.now
-      expect(@user).to be_confirmed
-    end
-  end
-
-  describe "email_confirmed method" do
-    before { @user.save }
-
-    it "sets the confirmed_at date" do
-      @user.email_confirmed!
-      expect(@user).to be_confirmed
-    end
-
-    it "sets the email to the unconfirmed_email" do
-      @user.update_columns(unconfirmed_email: 'anewemail@test.com')
-      @user.email_confirmed!
-      expect(@user.email).to eq('anewemail@test.com')
-    end
-  end
-
-  describe "find_or_create_recipient class method" do
-    describe "contact does not exist" do
+  describe "#find_or_create_recipient(attributes)" do
+    context "contact does not exist" do
       it "creates a user" do
         expect {
           User.find_or_create_recipient({email: 'testing@email.com'})
@@ -445,7 +317,7 @@ describe User do
       end
     end
 
-    describe "contact does exist" do
+    context "contact does exist" do
       it "finds an existing user" do
         user = FactoryGirl.create(:user)
         expect(User.find_or_create_recipient({email: user.email})).to eq(user)
@@ -453,20 +325,243 @@ describe User do
     end
   end
 
-  describe "is_following method" do
+  describe "#generate_token(column)" do
+    it 'generates a unique token for a given column' do
+      expect(User.generate_token(:recipient_token)).to_not be_blank
+    end
+  end
+
+  describe "#search_by_identity(query)" do
+    let(:user_with_username) { FactoryGirl.create(:user, username: 'testperson') }
+    let(:user_with_email) { FactoryGirl.create(:user, email: 'testing@email.com') }
+
+    context 'searching with a username' do
+      it 'returns user with the username' do
+        expect(User.search_by_identity('@testperson')).to eq([user_with_username])
+        expect(User.search_by_identity('something @testperson')).to eq([user_with_username])
+        expect(User.search_by_identity('something @testperson after')).to eq([user_with_username])
+      end
+    end
+
+    context 'searching with an email address' do
+      it 'returns user with an email' do
+        expect(User.search_by_identity('testing@email.com')).to eq([user_with_email])
+      end
+    end
+  end
+
+  describe "#search_by_name(query)" do
+    let!(:user_william) { FactoryGirl.create(:user, first_name: 'William', last_name: 'Johnson') }
+    let!(:user_john) { FactoryGirl.create(:user, first_name: 'John', last_name: 'Wilson') }
+    let!(:user_mary) { FactoryGirl.create(:user, first_name: 'Mary', last_name: 'Jones') }
+
+    context 'with one param' do
+      it 'returns the matches' do
+        expect(User.search_by_name('Wil').to_a).to match_array([user_william, user_john])
+        expect(User.search_by_name('wil').to_a).to match_array([user_william, user_john])
+      end
+    end
+
+    context 'with two params' do
+      it 'returns the matches' do
+        expect(User.search_by_name('mary jones').to_a).to match_array([user_mary])
+        expect(User.search_by_name('jones mary').to_a).to match_array([user_mary])
+      end
+    end
+  end
+
+  describe ".authenticate(password)" do
     before do
-      @user = FactoryGirl.create(:user)
-      @followed_user = FactoryGirl.create(:user)
+      @user.oauth = oauth_attributes
+      @user.save
+    end
+    let(:found_user) { User.find_by(provider: 'facebook', uid: '1234567') }
+
+    describe 'return value of authenticate method' do
+      it { should eq found_user.authenticate }
+    end
+  end
+
+  describe ".current_device" do
+    let!(:user) { FactoryGirl.create(:user) }
+    let!(:device) { FactoryGirl.create(:device, user: user) }
+
+    it 'returns the current_device for the user' do
+      expect(user.current_device).to eq(device)
+    end
+  end
+
+  describe ".full_name" do
+    it "returns the first and last name as one string" do
+      user = FactoryGirl.create(:user, first_name: 'Russell', last_name: 'Wilson')
+      expect(user.full_name).to eq('Russell Wilson')
+    end
+  end
+
+  describe 'user following' do
+    let!(:user) { FactoryGirl.create(:user) }
+    let!(:other_user) { FactoryGirl.create(:user) }
+
+    describe ".follow!(other_user)" do
+
+      context 'other_user is not a follower' do
+        it 'adds the other_user to the follower list' do
+          user.follow!(other_user)
+          expect(user.following).to include(other_user.id)
+        end
+      end
+
+      context 'other_user is a follower' do
+        it 'does not add other_user' do
+          user.follow!(other_user)
+          user.follow!(other_user)
+          expect(user.following.size).to eq(1)
+          expect(user.following).to match_array([other_user.id])
+        end
+      end
     end
 
-    it 'returns false' do
-      expect(@user.is_following?(@followed_user)).to be_false
+    describe ".following?(other_user)" do
+      before { user.follow!(other_user) }
+
+      subject { user }
+
+      it { should be_following(other_user) }
+      it { should_not be_following(FactoryGirl.create(:user)) }
     end
 
-    it 'returns true' do
-      @user.follow!(@followed_user)
-      expect(@user.is_following?(@followed_user)).to be_true
+    describe ".unfollow!(other_user)" do
+      before { user.follow!(other_user) }
+
+      it 'removes a followed user' do
+        user.unfollow!(other_user)
+        expect(user.following).to_not include(other_user.id)
+      end
+    end
+
+    describe '.followed_users' do
+      let!(:other_users) { FactoryGirl.create_list(:user, 3) }
+      before { other_users.each { |u| user.follow!(u) } }
+
+      it 'returns the followed users' do
+        expect(user.followed_users).to match_array(other_users)
+      end
+    end
+
+    describe '.followers' do
+      let!(:other_users) { FactoryGirl.create_list(:user, 3) }
+      before { other_users.each { |u| u.follow!(user) } }
+
+      it 'returns user that are following the user' do
+        expect(user.followers).to match_array(other_users)
+      end
+    end
+
+    describe '.watching_count' do
+      let!(:other_users) { FactoryGirl.create_list(:user, 3) }
+      before { other_users.each { |u| user.follow!(u) } }
+      subject { user }
+      its(:watching_count) { should eq(3) }
+    end
+
+    describe '.watchers_count' do
+      let!(:other_users) { FactoryGirl.create_list(:user, 3) }
+      before { other_users.each { |u| u.follow!(user) } }
+      subject { user }
+      its(:watchers_count) { should eq(3) }
     end
 
   end
+
+  describe 'contacts' do
+    let!(:user) { FactoryGirl.create(:user) }
+    let!(:contact) { FactoryGirl.create(:user) }
+
+    describe ".add_as_contact(contact)" do
+      context 'contact does not exist' do
+        it 'adds as a contact' do
+          user.add_as_contact(contact)
+          expect(user.contacts).to include(contact)
+        end
+      end
+
+      context "contact already exists" do
+        it "does not add as contact again" do
+          user.contacts << contact
+          user.add_as_contact(contact)
+          expect(user.contacts.size).to eq(1)
+        end
+      end
+    end
+
+    describe ".is_a_contact?" do
+      it "returns false" do
+        expect(user.is_a_contact?(contact)).to be_false
+      end
+
+      it "returns true" do
+        user.contacts << contact
+        expect(user.is_a_contact?(contact)).to be_true
+      end
+    end
+  end
+
+  describe "send_confirmation_email method" do
+    before { @user.save }
+
+    it "generates a confirmation token" do
+      UserMailer.stub(:email_confirmation).and_return(double("Mailer", deliver: true))
+      @user.send_confirmation_email
+      expect(@user.confirmation_token).to_not be_nil
+      expect(@user.confirmation_sent_at).to_not be_nil
+    end
+
+    it "sends an email" do
+#      UserMailer.should_receive(:email_confirmation).and_return(double("Mailer", deliver: true))
+#      @user.send_confirmation_email
+    end
+  end
+
+  describe ".email_confirmed!" do
+    let(:user) { FactoryGirl.create(:user, unconfirmed_email: 'unconfirmed@gmail.com') }
+    before { user.email_confirmed! }
+
+    it 'sets the confirmed_at date' do
+      expect(user.confirmed_at).to_not be_nil
+    end
+
+    it 'moves the unconfirmed_email to the email' do
+      expect(user.email).to eq('unconfirmed@gmail.com')
+      expect(user.unconfirmed_email).to be_nil
+    end
+  end
+
+  describe ".confirmed?" do
+    before { @user.save }
+
+    it "is not confirmed" do
+      expect(@user).to_not be_confirmed
+    end
+
+    it "is confirmed" do
+      @user.confirmed_at = Time.now
+      expect(@user).to be_confirmed
+    end
+  end
+
+  describe "email_confirmed method" do
+    before { @user.save }
+
+    it "sets the confirmed_at date" do
+      @user.email_confirmed!
+      expect(@user).to be_confirmed
+    end
+
+    it "sets the email to the unconfirmed_email" do
+      @user.update_columns(unconfirmed_email: 'anewemail@test.com')
+      @user.email_confirmed!
+      expect(@user.email).to eq('anewemail@test.com')
+    end
+  end
+
 end
