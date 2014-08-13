@@ -13,11 +13,11 @@ module API
         if query[0] == '#'
           @hashtags = Capsule.search_hashtags(query)
         elsif query.include?('@')
-          @users = User.search_by_identity(query)
+          @users = Users::Search.by_identity(query)
         else
           @capsules = Capsule.search_capsules(query, current_user)
           @hashtags = Capsule.search_hashtags(query)
-          @users = User.search_by_name(query)
+          @users = Users::Search.by_name(query)
         end
       end
     end

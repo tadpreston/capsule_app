@@ -26,7 +26,7 @@ class Authentication
       if params[:email]
         User.find_by(email: params[:email])
       elsif params[:oauth]
-        User.find_or_create_by_oauth(params[:oauth])
+        Users::Search.find_or_create_by_oauth(params[:oauth])
       end
     end
 end

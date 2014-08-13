@@ -15,7 +15,7 @@ class CapsuleCallbacks
       recipients = capsule.recipients_attributes
 
       recipients.each do |recipient|
-        user = User.find_or_create_recipient(recipient)
+        user = Users::Search.find_or_create_recipient(recipient)
         capsule.add_as_recipient user
         capsule.user.add_as_contact user
 
