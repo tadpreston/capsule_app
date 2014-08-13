@@ -76,7 +76,8 @@ module API
 
       def relative
         user_id = current_user ? current_user.id : nil
-        @capsules = Capsule.relative_location(params[:tutorial_level] || 0, user_id)
+        tutorial_level = user_id ? current_user.tutorial_progress : 0
+        @capsules = Capsule.relative_location(tutorial_level || 0, user_id)
       end
 
       def replies
@@ -90,6 +91,14 @@ module API
 
       def read
         @capsule.read current_user
+        if @capsule.location.nil?
+          capsules = Capsule.relative_location(current_user.tutorial_progress)
+          @all_read = true
+          capsules.each { |capsule| @all_read = nil unless capsule.read_by?(current_user) }
+          if @all_read
+            current_user.update_attribute(:tutorial_progress, current_user.tutorial_progress + 1)
+          end
+        end
         render :show
       end
 
