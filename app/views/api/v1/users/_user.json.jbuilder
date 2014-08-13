@@ -21,7 +21,7 @@ json.user do
   json.email_confirmed (user.confirmed? ? true : false)
   json.watching_count user.watching_count
   json.watchers_count user.watchers_count
-  json.is_watched current_user ? current_user.is_following?(user) : false
+  json.is_watched current_user ? current_user.following?(user) : false
   json.created_at user.created_at
   json.updated_at user.updated_at
 end
