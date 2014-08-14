@@ -2,6 +2,7 @@ class ProcessResponsesController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def create
+    Tenant.current_id = 1
 
     transloadit = JSON.parse params["transloadit"]
 
@@ -10,6 +11,8 @@ class ProcessResponsesController < ApplicationController
     asset.update_attributes(complete: true, metadata: transloadit)
 
     ProcessResponseWorker.perform_async asset.id
+
+    Tenant.current_id = nil
 
     render nothing: true
   end
