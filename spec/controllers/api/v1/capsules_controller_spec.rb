@@ -2,13 +2,7 @@ require 'spec_helper'
 
 describe API::V1::CapsulesController do
   before do
-    @tenant = FactoryGirl.create(:tenant)
-    @token = @tenant.tenant_keys[0].token
-    @request.env['HTTP_AUTHORIZATION'] = "Token token=\"#{@token}\""
-    @request.env["CONTENT_TYPE"] = "application/json"
-    @user = FactoryGirl.create(:user)
-    @device = FactoryGirl.create(:device, user: @user)
-    @request.env['HTTP_CAPSULE_AUTH_TOKEN'] = @device.auth_token
+    api_setup
   end
 
   let(:valid_attributes) { FactoryGirl.attributes_for(:capsule) }
