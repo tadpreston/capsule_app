@@ -13,5 +13,12 @@ envelope(json, :success) do
     json.north_lat 72
     json.east_long 179.9
     json.dmca_url 'http://capsuleapp.net/dmca'
+    json.fetch_boundary_multiplier_for_map_rect "0.2"
+    json.seconds_ahead_of_path_for_relative_capsules "45.0"
+    json.max_jitter_for_relative_positions "0.1"
+    json.seconds_until_picker_appears "2.0"
+    json.max_video_duration "25.0"
+    json.max_number_photos "4"
+    json.marquee_pixels_per_second "80.0"
   end
 end
