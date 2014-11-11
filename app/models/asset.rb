@@ -25,7 +25,7 @@ class Asset < ActiveRecord::Base
   validates :resource, presence: true
 
   def resource_path
-    return resource if resource.includes? 'http'
+    return resource if resource.include? 'http'
     return hosted_resource_path if complete
     AssetPaths::WAITING_PATH
   end
