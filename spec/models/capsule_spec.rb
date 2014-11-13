@@ -51,8 +51,6 @@ describe Capsule do
   it { should have_many(:objections) }
   it { should belong_to(:tenant) }
 
-  it { should validate_presence_of(:title) }
-
   it { should accept_nested_attributes_for(:comments).allow_destroy(true) }
   it { should accept_nested_attributes_for(:assets).allow_destroy(true) }
   it { should accept_nested_attributes_for(:recipients) }

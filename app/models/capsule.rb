@@ -42,7 +42,6 @@ class Capsule < ActiveRecord::Base
   after_create CapsuleCallbacks
   before_create CapsuleCallbacks
 
-  validates :title, presence: true
   validates_each :recipients_attributes, allow_blank: true do |record, attr, value|
     value.each do |recipient|
       if recipient[:email].blank? && recipient[:phone_number].blank?
