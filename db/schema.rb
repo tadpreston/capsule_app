@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140807212158) do
+ActiveRecord::Schema.define(version: 20141113141939) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -92,9 +92,9 @@ ActiveRecord::Schema.define(version: 20140807212158) do
     t.datetime "start_date"
     t.integer  "watchers",          default: [], array: true
     t.integer  "readers",           default: [], array: true
-    t.integer  "tenant_id"
     t.hstore   "creator"
     t.integer  "likes",             default: [], array: true
+    t.integer  "tenant_id"
   end
 
   add_index "capsules", ["in_reply_to"], name: "index_capsules_on_in_reply_to", using: :btree
@@ -273,6 +273,7 @@ ActiveRecord::Schema.define(version: 20140807212158) do
     t.integer  "following",            default: [],                   array: true
     t.integer  "watching",             default: [],                   array: true
     t.boolean  "can_send_text"
+    t.string   "device_token"
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", using: :btree

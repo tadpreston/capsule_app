@@ -36,6 +36,8 @@
 #  complete             :boolean          default(FALSE)
 #  following            :integer          default([]), is an Array
 #  watching             :integer          default([]), is an Array
+#  can_send_text        :boolean
+#  device_token         :string(255)
 #
 
 class User < ActiveRecord::Base
@@ -88,7 +90,7 @@ class User < ActiveRecord::Base
   end
 
   def current_device
-    devices.order(last_sign_in_at: :desc).limit(1).take
+    @current_device ||= devices.order(last_sign_in_at: :desc).limit(1).take
   end
 
   def full_name

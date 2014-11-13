@@ -36,6 +36,8 @@
 #  complete             :boolean          default(FALSE)
 #  following            :integer          default([]), is an Array
 #  watching             :integer          default([]), is an Array
+#  can_send_text        :boolean
+#  device_token         :string(255)
 #
 
 require 'spec_helper'
