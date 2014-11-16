@@ -9,7 +9,6 @@ module API
       def index
         @user = User.find params[:user_id]
         @capsules = @user.capsules
-#       render json: @capsules
       end
 
       def watched
@@ -18,7 +17,6 @@ module API
       end
 
       def show
-#       render json: @capsule
       end
 
       def create
@@ -42,7 +40,6 @@ module API
       def explorer
         hashtag = params[:hashtag].blank? ? '' : params[:hashtag]
         @capsule_boxes = Explorer.new(@origin, @span, hashtag).find_capsules
-#       render json: @capsule_boxes, meta: { capsule_count: @capsule_boxes.size }
       end
 
       def locationtags
