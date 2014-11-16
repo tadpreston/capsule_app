@@ -43,6 +43,7 @@ gem 'urbanairship', '~> 2.4.1'
 group :development do
   gem 'spring', '~> 1.1.2'
   gem "annotate", "2.6.3"
+  gem 'pry-rails', '~> 0.3.2'
 end
 
 group :development, :test do
