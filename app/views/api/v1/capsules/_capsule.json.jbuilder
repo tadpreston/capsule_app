@@ -7,8 +7,7 @@ json.set! :creator do
   json.profile_image capsule.cached_user.profile_image_path
 end
 json.is_owned is_owned?(capsule.user_id)
-json.title capsule.title
-json.set! :hash_tags, capsule.hash_tags_array
+json.pin_comment capsule.pin_comment
 json.location capsule.location
 json.relative_location capsule.relative_location
 json.payload_type capsule.payload_type || 0
