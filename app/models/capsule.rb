@@ -30,7 +30,6 @@
 #  creator           :hstore
 #  likes             :integer          default([]), is an Array
 #  tenant_id         :integer
-#  pin_comment       :string(255)
 #
 
 class Capsule < ActiveRecord::Base

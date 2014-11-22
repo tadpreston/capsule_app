@@ -1,5 +1,4 @@
 json.id capsule.id
-json.pin_comment capsule.pin_comment
 json.location capsule.location
 json.relative_location capsule.relative_location
 json.thumbnail capsule.thumbnail_path
