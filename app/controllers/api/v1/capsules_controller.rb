@@ -21,6 +21,8 @@ module API
 
       def create
         @capsule = current_user.capsules.build(capsule_params)
+        comment = @capsule.comments.first
+        comment.user_id = current_user.id if comment
         unless @capsule.save
           render :create, status: 422
         end

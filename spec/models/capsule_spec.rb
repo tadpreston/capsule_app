@@ -125,16 +125,6 @@ describe Capsule do
   end
 
   describe 'before_save callback' do
-    describe 'with hash_tags in the title' do
-      it 'pulls hash tags out of the title and stores them in the has_tags field' do
-        @capsule.save
-        expect(@capsule.hash_tags).to_not be_blank
-        @capsule.hash_tags.split(' ').each do |tag|
-          expect(@capsule.title).to include(tag)
-        end
-      end
-    end
-
     describe 'without hash tags in the title' do
       it 'hash_tags field should be blank' do
         @capsule.title = 'A title with no hash tags'
@@ -246,42 +236,42 @@ describe Capsule do
     end
   end
 
-  describe 'with_hash_tag scope' do
-    it 'returns capsules with the right tags' do
-      capsule1 = FactoryGirl.create(:capsule, title: 'Title with #tag1 #tag2')
-      capsule2 = FactoryGirl.create(:capsule, title: 'Title with #tag3 tag#4')
-      capsule3 = FactoryGirl.create(:capsule, title: 'Title with #tag1 #tag4')
-      capsules = Capsule.with_hash_tag('#tag1')
-      expect(capsules.size).to eq(2)
-      expect(capsules).to match_array([capsule1, capsule3])
-      expect(capsules).to_not include(capsule2)
-    end
-  end
+#  describe 'with_hash_tag scope' do
+#    it 'returns capsules with the right tags' do
+#      capsule1 = FactoryGirl.create(:capsule, title: 'Title with #tag1 #tag2')
+#      capsule2 = FactoryGirl.create(:capsule, title: 'Title with #tag3 tag#4')
+#      capsule3 = FactoryGirl.create(:capsule, title: 'Title with #tag1 #tag4')
+#      capsules = Capsule.with_hash_tag('#tag1')
+#      expect(capsules.size).to eq(2)
+#      expect(capsules).to match_array([capsule1, capsule3])
+#      expect(capsules).to_not include(capsule2)
+#    end
+#  end
 
-  describe 'find_location_hash_tags method' do
-    before do
-      @origin = { lat: 33.190, long: -96.8915 }
-      @span = { lat: 2.5359475904, long: 1.7578124096 }
-      @capsule1 = FactoryGirl.create(:capsule, title: 'Title with #tag1 #tag2', location: { latitude: '33.167111', longitude: '-96.663793', radius: '20000' })
-      @capsule2 = FactoryGirl.create(:capsule, title: 'Title with #tag3 #tag4', location: { latitude: '33.013300', longitude: '-96.823046', radius: '20000' })
-      @capsule3 = FactoryGirl.create(:capsule, title: 'Title with #tag1 #tag2', location: { latitude: '30.089326', longitude: '-96.231873', radius: '20000' })
-    end
-
-    it 'gets the correct capsules without a hashtag' do
-      capsules = Capsule.find_location_hash_tags(@origin, @span)
-      expect(capsules.size).to eq(2)
-      expect(capsules).to match_array([@capsule1, @capsule2])
-      expect(capsules).to_not include(@capsule3)
-    end
-
-    it 'gets the correct capsules with a hashtag' do
-      capsules = Capsule.find_location_hash_tags(@origin, @span, '#tag2')
-      expect(capsules.size).to eq(1)
-      expect(capsules.to_a).to eq([@capsule1])
-      expect(capsules.to_a).to_not include(@capsule2)
-      expect(capsules.to_a).to_not include(@capsule3)
-    end
-  end
+#  describe 'find_location_hash_tags method' do
+#    before do
+#      @origin = { lat: 33.190, long: -96.8915 }
+#      @span = { lat: 2.5359475904, long: 1.7578124096 }
+#      @capsule1 = FactoryGirl.create(:capsule, title: 'Title with #tag1 #tag2', location: { latitude: '33.167111', longitude: '-96.663793', radius: '20000' })
+#      @capsule2 = FactoryGirl.create(:capsule, title: 'Title with #tag3 #tag4', location: { latitude: '33.013300', longitude: '-96.823046', radius: '20000' })
+#      @capsule3 = FactoryGirl.create(:capsule, title: 'Title with #tag1 #tag2', location: { latitude: '30.089326', longitude: '-96.231873', radius: '20000' })
+#    end
+#
+#    it 'gets the correct capsules without a hashtag' do
+#      capsules = Capsule.find_location_hash_tags(@origin, @span)
+#      expect(capsules.size).to eq(2)
+#      expect(capsules).to match_array([@capsule1, @capsule2])
+#      expect(capsules).to_not include(@capsule3)
+#    end
+#
+#    it 'gets the correct capsules with a hashtag' do
+#      capsules = Capsule.find_location_hash_tags(@origin, @span, '#tag2')
+#      expect(capsules.size).to eq(1)
+#      expect(capsules.to_a).to eq([@capsule1])
+#      expect(capsules.to_a).to_not include(@capsule2)
+#      expect(capsules.to_a).to_not include(@capsule3)
+#    end
+#  end
 
   describe 'hidden scope' do
     it 'finds the hidden capsules' do
@@ -545,34 +535,34 @@ describe Capsule do
     it { should respond_to(:cached_watchers) }
   end
 
-  describe 'search_hashtags class method' do
-    before do
-      @capsule1 = FactoryGirl.create(:capsule, title: 'A title #withhashtags #testing #wowfun')
-      @capsule2 = FactoryGirl.create(:capsule, title: 'Another #stuckintheoffice #withhashtags title #niceday')
-      @capsule3 = FactoryGirl.create(:capsule, title: 'Interesting #shouldnotfind #intheresults')
-    end
-
-    it 'returns the correct capsules' do
-      capsules = Capsule.search_hashtags('#withhashtags')
-      expect(capsules.to_a.size).to eq(2)
-      expect(capsules).to match_array([@capsule1, @capsule2])
-    end
-
-    it 'returns a partial match' do
-      capsules = Capsule.search_hashtags('#intheresu')
-      expect(capsules.to_a.size).to eq(1)
-      expect(capsules).to eq([@capsule3])
-    end
-
-    it 'returns the matching hashtag' do
-      capsules = Capsule.search_hashtags('#withhashtags')
-      capsules.each { |c| expect(c.hash_tags).to eq(['#withhashtags']) }
-    end
-
-    it 'returns the matching hashtag with a partial match' do
-      capsules = Capsule.search_hashtags('#withhas')
-      capsules.each { |c| expect(c.hash_tags).to eq(['#withhashtags']) }
-    end
-  end
+#  describe 'search_hashtags class method' do
+#    before do
+#      @capsule1 = FactoryGirl.create(:capsule, title: 'A title #withhashtags #testing #wowfun')
+#      @capsule2 = FactoryGirl.create(:capsule, title: 'Another #stuckintheoffice #withhashtags title #niceday')
+#      @capsule3 = FactoryGirl.create(:capsule, title: 'Interesting #shouldnotfind #intheresults')
+#    end
+#
+#    it 'returns the correct capsules' do
+#      capsules = Capsule.search_hashtags('#withhashtags')
+#      expect(capsules.to_a.size).to eq(2)
+#      expect(capsules).to match_array([@capsule1, @capsule2])
+#    end
+#
+#    it 'returns a partial match' do
+#      capsules = Capsule.search_hashtags('#intheresu')
+#      expect(capsules.to_a.size).to eq(1)
+#      expect(capsules).to eq([@capsule3])
+#    end
+#
+#    it 'returns the matching hashtag' do
+#      capsules = Capsule.search_hashtags('#withhashtags')
+#      capsules.each { |c| expect(c.hash_tags).to eq(['#withhashtags']) }
+#    end
+#
+#    it 'returns the matching hashtag with a partial match' do
+#      capsules = Capsule.search_hashtags('#withhas')
+#      capsules.each { |c| expect(c.hash_tags).to eq(['#withhashtags']) }
+#    end
+#  end
 
 end

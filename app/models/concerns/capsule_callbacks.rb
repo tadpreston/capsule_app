@@ -1,7 +1,5 @@
 class CapsuleCallbacks
   def self.before_save(capsule)
-    capsule.hash_tags = capsule.title.split(/\s+|[;,]\s*/).select { |v| v[0] == '#' }.join(' ')
-
     if capsule.location
       capsule.latitude = capsule.location["latitude"] if capsule.location["latitude"]
       capsule.longitude = capsule.location["longitude"] if capsule.location["longitude"]
@@ -32,7 +30,7 @@ class CapsuleCallbacks
   end
 
   def self.after_create(capsule)
-    CapsuleLocationWatchWorker.perform_in(2.seconds, capsule.id)
+    # CapsuleLocationWatchWorker.perform_in(2.seconds, capsule.id)
     CapsuleWorker.perform_in(15.seconds, capsule.id)
   end
 end

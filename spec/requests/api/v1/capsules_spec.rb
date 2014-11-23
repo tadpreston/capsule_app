@@ -68,24 +68,24 @@ describe 'Capsules API' do
     end
   end
 
-  describe "GET 'locationtags'" do
-    before do
-      origin = { lat: 33.18953, long: -96.87909000000002 }
-      span = { lat: 2.5359475904, long: 1.7578124096 }
-      @capsule1 = FactoryGirl.create(:capsule, location: { latitude: '33.167111', longitude: '-96.663793', radius: '999999' }, tenant_id: tenant.id)
-      @capsule2 = FactoryGirl.create(:capsule, location: { latitude: '33.013300', longitude: '-96.823046', radius: '999999' }, tenant_id: tenant.id)
-      @capsule3 = FactoryGirl.create(:capsule, location: { latitude: '33.089326', longitude: '-96.731873', radius: '999999' }, tenant_id: tenant.id)
-      get "/api/v1/capsules/locationtags", { latOrigin: origin[:lat], longOrigin: origin[:long], latSpan: span[:lat], longSpan: span[:long], hashtags: 'hellokitty' }, { format: :json, 'HTTP_AUTHORIZATION' => token, 'HTTP_CAPSULE_AUTH_TOKEN' => auth_token }
-    end
-
-    it 'returns http success' do
-      expect(response).to be_success
-      expect(response.status).to eq(200)
-    end
-
-    it 'returns the count of the capsules' do
-      expect(json['response']['capsule_count']).to eq(3)
-    end
-  end
+#  describe "GET 'locationtags'" do
+#    before do
+#      origin = { lat: 33.18953, long: -96.87909000000002 }
+#      span = { lat: 2.5359475904, long: 1.7578124096 }
+#      @capsule1 = FactoryGirl.create(:capsule, location: { latitude: '33.167111', longitude: '-96.663793', radius: '999999' }, tenant_id: tenant.id)
+#      @capsule2 = FactoryGirl.create(:capsule, location: { latitude: '33.013300', longitude: '-96.823046', radius: '999999' }, tenant_id: tenant.id)
+#      @capsule3 = FactoryGirl.create(:capsule, location: { latitude: '33.089326', longitude: '-96.731873', radius: '999999' }, tenant_id: tenant.id)
+#      get "/api/v1/capsules/locationtags", { latOrigin: origin[:lat], longOrigin: origin[:long], latSpan: span[:lat], longSpan: span[:long], hashtags: 'hellokitty' }, { format: :json, 'HTTP_AUTHORIZATION' => token, 'HTTP_CAPSULE_AUTH_TOKEN' => auth_token }
+#    end
+#
+#    it 'returns http success' do
+#      expect(response).to be_success
+#      expect(response.status).to eq(200)
+#    end
+#
+#    it 'returns the count of the capsules' do
+#      expect(json['response']['capsule_count']).to eq(3)
+#    end
+#  end
 
 end
