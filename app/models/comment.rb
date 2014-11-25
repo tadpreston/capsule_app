@@ -26,6 +26,8 @@ class Comment < ActiveRecord::Base
 
   delegate :first_name, to: :user, prefix: true
   delegate :last_name, to: :user, prefix: true
+  delegate :full_name, to: :user, prefix: true
+  delegate :device_token, to: :user, prefix: true
   delegate :profile_image, to: :user, prefix: true
 
   def liked_by?(user)
