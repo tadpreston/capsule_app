@@ -3,7 +3,7 @@ module API
 
     class UsersController < API::V1::ApplicationController
       before_action :set_user, only: [:show, :update, :following, :followers]
-      skip_before_action :authorize_auth_token, only: [:index, :show, :create, :following, :followers, :recipient]
+      skip_before_action :authorize_auth_token, only: [:index, :show, :create, :following, :followers, :recipient, :registered]
 
       def index
         @users = User.all.order(:last_name)
@@ -69,27 +69,32 @@ module API
         @user.send_confirmation_email
       end
 
+      def registered
+        @user = User.find_by_email_or_phone params[:q]
+        render json: { status: 'Not Found', response: { errors: [ { user: [ "Not found with: #{params[:q]}" ] } ] } }, status: 404 unless @user
+      end
+
       private
 
-        def set_user
-          begin
-            @user = User.find(params[:id])
-          rescue
-            render json: { status: 'Not Found', response: { errors: [ { user: [ "Not found with id: #{params[:id]}" ] } ] } }, status: 404
-          end
+      def set_user
+        begin
+          @user = User.find(params[:id])
+        rescue
+          render json: { status: 'Not Found', response: { errors: [ { user: [ "Not found with id: #{params[:id]}" ] } ] } }, status: 404
         end
+      end
 
-        def user_params
-          params.required(:user).permit(:email, :username, :first_name, :last_name, :location, :password, :password_confirmation, :time_zone, :tutorial_progress, :phone_number,
-                                        :motto, :background_image, :facebook_username, :twitter_username, :profile_image, :device_token,
-                                        oauth: [
-                                          { location: [:id, :name] }, { friends: [:name, :id, :username, :first_name, :last_name] }, :birthday, :quotes, :verified, :work, :education,
-                                          :timezone, :updated_time, :name, :email, :birthdate, :locale, :first_name, :username, :id, :provider, :uid,
-                                          :gender, :last_name, { hometown: [:id, :name] }, :link
-                                        ]
-                                       )
+      def user_params
+        params.required(:user).permit(:email, :username, :first_name, :last_name, :location, :password, :password_confirmation, :time_zone, :tutorial_progress, :phone_number,
+                                      :motto, :background_image, :facebook_username, :twitter_username, :profile_image, :device_token,
+                                      oauth: [
+                                        { location: [:id, :name] }, { friends: [:name, :id, :username, :first_name, :last_name] }, :birthday, :quotes, :verified, :work, :education,
+                                        :timezone, :updated_time, :name, :email, :birthdate, :locale, :first_name, :username, :id, :provider, :uid,
+                                        :gender, :last_name, { hometown: [:id, :name] }, :link
+                                      ]
+                                     )
 
-        end
+      end
     end
   end
 end

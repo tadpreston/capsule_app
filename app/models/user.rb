@@ -79,6 +79,10 @@ class User < ActiveRecord::Base
     token
   end
 
+  def self.find_by_email_or_phone query
+    where("email = ? OR phone_number = ?", query, query).take
+  end
+
   def authenticate(password = nil)
     if password
       super(password)
@@ -276,24 +280,24 @@ class User < ActiveRecord::Base
 
   protected
 
-    def uid_and_provider_are_unique
-      unless self.persisted?
-        if User.exists?(provider: self.provider, uid: self.uid)
-          errors.add(:uid, "already exists")
-        end
+  def uid_and_provider_are_unique
+    unless self.persisted?
+      if User.exists?(provider: self.provider, uid: self.uid)
+        errors.add(:uid, "already exists")
       end
     end
+  end
 
-    def generate_token(column)
-      begin
-        self[column] = SecureRandom.urlsafe_base64
-      end while User.exists?(column => self[column])
-    end
+  def generate_token(column)
+    begin
+      self[column] = SecureRandom.urlsafe_base64
+    end while User.exists?(column => self[column])
+  end
 
-    def cached_followed_users
-      Rails.cache.fetch([self, "followed_users"]) do
-        User.where(id: following).to_a
-      end
+  def cached_followed_users
+    Rails.cache.fetch([self, "followed_users"]) do
+      User.where(id: following).to_a
     end
+  end
 
 end

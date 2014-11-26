@@ -37,6 +37,7 @@ Rails.application.routes.draw do
         end
         collection do
           post :follow
+          get :registered
         end
         resources :capsules, only: [:index]
         resources :contacts, only: [:index, :create, :destroy]
