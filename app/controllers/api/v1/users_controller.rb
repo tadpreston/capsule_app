@@ -70,8 +70,8 @@ module API
       end
 
       def registered
-        @user = User.find_by_email_or_phone params[:q]
-        render json: { status: 'Not Found', response: { errors: [ { user: [ "Not found with: #{params[:q]}" ] } ] } }, status: 404 unless @user
+        @registered_users = User.find_all_by_phone params[:q]
+        render json: @registered_users, each_serializer: RegisteredUserSerializer
       end
 
       private
