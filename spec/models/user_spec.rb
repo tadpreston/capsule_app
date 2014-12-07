@@ -250,6 +250,22 @@ describe User do
     end
   end
 
+  describe '#find_all_by_phone_number' do
+    let(:user1) { FactoryGirl.create(:user, phone_number: '1234567890') }
+    let(:user2) { FactoryGirl.create(:user, phone_number: '5018675309') }
+    let(:user3) { FactoryGirl.create(:user, phone_number: '2148675309') }
+
+    subject { User.find_all_by_phone('5018675309,1234567890') }
+
+    it 'returns the correct users' do
+      expect(subject).to match_array([user1,user2])
+    end
+
+    it 'does not return users not asked for' do
+      expect(subject).to_not include(user3)
+    end
+  end
+
   describe ".authenticate(password)" do
     before do
       @user.oauth = oauth_attributes
