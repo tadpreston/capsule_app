@@ -1,58 +1,51 @@
 class UserCallbacks
   def self.before_save(user)
     create_oauth(user) if user.oauth_changed?
+    create_password(user) if user.password_digest.blank?
     user.email.downcase! if user.email_changed?
   end
 
   def self.after_save(user)
-    if user.profile_image_changed?
-      unless user.profile_image.include?('/')
-        if asset = user.profile_asset
-          asset.destroy
-        end
-        user.assets.create(resource: user.profile_image, media_type: 'profile')
-      end
-    end
-    if user.background_image_changed?
-      unless user.background_image.include?('/')
-        if asset = user.background_asset
-          asset.destroy
-        end
-        user.assets.create(resource: user.background_image, media_type: 'background')
-      end
-    end
+    process_image(user, :profile) if user.profile_image_changed?
+    process_image(user, :background) if user.background_image_changed?
   end
 
   def self.before_validation(user)
     create_oauth(user) if user.oauth
   end
 
-  def self.after_commit(user)
-  end
-
   def self.after_create(user)
-#   user.send_confirmation_email
-    FriendsWorker.perform_in(5.seconds, user.id)
+    user.send_confirmation_email
   end
 
   private
 
-    def self.create_oauth(user)
-      oauth_hash = OauthHash.new(user.oauth).to_json
+  def self.process_image user, asset_type
+    create_asset(user, asset_type) if process_the_image?(user, asset_type)
+  end
 
-      user.provider = oauth_hash["provider"]
-      user.uid = user.oauth["uid"]
-      user.email = oauth_hash["email"]
-      user.username = oauth_hash["username"]
-      user.first_name = oauth_hash["first_name"]
-      user.last_name = oauth_hash["last_name"]
-      user.location = oauth_hash["location"]
-      user.time_zone = oauth_hash["timezone"]
-      user.locale = oauth_hash["locale"]
-      user.profile_image = oauth_hash["profile_image"]
-      tmp_pwd = SecureRandom.hex
-      user.password = tmp_pwd
-      user.password_confirmation = tmp_pwd
+  def self.process_the_image? user, asset_type
+    !user.send("#{asset_type}_image".to_sym).include? '/'
+  end
+
+  def self.create_asset user, asset_type
+    asset = user.send "#{asset_type}_asset"
+    asset.destroy if asset
+    user.assets.create(resource: user.send("#{asset_type}_image".to_sym), media_type: asset_type)
+  end
+
+  def self.create_oauth(user)
+    oauth_hash = OauthHash.new(user.oauth).to_json
+    user.uid = user.oauth["uid"]
+    ['provider', 'email', 'username', 'first_name', 'last_name', 'location', 'locale', 'profile_image'].each do |column|
+      user.send("#{column}=", oauth_hash[column])
     end
+  end
+
+  def self.create_password user
+    tmp_pwd = SecureRandom.hex
+    user.password = tmp_pwd
+    user.password_confirmation = tmp_pwd
+  end
 
 end
