@@ -48,7 +48,6 @@ class User < ActiveRecord::Base
   after_create UserCallbacks, unless: Proc.new { |user| user.provider == 'contact' }
 
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
-# validates :email, presence: true, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }, if: "oauth.nil?"
   validates :email, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }, :if => "oauth.nil?" && Proc.new { |user| !user.email.blank? && user.email_changed? }
   validate :uid_and_provider_are_unique, if: "oauth"
   has_secure_password
