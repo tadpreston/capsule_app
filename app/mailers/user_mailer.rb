@@ -3,6 +3,6 @@ class UserMailer < ActionMailer::Base
 
   def email_confirmation(user)
     @user = user
-#   mail(to: user.email, subject: "Welcome to Capsule! Please confirm your email address.", content_type: "text/html")
+    mail(to: user.email, subject: "Welcome to PinYada! Please confirm your email address.", content_type: "text/html")
   end
 end
