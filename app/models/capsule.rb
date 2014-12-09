@@ -159,11 +159,16 @@ class Capsule < ActiveRecord::Base
   end
 
   def self.capsules(user_id)
-    capsules = find_by_sql json_capsule_sql(user_id) { "WHERE TRIM(status) IS NULL AND user_id = #{user_id} AND tenant_id = #{Tenant.current_id}" }
+    find_by_sql json_capsule_sql(user_id) { "WHERE TRIM(status) IS NULL AND user_id = #{user_id} AND tenant_id = #{Tenant.current_id}" }
   end
 
   def self.watched_capsules(user_id, tenant_id = Tenant.current_id)
     find_by_sql json_capsule_sql(user_id) { "WHERE TRIM(status) IS NULL AND watchers @> ARRAY[#{user_id}] AND tenant_id = #{tenant_id} ORDER BY updated_at DESC" }
+  end
+
+  def self.capsules_for_user user_id
+    user = User.find user_id
+    user.capsules
   end
 
   def purged_title
@@ -179,7 +184,6 @@ class Capsule < ActiveRecord::Base
       end
     else
       "https://#{ENV['CDN_HOST']}/default/waiting-001.png"
-#     "http://res.cloudinary.com/demo/image/upload/w_320,h_313,c_thumb,g_face/butterfly.jpg"
     end
   end
 
@@ -278,35 +282,35 @@ class Capsule < ActiveRecord::Base
 
   private
 
-    def self.truncate_decimals(value, places = 1)
-      precision = 10**places
-      (value * precision).to_i / precision.to_f
-    end
+  def self.truncate_decimals(value, places = 1)
+    precision = 10**places
+    (value * precision).to_i / precision.to_f
+  end
 
-    def self.promoted_tags
-      [ '#hometown', '#dallas', '#fishboy' ]
-    end
+  def self.promoted_tags
+    [ '#hometown', '#dallas', '#fishboy' ]
+  end
 
-    def self.json_capsule_sql(user_id)
-      sql = <<-SQL
-        SELECT row_to_json(c) AS capsule_json
-        FROM (
-          SELECT id, user_id, title, string_to_array(hash_tags, ' ') as hash_tags, location, relative_location, concat('https://#{ENV['CDN_HOST']}/',thumbnail) AS thumbnail,
-                 lock_answer, incognito AS is_incognito, COALESCE(is_portable, 'false') AS is_portable, comments_count, coalesce(array_length(likes,1),0) AS likes_count, created_at, updated_at,
-                 (
-                   SELECT row_to_json(u)
-                   FROM (
-                     SELECT id, first_name, last_name, concat('https://#{ENV['CDN_HOST']}/',profile_image) AS profile_image
-                     FROM users
-                     WHERE id = capsules.user_id
-                   ) u
-                 ) AS creator, capsules.user_id = #{user_id} AS is_owned, #{user_id} = ANY(watchers) AS is_watched, #{user_id} = ANY(readers) AS is_read
-          FROM capsules
-          #{yield}
-        ) c;
-      SQL
+  def self.json_capsule_sql(user_id)
+    sql = <<-SQL
+      SELECT row_to_json(c) AS capsule_json
+      FROM (
+        SELECT id, user_id, title, string_to_array(hash_tags, ' ') as hash_tags, location, relative_location, concat('https://#{ENV['CDN_HOST']}/',thumbnail) AS thumbnail,
+               lock_answer, incognito AS is_incognito, COALESCE(is_portable, 'false') AS is_portable, comments_count, coalesce(array_length(likes,1),0) AS likes_count, created_at, updated_at,
+               (
+                 SELECT row_to_json(u)
+                 FROM (
+                   SELECT id, first_name, last_name, concat('https://#{ENV['CDN_HOST']}/',profile_image) AS profile_image
+                   FROM users
+                   WHERE id = capsules.user_id
+                 ) u
+               ) AS creator, capsules.user_id = #{user_id} AS is_owned, #{user_id} = ANY(watchers) AS is_watched, #{user_id} = ANY(readers) AS is_read
+        FROM capsules
+        #{yield}
+      ) c;
+    SQL
 
-      sql
-    end
+    sql
+  end
 
 end

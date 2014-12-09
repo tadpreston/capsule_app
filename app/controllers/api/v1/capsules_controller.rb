@@ -7,16 +7,18 @@ module API
       skip_before_action :authorize_auth_token, only: [:index, :explorer, :locationtags, :library, :read, :unread, :loadtest, :hidden, :show, :relative]
 
       def index
-        @user = User.find params[:user_id]
-        @capsules = @user.capsules
+        @capsules = Capsule.capsules_for_user params[:user_id]
+        render json: @capsules, each_serializer: CapsuleSerializer
       end
 
       def watched
         user = params[:user_id] ? User.find(params[:user_id]) : current_user
         @capsules = user.watched_capsules
+        render json: @capsules, each_serializer: CapsuleSerializer
       end
 
       def show
+        render json: @capsule
       end
 
       def create
@@ -26,12 +28,14 @@ module API
         unless @capsule.save
           render :create, status: 422
         end
+        render json: @capsule
       end
 
       def update
         unless @capsule.update_attributes(capsule_params)
           render :update, status: 422
         end
+        render json: @capsule
       end
 
       def destroy
@@ -51,10 +55,12 @@ module API
 
       def forme
         @capsules = current_user.received_capsules.includes(:user)
+        render json: @capsules, each_serializer: CapsuleSerializer
       end
 
       def suggested
         @capsules  = Capsule.find_in_rec({ lat: 33.2342834, long: -97.5861393 }, { lat: 1.4511453, long: 1.7329357 }).includes(:user).limit(5)
+        render json: @capsules, each_serializer: CapsuleSerializer
       end
 
       def library
@@ -71,21 +77,25 @@ module API
 
       def hidden
         @capsules = Capsule.find_hidden_in_rec(@origin, @span)
+        render json: @capsules, each_serializer: CapsuleSerializer
       end
 
       def relative
         user_id = current_user ? current_user.id : nil
         tutorial_level = user_id ? current_user.tutorial_progress : 0
         @capsules = Capsule.relative_location(tutorial_level || 0, user_id)
+        render json: @capsules, each_serializer: CapsuleSerializer
       end
 
       def replies
         @capsules = Capsule.where('(TRIM(status) IS NULL)').where(in_reply_to: params[:id])
+        render json: @capsules, each_serializer: CapsuleSerializer
       end
 
       def replied_to
         capsule = Capsule.find params[:id]
         @capsule = capsule.replied_to
+        render json: @capsule
       end
 
       def read
@@ -133,28 +143,27 @@ module API
 
       private
 
-        def set_capsule
-          begin
-            @capsule = Capsule.find params[:id]
-          rescue
-            render json: { status: 'Not Found', response: { errors: [ { capsule: [ "Not found with id: #{params[:id]}" ] } ] } }, status: 404
-          end
+      def set_capsule
+        begin
+          @capsule = Capsule.find params[:id]
+        rescue
+          render json: { status: 'Not Found', response: { errors: [ { capsule: [ "Not found with id: #{params[:id]}" ] } ] } }, status: 404
         end
+      end
 
-        def set_origin_span
-          @origin = { lat: params[:latOrigin].to_f, long: params[:longOrigin].to_f }
-          @span = { lat: params[:latSpan].to_f, long: params[:longSpan].to_f }
-        end
+      def set_origin_span
+        @origin = { lat: params[:latOrigin].to_f, long: params[:longOrigin].to_f }
+        @span = { lat: params[:latSpan].to_f, long: params[:longSpan].to_f }
+      end
 
-        def capsule_params
-          params.required(:capsule).permit(:user_id, :title, { location: [:name, :latitude, :longitude, :radius] }, :status, :payload_type, :promotional_state, :passcode,
-                                           :visibility, :thumbnail, :in_reply_to, :is_portable, :start_date, :lock_question, :lock_answer, :is_incognito,
-                                           { relative_location: [:distance, :radius, :fixed_positioning, :tutorial_level] },
-                                           comments_attributes: [:user_id, :body],
-                                           assets_attributes: [:media_type, :resource, :metadata],
-                                           recipients_attributes: [:phone_number, :email, :first_name, :last_name, :profile_image, :can_send_text])
-        end
-
+      def capsule_params
+        params.required(:capsule).permit(:user_id, :title, { location: [:name, :latitude, :longitude, :radius] }, :status, :payload_type, :promotional_state, :passcode,
+                                         :visibility, :thumbnail, :in_reply_to, :is_portable, :start_date, :lock_question, :lock_answer, :is_incognito,
+                                         { relative_location: [:distance, :radius, :fixed_positioning, :tutorial_level] },
+                                         comments_attributes: [:user_id, :body],
+                                         assets_attributes: [:media_type, :resource, :metadata],
+                                         recipients_attributes: [:phone_number, :email, :first_name, :last_name, :profile_image, :can_send_text])
+      end
     end
   end
 end
