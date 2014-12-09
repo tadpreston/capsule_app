@@ -18,7 +18,7 @@ module API
         else
           render json: { status: 'Not Found', response: { errors: [ { session: [ "Not found with id: #{params[:id]}" ] } ] } }, status: 404
         end
-     end
+      end
 
       private
 

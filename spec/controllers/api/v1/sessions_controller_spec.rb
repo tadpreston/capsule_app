@@ -118,9 +118,7 @@ describe API::V1::SessionsController do
         end
 
         it 'creates user' do
-          expect {
-            post :create, { oauth: @oauth_attrs }
-          }.to change(User, :count).by(1)
+          expect { post :create, { oauth: @oauth_attrs } }.to change(User, :count).by(1)
         end
 
 #        it 'sends a confirmation email' do
