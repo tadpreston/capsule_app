@@ -35,11 +35,12 @@ class UserCallbacks
   end
 
   def self.create_oauth(user)
-    oauth_hash = OauthHash.new(user.oauth).to_json
     user.uid = user.oauth["uid"]
+    oauth_hash = OauthHash.new(user.oauth).to_json
     ['provider', 'email', 'username', 'first_name', 'last_name', 'location', 'locale', 'profile_image'].each do |column|
       user.send("#{column}=", oauth_hash[column])
     end
+    create_password user
   end
 
   def self.create_password user
