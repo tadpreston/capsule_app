@@ -4,7 +4,7 @@
 #
 #  id                :integer          not null, primary key
 #  user_id           :integer
-#  title             :string(255)
+#  comment           :string(255)
 #  hash_tags         :string(255)
 #  location          :hstore
 #  status            :string(255)
@@ -143,7 +143,7 @@ class Capsule < ActiveRecord::Base
   end
 
   def self.search_capsules(query, user = nil)
-    capsules = where('title ilike ?', "%#{query}%").not_hidden.absolute_location
+    capsules = where('comment ilike ?', "%#{query}%").not_hidden.absolute_location
     if user
       capsules.public_with_user(user.id)
     else
@@ -171,8 +171,8 @@ class Capsule < ActiveRecord::Base
     user.capsules
   end
 
-  def purged_title
-    title.slice(/^[^#]*\b/)
+  def purged_comment
+    comment.slice(/^[^#]*\b/)
   end
 
   def thumbnail_path
@@ -295,7 +295,7 @@ class Capsule < ActiveRecord::Base
     sql = <<-SQL
       SELECT row_to_json(c) AS capsule_json
       FROM (
-        SELECT id, user_id, title, string_to_array(hash_tags, ' ') as hash_tags, location, relative_location, concat('https://#{ENV['CDN_HOST']}/',thumbnail) AS thumbnail,
+        SELECT id, user_id, comment, string_to_array(hash_tags, ' ') as hash_tags, location, relative_location, concat('https://#{ENV['CDN_HOST']}/',thumbnail) AS thumbnail,
                lock_answer, incognito AS is_incognito, COALESCE(is_portable, 'false') AS is_portable, comments_count, coalesce(array_length(likes,1),0) AS likes_count, created_at, updated_at,
                (
                  SELECT row_to_json(u)

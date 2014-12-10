@@ -25,7 +25,7 @@ describe API::V1::CapsulesController do
     describe 'with invalid params' do
       it "assigns newly created but unsaved capsule as @capsule" do
         Capsule.any_instance.stub(:save).and_return(false)
-        post :create, { capsule: { title: '' } }
+        post :create, { capsule: { comment: '' } }
         expect(assigns(:capsule)).to be_a_new(Capsule)
       end
     end
@@ -145,11 +145,11 @@ describe API::V1::CapsulesController do
     describe 'with valid params' do
       it 'updates the requested capsule' do
         Capsule.any_instance.should_receive(:update_attributes)
-        patch :update, id: @capsule.to_param, capsule: { title: 'A changed title' }
+        patch :update, id: @capsule.to_param, capsule: { comment: 'A changed comment' }
       end
 
       it 'assigns the requested capsule to @capsule' do
-        patch :update, id: @capsule.to_param, capsule: { title: 'A changed title' }
+        patch :update, id: @capsule.to_param, capsule: { comment: 'A changed comment' }
         expect(assigns(:capsule)).to eq(@capsule)
       end
     end
@@ -157,7 +157,7 @@ describe API::V1::CapsulesController do
     describe "with invalid params" do
       it "assigns the capsule as @capsule" do
         Capsule.any_instance.stub(:update_attributes).and_return(false)
-        patch :update, id: @capsule.to_param, capsule: { title: '' }
+        patch :update, id: @capsule.to_param, capsule: { comment: '' }
         assigns(:capsule).should eq(@capsule)
       end
     end

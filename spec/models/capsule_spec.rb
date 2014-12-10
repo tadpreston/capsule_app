@@ -4,7 +4,7 @@
 #
 #  id                :integer          not null, primary key
 #  user_id           :integer
-#  title             :string(255)
+#  comment           :string(255)
 #  hash_tags         :string(255)
 #  location          :hstore
 #  status            :string(255)
@@ -125,9 +125,9 @@ describe Capsule do
   end
 
   describe 'before_save callback' do
-    describe 'without hash tags in the title' do
+    describe 'without hash tags in the comment' do
       it 'hash_tags field should be blank' do
-        @capsule.title = 'A title with no hash tags'
+        @capsule.comment = 'A comment with no hash tags'
         @capsule.save
         expect(@capsule.hash_tags).to be_blank
       end
@@ -195,11 +195,11 @@ describe Capsule do
     end
   end
 
-  describe 'purged_title method' do
-    it 'returns the title with no hash tags' do
-      @capsule.title = "A title with hash tags #hashtagone #hashtagtwo"
+  describe 'purged_comment method' do
+    it 'returns the comment with no hash tags' do
+      @capsule.comment = "A comment with hash tags #hashtagone #hashtagtwo"
       @capsule.save
-      expect(@capsule.purged_title).to eq('A title with hash tags')
+      expect(@capsule.purged_comment).to eq('A comment with hash tags')
     end
   end
 
@@ -238,9 +238,9 @@ describe Capsule do
 
 #  describe 'with_hash_tag scope' do
 #    it 'returns capsules with the right tags' do
-#      capsule1 = FactoryGirl.create(:capsule, title: 'Title with #tag1 #tag2')
-#      capsule2 = FactoryGirl.create(:capsule, title: 'Title with #tag3 tag#4')
-#      capsule3 = FactoryGirl.create(:capsule, title: 'Title with #tag1 #tag4')
+#      capsule1 = FactoryGirl.create(:capsule, comment: 'comment with #tag1 #tag2')
+#      capsule2 = FactoryGirl.create(:capsule, comment: 'comment with #tag3 tag#4')
+#      capsule3 = FactoryGirl.create(:capsule, comment: 'comment with #tag1 #tag4')
 #      capsules = Capsule.with_hash_tag('#tag1')
 #      expect(capsules.size).to eq(2)
 #      expect(capsules).to match_array([capsule1, capsule3])
@@ -252,9 +252,9 @@ describe Capsule do
 #    before do
 #      @origin = { lat: 33.190, long: -96.8915 }
 #      @span = { lat: 2.5359475904, long: 1.7578124096 }
-#      @capsule1 = FactoryGirl.create(:capsule, title: 'Title with #tag1 #tag2', location: { latitude: '33.167111', longitude: '-96.663793', radius: '20000' })
-#      @capsule2 = FactoryGirl.create(:capsule, title: 'Title with #tag3 #tag4', location: { latitude: '33.013300', longitude: '-96.823046', radius: '20000' })
-#      @capsule3 = FactoryGirl.create(:capsule, title: 'Title with #tag1 #tag2', location: { latitude: '30.089326', longitude: '-96.231873', radius: '20000' })
+#      @capsule1 = FactoryGirl.create(:capsule, comment: 'comment with #tag1 #tag2', location: { latitude: '33.167111', longitude: '-96.663793', radius: '20000' })
+#      @capsule2 = FactoryGirl.create(:capsule, comment: 'comment with #tag3 #tag4', location: { latitude: '33.013300', longitude: '-96.823046', radius: '20000' })
+#      @capsule3 = FactoryGirl.create(:capsule, comment: 'comment with #tag1 #tag2', location: { latitude: '30.089326', longitude: '-96.231873', radius: '20000' })
 #    end
 #
 #    it 'gets the correct capsules without a hashtag' do
@@ -352,9 +352,9 @@ describe Capsule do
 
   describe 'search_capsules method' do
     it 'returns capsules that match the search term' do
-      capsule1 = FactoryGirl.create(:capsule, title: 'This is a test capsule')
-      capsule2 = FactoryGirl.create(:capsule, title: 'Just an average capsule')
-      capsule3 = FactoryGirl.create(:capsule, title: 'Another test capsule')
+      capsule1 = FactoryGirl.create(:capsule, comment: 'This is a test capsule')
+      capsule2 = FactoryGirl.create(:capsule, comment: 'Just an average capsule')
+      capsule3 = FactoryGirl.create(:capsule, comment: 'Another test capsule')
 
       capsules = Capsule.search_capsules('test')
       expect(capsules.size).to eq(2)
@@ -363,9 +363,9 @@ describe Capsule do
     end
 
     it 'returns capsules that match the search term and are not hidden' do
-      capsule1 = FactoryGirl.create(:capsule, title: 'This is a test capsule', incognito: true)
-      capsule2 = FactoryGirl.create(:capsule, title: 'Just an average capsule')
-      capsule3 = FactoryGirl.create(:capsule, title: 'Another test capsule')
+      capsule1 = FactoryGirl.create(:capsule, comment: 'This is a test capsule', incognito: true)
+      capsule2 = FactoryGirl.create(:capsule, comment: 'Just an average capsule')
+      capsule3 = FactoryGirl.create(:capsule, comment: 'Another test capsule')
 
       capsules = Capsule.search_capsules('test')
       expect(capsules.size).to eq(1)
@@ -373,9 +373,9 @@ describe Capsule do
     end
 
     it 'returns capsules that match the search term and are absolute position' do
-      capsule1 = FactoryGirl.create(:capsule, title: 'This is a test capsule')
-      capsule2 = FactoryGirl.create(:capsule, title: 'Just an average capsule')
-      capsule3 = FactoryGirl.create(:capsule, title: 'Another test capsule', relative_location: { location: { latitude: 33, longitude: -97 } })
+      capsule1 = FactoryGirl.create(:capsule, comment: 'This is a test capsule')
+      capsule2 = FactoryGirl.create(:capsule, comment: 'Just an average capsule')
+      capsule3 = FactoryGirl.create(:capsule, comment: 'Another test capsule', relative_location: { location: { latitude: 33, longitude: -97 } })
 
       capsules = Capsule.search_capsules('test')
       expect(capsules.size).to eq(1)
@@ -383,9 +383,9 @@ describe Capsule do
     end
 
     it 'returns capsules that match the search term and are public' do
-      capsule1 = FactoryGirl.create(:capsule, title: 'This is a test capsule')
-      capsule2 = FactoryGirl.create(:capsule, title: 'Just an average capsule')
-      capsule3 = FactoryGirl.create(:capsule, title: 'Another test capsule')
+      capsule1 = FactoryGirl.create(:capsule, comment: 'This is a test capsule')
+      capsule2 = FactoryGirl.create(:capsule, comment: 'Just an average capsule')
+      capsule3 = FactoryGirl.create(:capsule, comment: 'Another test capsule')
       capsule1.recipients << FactoryGirl.create(:user)
 
       capsules = Capsule.search_capsules('test')
@@ -394,10 +394,10 @@ describe Capsule do
     end
 
     it 'returns capsules that match the search term and the user is a recipient' do
-      capsule1 = FactoryGirl.create(:capsule, title: 'This is a test capsule')
-      capsule2 = FactoryGirl.create(:capsule, title: 'Just an average capsule')
-      capsule3 = FactoryGirl.create(:capsule, title: 'Another test capsule')
-      capsule4 = FactoryGirl.create(:capsule, title: 'Some testing going on')
+      capsule1 = FactoryGirl.create(:capsule, comment: 'This is a test capsule')
+      capsule2 = FactoryGirl.create(:capsule, comment: 'Just an average capsule')
+      capsule3 = FactoryGirl.create(:capsule, comment: 'Another test capsule')
+      capsule4 = FactoryGirl.create(:capsule, comment: 'Some testing going on')
       user = FactoryGirl.create(:user)
       capsule1.recipients << user
       capsule4.recipients << FactoryGirl.create(:user)
@@ -537,9 +537,9 @@ describe Capsule do
 
 #  describe 'search_hashtags class method' do
 #    before do
-#      @capsule1 = FactoryGirl.create(:capsule, title: 'A title #withhashtags #testing #wowfun')
-#      @capsule2 = FactoryGirl.create(:capsule, title: 'Another #stuckintheoffice #withhashtags title #niceday')
-#      @capsule3 = FactoryGirl.create(:capsule, title: 'Interesting #shouldnotfind #intheresults')
+#      @capsule1 = FactoryGirl.create(:capsule, comment: 'A comment #withhashtags #testing #wowfun')
+#      @capsule2 = FactoryGirl.create(:capsule, comment: 'Another #stuckintheoffice #withhashtags comment #niceday')
+#      @capsule3 = FactoryGirl.create(:capsule, comment: 'Interesting #shouldnotfind #intheresults')
 #    end
 #
 #    it 'returns the correct capsules' do
