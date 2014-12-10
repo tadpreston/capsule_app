@@ -23,17 +23,19 @@ module API
 
       def create
         @capsule = current_user.capsules.build(capsule_params)
-        unless @capsule.save
+        if @capsule.save
+          render json: @capsule
+        else
           render :create, status: 422
         end
-        render json: @capsule
       end
 
       def update
-        unless @capsule.update_attributes(capsule_params)
+        if @capsule.update_attributes(capsule_params)
+          render json: @capsule
+        else
           render :update, status: 422
         end
-        render json: @capsule
       end
 
       def destroy
