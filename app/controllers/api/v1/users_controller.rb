@@ -70,7 +70,7 @@ module API
       end
 
       def registered
-        @registered_users = User.find_all_by_phone params[:q]
+        @registered_users = RegisteredUser.find params[:q]
         render json: @registered_users, each_serializer: RegisteredUserSerializer
       end
 

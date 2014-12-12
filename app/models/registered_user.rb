@@ -7,9 +7,13 @@ class RegisteredUser
     @phone_number = phone_number
   end
 
-  def self.find phone_numbers
-    users = User.find_all_by_phone phone_numbers
+  def self.find params
+    users = User.find_all_by_phone_or_email params
     initialize_all_from_db users
+  end
+
+  def read_attribute_for_serialization attribute
+    send attribute
   end
 
   private

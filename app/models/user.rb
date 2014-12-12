@@ -78,8 +78,9 @@ class User < ActiveRecord::Base
     token
   end
 
-  def self.find_all_by_phone query
-    where phone_number: query.split(',')
+  def self.find_all_by_phone_or_email query
+    params = query.split ','
+    where('phone_number IN (?) OR email IN (?)', params, params)
   end
 
   def authenticate(password = nil)
