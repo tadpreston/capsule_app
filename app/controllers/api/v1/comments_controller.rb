@@ -8,11 +8,12 @@ module API
 
       def index
         @comments = @capsule.comments
+        render json: @comments, each_serializer: CommentSerializer
       end
 
       def create
         @comment = @capsule.comments.create(comment_params.merge({user_id: current_user.id}))
-        render :show
+        render json: @comment
       end
 
       def destroy
@@ -24,13 +25,13 @@ module API
       def like
         @comment.likes << current_user.id
         @comment.save
-        render :show
+        render json: @comment
       end
 
       def unlike
         @comment.likes.delete current_user.id
         @comment.save
-        render :show
+        render json: @comment
       end
 
       private
