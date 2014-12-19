@@ -176,15 +176,8 @@ class Capsule < ActiveRecord::Base
   end
 
   def thumbnail_path
-    unless self.thumbnail.blank?
-      if self.thumbnail.include?('/')
-        "https://#{ENV['CDN_HOST']}/#{self.thumbnail}"
-      else
-        "https://#{ENV['CDN_HOST']}/default/waiting-001.png"
-      end
-    else
-      "https://#{ENV['CDN_HOST']}/default/waiting-001.png"
-    end
+    return nil if thumbnail.blank? or !thumbnail.include '/'
+    "https://#{ENV['CDN_HOST']}/#{self.thumbnail}"
   end
 
   def recipients_attributes=(recipients)

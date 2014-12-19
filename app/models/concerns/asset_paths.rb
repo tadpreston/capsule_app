@@ -1,4 +1,4 @@
 module AssetPaths
-  WAITING_PATH = "https://#{ENV['CDN_HOST']}/default/waiting-001.png"
+  WAITING_PATH = nil
   CDN_HOST = "https://#{ENV['CDN_HOST']}"
 end
