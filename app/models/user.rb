@@ -44,7 +44,6 @@ class User < ActiveRecord::Base
   before_save UserCallbacks
   after_save UserCallbacks
   before_validation UserCallbacks, unless: Proc.new { |user| user.persisted? }
-  after_commit UserCallbacks
   after_create UserCallbacks, unless: Proc.new { |user| user.provider == 'contact' }
 
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
