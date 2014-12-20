@@ -26,7 +26,7 @@ class CapsuleCallbacks
 
   def self.before_create(capsule)
     user = capsule.user
-    capsule.creator = { id: user.id, first_name: user.first_name, last_name: user.last_name, profile_image: user.profile_image }
+    capsule.creator = { id: user.id, full_name: user.full_name, profile_image: user.profile_image }
   end
 
   def self.after_create(capsule)

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141210020319) do
+ActiveRecord::Schema.define(version: 20141220204928) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -242,8 +242,6 @@ ActiveRecord::Schema.define(version: 20141210020319) do
     t.uuid     "public_id",            default: "uuid_generate_v4()"
     t.string   "email"
     t.string   "username"
-    t.string   "first_name"
-    t.string   "last_name"
     t.string   "phone_number"
     t.string   "password_digest"
     t.string   "location"
@@ -274,6 +272,7 @@ ActiveRecord::Schema.define(version: 20141210020319) do
     t.integer  "watching",             default: [],                   array: true
     t.boolean  "can_send_text"
     t.string   "device_token"
+    t.string   "full_name"
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", using: :btree
