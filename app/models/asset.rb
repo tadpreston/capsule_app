@@ -30,6 +30,10 @@ class Asset < ActiveRecord::Base
     AssetPaths::WAITING_PATH
   end
 
+  def resource_path= path
+    self.resource = path
+  end
+
   private
 
   def hosted_resource_path
