@@ -26,7 +26,7 @@ module API
         if @capsule.save
           render json: @capsule
         else
-          render :create, status: 422
+          render_capsule_errors
         end
       end
 
@@ -34,7 +34,7 @@ module API
         if @capsule.update_attributes(capsule_params)
           render json: @capsule
         else
-          render :update, status: 422
+          render_capsule_errors
         end
       end
 
@@ -142,6 +142,18 @@ module API
       end
 
       private
+
+      def render_capsule_errors
+        render status: 422, json: {
+          errors: [
+            status: '422',
+            code: '422',
+            title: @capsule.errors,
+            links: [],
+            path: request.env['REQUEST_PATH']
+          ]
+        }
+      end
 
       def set_capsule
         begin
