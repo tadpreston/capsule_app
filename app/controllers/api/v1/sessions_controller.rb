@@ -6,7 +6,9 @@ module API
 
       def create
         auth = Authentication.new(params, request)
-        unless @user = auth.authenticated?
+        if @user = auth.authenticated?
+          render json: @user
+        else
           invalid_login_attempt
         end
       end
