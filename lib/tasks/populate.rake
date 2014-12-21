@@ -9,14 +9,13 @@ namespace :populate do
     args.user_count.to_i.times do
       user = User.new({
         email: Faker::Internet.email,
-        first_name: Faker::Name.first_name,
-        last_name: Faker::Name.last_name,
+        full_name: Faker::Name.first_name + ' ' + Faker::Name.last_name,
         phone_number: Faker::PhoneNumber.cell_phone,
         password: 'supersecret',
         password_confirmation: 'supersecret'
       })
       user.save
-      puts "Creating user #{user.first_name} #{user.last_name}"
+      puts "Creating user #{user.full_name}"
     end
   end
 

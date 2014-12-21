@@ -28,7 +28,7 @@ module API
       end
 
       def creator
-        { id: object.cached_user.id, first_name: object.cached_user.first_name, last_name: object.cached_user.last_name, profile_image: object.cached_user.profile_image }
+        { id: object.cached_user.id, full_name: object.cached_user.full_name, profile_image: object.cached_user.profile_image }
       end
     end
   end

@@ -9,7 +9,6 @@ json.comments_count capsule.comments_count unless capsule.comments_count == 0
 json.likes_count capsule.likes_count unless capsule.likes_count == 0
 json.set! :creator do
   json.id capsule.cached_user.id
-  json.first_name capsule.cached_user.first_name
-  json.last_name capsule.cached_user.last_name
+  json.full_name capsule.cached_user.full_name
   json.profile_image capsule.cached_user.profile_image_path
 end

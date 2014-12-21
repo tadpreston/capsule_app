@@ -88,8 +88,8 @@ module API
         params.required(:user).permit(:email, :username, :full_name, :location, :password, :password_confirmation, :time_zone, :tutorial_progress, :phone_number,
                                       :motto, :background_image, :facebook_username, :twitter_username, :profile_image, :device_token,
                                       oauth: [
-                                        { location: [:id, :name] }, { friends: [:name, :id, :username, :first_name, :last_name] }, :birthday, :quotes, :verified, :work, :education,
-                                        :timezone, :updated_time, :name, :email, :birthdate, :locale, :first_name, :username, :id, :provider, :uid,
+                                        { location: [:id, :name] }, { friends: [:name, :id, :username, :full_name] }, :birthday, :quotes, :verified, :work, :education,
+                                        :timezone, :updated_time, :name, :email, :birthdate, :locale, :full_name, :id, :provider, :uid,
                                         :gender, :last_name, { hometown: [:id, :name] }, :link
                                       ]
                                      )

@@ -7,7 +7,7 @@ module Admin
         @users = User.all.order(:last_name).page(params[:page]).per(13)
       else
         q = "%#{params[:query]}%"
-        @users = User.where('first_name ilike ? OR last_name ilike ? OR email ilike ?', q, q, q).order(:last_name).page(params[:page]).per(13)
+        @users = User.where('full_name ? OR email ilike ?', q, q).order(:email).page(params[:page]).per(13)
       end
     end
 
@@ -52,7 +52,7 @@ module Admin
       end
 
       def user_params
-        params.required(:user).permit(:email, :first_name, :last_name, :password, :password_confirmation)
+        params.required(:user).permit(:email, :full_name, :password, :password_confirmation)
       end
 
   end

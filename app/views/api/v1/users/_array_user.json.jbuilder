@@ -5,8 +5,6 @@ json.motto user.motto || ''
 json.facebook_username user.facebook_username || ''
 json.twitter_username user.twitter_username || ''
 json.full_name user.full_name
-json.first_name user.first_name
-json.last_name user.last_name
 json.phone_number user.phone_number || ''
 json.location user.location
 json.locale user.locale

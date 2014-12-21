@@ -25,8 +25,7 @@ class OauthHash
         uid: @orig_hash["uid"],
         email: @orig_hash["email"],
         username: @orig_hash["username"],
-        first_name: @orig_hash["first_name"],
-        last_name: @orig_hash["last_name"],
+        full_name: "#{@orig_hash["first_name"]} #{@orig_hash["last_name"]}",
         location: location["name"],
         timezone: timezone,
         locale: @orig_hash["locale"],
@@ -36,14 +35,12 @@ class OauthHash
 
     def twitter
       email = @orig_hash["email"].blank? ? '' : @orig_hash["email"]
-      full_name = @orig_hash["name"].split(' ')
       {
         provider: "twitter",
         uid: @orig_hash["uid"],
         email: email,
         username: @orig_hash["screen_name"],
-        first_name: full_name[0],
-        last_name: full_name[1] || '',
+        full_name:@orig_hash["name"],
         location: @orig_hash["location"],
         timezone: @orig_hash["time_zone"],
         locale: @orig_hash["lang"],
@@ -62,8 +59,7 @@ class OauthHash
         uid: @orig_hash["uid"],
         email: email,
         username: email,
-        first_name: name["givenName"],
-        last_name: name["familyName"],
+        full_name: "#{name["givenName"]} #{name["familyName"]}",
         location: '',
         timezone: '',
         locale: @orig_hash["language"],

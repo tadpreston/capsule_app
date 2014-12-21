@@ -293,7 +293,7 @@ class Capsule < ActiveRecord::Base
                (
                  SELECT row_to_json(u)
                  FROM (
-                   SELECT id, first_name, last_name, concat('https://#{ENV['CDN_HOST']}/',profile_image) AS profile_image
+                   SELECT id, full_name, concat('https://#{ENV['CDN_HOST']}/',profile_image) AS profile_image
                    FROM users
                    WHERE id = capsules.user_id
                  ) u

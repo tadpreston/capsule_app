@@ -9,8 +9,7 @@ module Users
     def self.find_or_create_by_phone_number(phone_number, user_attributes = {})
       User.find_or_create_by(phone_number: phone_number) do |user|
         user.email = user_attributes[:email]
-        user.first_name = user_attributes[:first_name]
-        user.last_name = user_attributes[:last_name]
+        user.full_name = user_attributes[:full_name]
         user.provider = user_attributes[:provider] || 'capsule'
         tmp_pwd = SecureRandom.hex
         user.password = tmp_pwd
@@ -46,7 +45,7 @@ module Users
       user_query = query.split
       where_clause = []
       user_query.each do |q|
-        where_clause << '(' + %w[first_name last_name].map { |column| "#{column} ilike '%#{q}%'" }.join(' OR ') + ')'
+        where_clause << '(' + %w[full_name].map { |column| "#{column} ilike '%#{q}%'" }.join(' OR ') + ')'
       end
       User.where(where_clause.join(' AND '))
     end

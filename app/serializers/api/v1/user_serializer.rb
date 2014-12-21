@@ -4,7 +4,7 @@ module API
       cached
       delegate :cache_key, to: :object
 
-      attributes :id, :email, :username, :motto, :facebook_username, :twitter_username, :first_name, :last_name
+      attributes :id, :email, :username, :motto, :facebook_username, :twitter_username, :full_name
       attributes :phone_number, :location, :locale, :timezone, :provider, :uid, :profile_image, :background_image
       attributes :tutorial_progress, :settings, :email_confirmed, :watching_count, :watchers_count, :created_at, :updated_at
 

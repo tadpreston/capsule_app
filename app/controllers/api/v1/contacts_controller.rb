@@ -35,7 +35,7 @@ module API
         end
 
         def contact_params
-          params.required(:contact).permit(:id, :email, :username, :first_name, :last_name, :phone_number, :location, :uid)
+          params.required(:contact).permit(:id, :email, :username, :full_name, :phone_number, :location, :uid)
         end
     end
 

@@ -2,8 +2,7 @@ json.id comment.id
 json.body comment.body
 json.set! :author do
   json.id comment.user_id
-  json.first_name comment.user_first_name
-  json.last_name comment.user_last_name
+  json.full_name comment.user_full_name
   json.profile_image comment.user_profile_image
 end
 json.is_liked comment.liked_by?(current_user)

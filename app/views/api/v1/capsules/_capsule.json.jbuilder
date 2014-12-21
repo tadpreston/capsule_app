@@ -2,8 +2,7 @@ json.id capsule.id
 json.in_reply_to capsule.in_reply_to if capsule.in_reply_to
 json.set! :creator do
   json.id capsule.cached_user.id
-  json.first_name capsule.cached_user.first_name
-  json.last_name capsule.cached_user.last_name
+  json.full_name capsule.cached_user.full_name
   json.profile_image capsule.cached_user.profile_image_path
 end
 json.is_owned is_owned?(capsule.user_id)
@@ -25,8 +24,6 @@ json.recipients capsule.cached_recipients do |recipient|
   json.email recipient.email
   json.username recipient.username
   json.full_name recipient.full_name
-  json.first_name recipient.first_name
-  json.last_name recipient.last_name
   json.phone_number recipient.phone_number
   json.location recipient.location
   json.locale recipient.locale
