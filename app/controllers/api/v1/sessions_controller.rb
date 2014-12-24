@@ -7,6 +7,7 @@ module API
       def create
         auth = Authentication.new(params, request)
         if @user = auth.authenticated?
+          render json: SessionSerializer.new(@user, root: false)
         else
           invalid_login_attempt
         end

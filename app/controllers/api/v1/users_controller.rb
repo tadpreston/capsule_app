@@ -17,6 +17,7 @@ module API
         if @user.save
           @user.reload
           @device = @user.devices.create(remote_ip: request.remote_ip, user_agent: request.user_agent, last_sign_in_at: Time.now)
+          render json: SessionSerializer.new(@user, root: false)
         else
           render :create, status: 422
         end
