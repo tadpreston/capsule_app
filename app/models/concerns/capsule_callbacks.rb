@@ -7,7 +7,7 @@ class CapsuleCallbacks
   end
 
   def self.after_save(capsule)
-    capsule.recipients.clear if capsule.recipients.empty?   # Assumption is that the recipienst array sent in the capsule always represents the full list
+    capsule.recipients.clear if capsule.recipients.empty?   # Assumption is that the recipient array sent in the capsule always represents the full list
 
     unless capsule.recipients_attributes.nil?
       recipients = capsule.recipients_attributes
@@ -16,10 +16,6 @@ class CapsuleCallbacks
         user = Users::Search.find_or_create_recipient(recipient)
         capsule.add_as_recipient user
         capsule.user.add_as_contact user
-
-        if user.phone_number.blank? || !user.can_send_text
-          RecipientWorker.perform_in(5.seconds, user.id, capsule.id)
-        end
       end
     end
   end

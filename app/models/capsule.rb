@@ -176,7 +176,7 @@ class Capsule < ActiveRecord::Base
   end
 
   def thumbnail_path
-    return nil if thumbnail.blank? or !thumbnail.include '/'
+    return nil if thumbnail.blank? or !thumbnail.include? '/'
     "https://#{ENV['CDN_HOST']}/#{self.thumbnail}"
   end
 
