@@ -271,6 +271,10 @@ class User < ActiveRecord::Base
     assets.where(media_type: 'background').take
   end
 
+  def is_recipient?
+    provider == 'recipient'
+  end
+
   protected
 
   def uid_and_provider_are_unique
