@@ -1,8 +1,7 @@
 source 'https://rubygems.org'
-ruby '2.1.1'
+ruby '2.1.5'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-#gem 'rails', '4.1.0'
 gem 'rails', '4.1.1'
 gem 'pg', '~> 0.17.1'
 gem "unicorn", "~> 4.8.2"
@@ -44,9 +43,6 @@ group :development do
   gem 'spring', '~> 1.1.2'
   gem "annotate", "2.6.3"
   gem 'pry'
-  gem 'pry-remote'
-  gem 'pry-stack_explorer'
-  gem 'pry-debugger'
 end
 
 group :development, :test do
@@ -66,11 +62,10 @@ group :test do
 end
 
 # Use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.1.5'
 gem 'bcrypt', '~> 3.1.7'
 
 # Use debugger
-gem 'debugger', group: [:development, :test]
+# gem 'debugger', group: [:development, :test]
 
 group :production do
   gem 'rails_12factor', '0.0.2'
