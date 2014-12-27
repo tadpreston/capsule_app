@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141220204928) do
+ActiveRecord::Schema.define(version: 20141226202146) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -182,6 +182,20 @@ ActiveRecord::Schema.define(version: 20141220204928) do
   add_index "location_watches", ["longitude", "latitude"], name: "index_location_watches_on_longitude_and_latitude", using: :btree
   add_index "location_watches", ["longitude"], name: "index_location_watches_on_longitude", using: :btree
   add_index "location_watches", ["user_id"], name: "index_location_watches_on_user_id", using: :btree
+
+  create_table "notifications", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "capsule_id"
+    t.text     "message"
+    t.integer  "notification_type_id"
+    t.boolean  "notified"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "notifications", ["capsule_id"], name: "index_notifications_on_capsule_id", using: :btree
+  add_index "notifications", ["notification_type_id"], name: "index_notifications_on_notification_type_id", using: :btree
+  add_index "notifications", ["user_id"], name: "index_notifications_on_user_id", using: :btree
 
   create_table "objections", force: true do |t|
     t.integer  "objectionable_id"
