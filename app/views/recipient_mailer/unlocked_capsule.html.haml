@@ -1,0 +1,16 @@
+%h2= "Hi #{@user.full_name},"
+%br
+%br
+%p= "A Yada from #{@capsule.user.full_name} has been unlocked for you."
+%br
+%p
+  Here is the link to download the app to your phone
+  = link_to 'https://itunes.apple.com/us/app/106-park/id418612824?mt=8', 'https://itunes.apple.com/us/app/106-park/id418612824?mt=8'
+  %br
+  Or, you can just look at the Yada
+  = link_to 'yada://?c=823879123', 'yada://?c=823879123'
+
+%br
+%p
+  Thanks from the PinYada team!
+
