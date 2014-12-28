@@ -4,7 +4,6 @@ class Notifications::UnlockNotification
   end
 
   def process
-    binding.pry
     create_notification if @capsule.notifications.empty?
   end
 
