@@ -9,7 +9,7 @@ class Notifications::UnlockNotification
 
   def create_notification
     @capsule.recipients.each do |recipient|
-      send_notification
+      send_notification recipient
     end
   end
 
