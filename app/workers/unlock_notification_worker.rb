@@ -3,6 +3,6 @@ class UnlockNotificationWorker
 
   def perform capsule_id
     capsule = Capsule.unscoped.find capsule_id
-    Notifications::UnlockCapsule.new(capsule).process
+    Notifications::UnlockNotification.new(capsule).process
   end
 end
