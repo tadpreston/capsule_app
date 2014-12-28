@@ -187,14 +187,13 @@ ActiveRecord::Schema.define(version: 20141226202146) do
     t.integer  "user_id"
     t.integer  "capsule_id"
     t.text     "message"
-    t.integer  "notification_type_id"
+    t.text     "notification_type"
     t.boolean  "notified"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "notifications", ["capsule_id"], name: "index_notifications_on_capsule_id", using: :btree
-  add_index "notifications", ["notification_type_id"], name: "index_notifications_on_notification_type_id", using: :btree
   add_index "notifications", ["user_id"], name: "index_notifications_on_user_id", using: :btree
 
   create_table "objections", force: true do |t|

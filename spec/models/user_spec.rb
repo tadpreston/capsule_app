@@ -6,8 +6,6 @@
 #  public_id            :uuid
 #  email                :string(255)
 #  username             :string(255)
-#  first_name           :string(255)
-#  last_name            :string(255)
 #  phone_number         :string(255)
 #  password_digest      :string(255)
 #  location             :string(255)
@@ -38,6 +36,7 @@
 #  watching             :integer          default([]), is an Array
 #  can_send_text        :boolean
 #  device_token         :string(255)
+#  full_name            :string(255)
 #
 
 require 'spec_helper'

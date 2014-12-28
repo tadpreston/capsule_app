@@ -36,6 +36,7 @@
 #  watching             :integer          default([]), is an Array
 #  can_send_text        :boolean
 #  device_token         :string(255)
+#  full_name            :string(255)
 #
 
 class User < ActiveRecord::Base
@@ -64,6 +65,7 @@ class User < ActiveRecord::Base
   has_many :location_watches
   has_many :objections
   has_many :assets, as: :assetable, dependent: :destroy
+  has_many :notifications
 
   def self.generate_token(column)
     token = ''
