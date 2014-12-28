@@ -1,9 +1,10 @@
 class Notifications::UnlockNotification
-  def initialization capsule
+  def initialize capsule
     @capsule = capsule
   end
 
   def process
+    binding.pry
     create_notification if @capsule.notifications.empty?
   end
 
