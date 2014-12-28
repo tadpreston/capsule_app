@@ -17,7 +17,7 @@ class Notifications::UnlockNotification
     notification = Notification.create capsule_id: @capsule.id,
                                        user_id: recipient.id,
                                        message: 'A Yada has been unlocked for you!',
-                                       message_type: message_type(recipient)
+                                       notification_type: message_type(recipient)
     notification.deliver
   end
 
