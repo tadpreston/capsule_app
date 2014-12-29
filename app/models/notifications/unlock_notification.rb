@@ -1,6 +1,7 @@
 class Notifications::UnlockNotification < Notifications::Base
   def process
-    create_notification(message) if @capsule.notifications.empty?
+    @notification_type = Notification::UNLOCKED
+    create_notification(message) if @capsule.notifications.unlocked.empty?
   end
 
   def message

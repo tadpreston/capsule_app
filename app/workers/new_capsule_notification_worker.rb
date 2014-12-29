@@ -3,6 +3,6 @@ class NewCapsuleNotificationWorker
 
   def perform(capsule_id)
     capsule = Capsule.unscoped.find capsule_id
-    Notificcations::NewYadaNotification.new(capsule).process
+    Notifications::NewYadaNotification.new(capsule).process
   end
 end

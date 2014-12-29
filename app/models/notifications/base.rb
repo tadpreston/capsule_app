@@ -1,4 +1,6 @@
 class Notifications::Base
+  attr_accessor :notification_type
+
   def initialize capsule
     @capsule = capsule
   end
@@ -17,7 +19,8 @@ class Notifications::Base
     notification = Notification.create capsule_id: @capsule.id,
                                        user_id: recipient.id,
                                        message: message,
-                                       notification_type: message_type(recipient)
+                                       notification_type: notification_type,
+                                       delivery_type: message_type(recipient)
     notification.deliver
   end
 

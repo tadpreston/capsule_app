@@ -1,5 +1,6 @@
 class Notifications::NewYadaNotification < Notifications::Base
   def process
+    @notification_type = Notification::NEW_YADA
     create_notification message
   end
 
