@@ -1,31 +1,9 @@
-class Notifications::UnlockNotification
-  def initialize capsule
-    @capsule = capsule
-  end
-
+class Notifications::UnlockNotification < Notifications::Base
   def process
-    create_notification if @capsule.notifications.empty?
+    create_notification(message) if @capsule.notifications.empty?
   end
 
-  def create_notification
-    @capsule.recipients.each do |recipient|
-      send_notification recipient
-    end
-  end
-
-  def send_notification recipient
-    notification = Notification.create capsule_id: @capsule.id,
-                                       user_id: recipient.id,
-                                       message: 'A Yada has been unlocked for you!',
-                                       notification_type: message_type(recipient)
-    notification.deliver
-  end
-
-  def message_type recipient
-    if recipient.device_token.blank?
-      Notification::EMAIL
-    else
-      Notification::PUSH
-    end
+  def message
+    'A Yada has been unlocked for you!'
   end
 end
