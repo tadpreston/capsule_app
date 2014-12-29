@@ -25,7 +25,7 @@ class Asset < ActiveRecord::Base
   validates :resource, presence: true
 
   def resource_path
-    "#{ENV['S3_BUCKET']}/#{resource}"
+    resource
   end
 
   def resource_path= path

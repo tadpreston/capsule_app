@@ -16,7 +16,7 @@ class S3Resource
   end
 
   def source_bucket
-    @source_bucket ||= @s3.buckets[ENV['S3_BUCKET_UPLOAD']]
+    @source_bucket ||= @s3.buckets[ENV['S3_BUCKET']]
   end
 
   def dest_bucket
