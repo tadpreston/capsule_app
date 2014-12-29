@@ -25,9 +25,7 @@ class Asset < ActiveRecord::Base
   validates :resource, presence: true
 
   def resource_path
-    return resource if resource.include? 'http'
-    return hosted_resource_path if complete
-    AssetPaths::WAITING_PATH
+    "#{ENV['S3_BUCKET']}/#{resource}"
   end
 
   def resource_path= path

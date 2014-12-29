@@ -26,6 +26,6 @@ class CapsuleCallbacks
   end
 
   def self.after_create(capsule)
-    CapsuleWorker.perform_in(5.seconds, capsule.id)
+    CapsuleWorker.perform_in(1.second, capsule.id)
   end
 end
