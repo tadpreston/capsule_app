@@ -7,6 +7,7 @@
 #  capsule_id        :integer
 #  message           :text
 #  notification_type :text
+#  delivery_type     :text
 #  notified          :boolean
 #  created_at        :datetime
 #  updated_at        :datetime

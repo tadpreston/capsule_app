@@ -4,7 +4,8 @@ class CreateNotifications < ActiveRecord::Migration
       t.references :user, index: true
       t.references :capsule, index: true
       t.text :message
-      t.text :notification_type, index: true
+      t.text :notification_type
+      t.text :delivery_type
       t.boolean :notified
 
       t.timestamps

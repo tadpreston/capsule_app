@@ -188,6 +188,7 @@ ActiveRecord::Schema.define(version: 20141226202146) do
     t.integer  "capsule_id"
     t.text     "message"
     t.text     "notification_type"
+    t.text     "delivery_type"
     t.boolean  "notified"
     t.datetime "created_at"
     t.datetime "updated_at"
