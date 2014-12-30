@@ -5,7 +5,7 @@ class AssetCallbacks
       s3_resource.move_to_destination
       asset.update resource: s3_resource.storage_path
     else
-      AssetWorker.perform_in 5.seconds, asset_id
+      AssetWorker.perform_in 5.seconds, asset.id
     end
   end
 end
