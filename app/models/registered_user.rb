@@ -1,5 +1,5 @@
 class RegisteredUser
-  ATTRIBUTES = [:id, :name, :phone_number, :email]
+  ATTRIBUTES = [:id, :name, :phone_number, :email, :profile_image]
   attr_accessor *ATTRIBUTES
 
   def initialize params
@@ -7,6 +7,7 @@ class RegisteredUser
     @name = params[:name]
     @phone_number = params[:phone_number]
     @email = params[:email]
+    @profile_image = params[:profile_image]
   end
 
   def self.find params
@@ -25,7 +26,8 @@ class RegisteredUser
       new id: user.id,
           name: user.full_name,
           phone_number: user.phone_number,
-          email: user.email
+          email: user.email,
+          profile_image: user.profile_image
     end
   end
 end
