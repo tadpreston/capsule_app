@@ -178,7 +178,7 @@ class Capsule < ActiveRecord::Base
 
   def thumbnail_path
     return nil if thumbnail.blank? or !thumbnail.include? '/'
-    "https://#{ENV['CDN_HOST']}/#{self.thumbnail}"
+    thumbnail
   end
 
   def recipients_attributes=(recipients)
@@ -289,12 +289,12 @@ class Capsule < ActiveRecord::Base
     sql = <<-SQL
       SELECT row_to_json(c) AS capsule_json
       FROM (
-        SELECT id, user_id, comment, string_to_array(hash_tags, ' ') as hash_tags, location, relative_location, concat('https://#{ENV['CDN_HOST']}/',thumbnail) AS thumbnail,
+        SELECT id, user_id, comment, string_to_array(hash_tags, ' ') as hash_tags, location, relative_location, thumbnail,
                lock_answer, incognito AS is_incognito, COALESCE(is_portable, 'false') AS is_portable, comments_count, coalesce(array_length(likes,1),0) AS likes_count, created_at, updated_at,
                (
                  SELECT row_to_json(u)
                  FROM (
-                   SELECT id, full_name, concat('https://#{ENV['CDN_HOST']}/',profile_image) AS profile_image
+                   SELECT id, full_name, profile_image
                    FROM users
                    WHERE id = capsules.user_id
                  ) u

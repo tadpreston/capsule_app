@@ -51,15 +51,5 @@ describe Asset do
         expect(asset.resource_path).to eq(AssetPaths::WAITING_PATH)
       end
     end
-
-    describe 'with processing complete' do
-      let(:asset) { create_asset(resource: 'filename.png') }
-
-      it 'returns the source image with the CDN' do
-        expect(asset.resource_path).to include('filename.png')
-        expect(asset.resource_path).to include('https')
-        expect(asset.resource_path).to eq("#{AssetPaths::CDN_HOST}/filename.png")
-      end
-    end
   end
 end
