@@ -1,10 +1,12 @@
 class RegisteredUser
-  ATTRIBUTES = [:name, :phone_number]
+  ATTRIBUTES = [:id, :name, :phone_number, :email]
   attr_accessor *ATTRIBUTES
 
-  def initialize name: name, phone_number: phone_number
-    @name = name
-    @phone_number = phone_number
+  def initialize params
+    @id = params[:id]
+    @name = params[:name]
+    @phone_number = params[:phone_number]
+    @email = params[:email]
   end
 
   def self.find params
@@ -20,8 +22,10 @@ class RegisteredUser
 
   def self.initialize_all_from_db users
     users.map do |user|
-      new name: user.full_name,
-          phone_number: user.phone_number
+      new id: user.id,
+          name: user.full_name,
+          phone_number: user.phone_number,
+          email: user.email
     end
   end
 end
