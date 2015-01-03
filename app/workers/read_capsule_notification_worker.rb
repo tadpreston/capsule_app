@@ -6,7 +6,11 @@ class ReadCapsuleNotificationWorker
     author = capsule.user
     user = User.unscoped.find user_id
 
-    push_notification = PushNotification.new author.device_token
-    push_notification.push "Your Pin has been read by #{user.full_name}"
+    if author.device_token.blank?
+      YadaMailer.yada_read(capsule_id, user_id).deliver
+    else
+      push_notification = PushNotification.new author.device_token
+      push_notification.push "Your Yada has been read by #{user.full_name}"
+    end
   end
 end
