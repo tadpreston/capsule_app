@@ -85,11 +85,11 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { :host => ENV["URL_HOST"] }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    address: ENV['SMTP_ADDRESS'],
+    address: 'smtp.sendgrid.net',
     port: 25,
-    domain: 'capsulapp.net',
-    user_name: ENV["SENDGRID_USERNAME"],
-    password: ENV["SENDGRID_PASSWORD"]
+    domain: 'pinyadaapp.com',
+    user_name: 'app22916433@heroku.com',
+    password: 'm5bcitdv'
   }
 
 end

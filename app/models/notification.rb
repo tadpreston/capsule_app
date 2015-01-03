@@ -31,16 +31,20 @@ class Notification < ActiveRecord::Base
   end
 
   def deliver
-    send_push_notification if notification_type == PUSH
-    send_email_notification if notification_type == EMAIL
+    deliver_push_notification if delivery_type == PUSH
+    send "deliver_#{notification_type}_email_notification" if delivery_type == EMAIL
   end
 
-  def send_push_notification
+  def deliver_push_notification
     push_notification = PushNotification.new(user_device_token)
     push_notification.push message
   end
 
-  def send_email_notification
+  def deliver_new_yada_email_notification
+    RecipientMailer.new_capsule(user_id, capsule_id, message).deliver
+  end
+
+  def deliver_unlocked_email_notification
     RecipientMailer.unlocked_capsule(user_id, capsule_id).deliver
   end
 end
