@@ -17,8 +17,6 @@
 #
 
 class Asset < ActiveRecord::Base
-  after_create AssetCallbacks
-
   belongs_to :assetable, polymorphic: true, touch: true
 
   validates :media_type, presence: true
@@ -30,11 +28,5 @@ class Asset < ActiveRecord::Base
 
   def resource_path= path
     self.resource = path
-  end
-
-  private
-
-  def hosted_resource_path
-    "#{AssetPaths::CDN_HOST}/#{resource}"
   end
 end
