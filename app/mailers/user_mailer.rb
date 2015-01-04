@@ -1,5 +1,5 @@
 class UserMailer < ActionMailer::Base
-  default from: "confirm@capsuleapp.net"
+  default from: "hello@pinyadaapp.com"
 
   def email_confirmation(user)
     @user = user

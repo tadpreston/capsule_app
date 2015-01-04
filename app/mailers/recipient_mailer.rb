@@ -1,5 +1,5 @@
 class RecipientMailer < ActionMailer::Base
-  default from: "yada@pinyada.com"
+  default from: "hello@pinyadaapp.com"
 
   def capsule_notification(user_id, capsule_id)
     get_user_and_capsule user_id, capsule_id

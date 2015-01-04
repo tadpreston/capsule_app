@@ -1,5 +1,5 @@
 class YadaMailer < ActionMailer::Base
-  default from: "yada@pinyada.com"
+  default from: "hello@pinyadaapp.com"
 
   def yada_read capsule_id, user_id
     @capsule = Capsule.unscoped.find capsule_id
