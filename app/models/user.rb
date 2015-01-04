@@ -150,7 +150,7 @@ class User < ActiveRecord::Base
 
   def email_confirmed!
     update_attribute(:confirmed_at, Time.now)
-    update_columns(email: self.unconfirmed_email, unconfirmed_email: nil)
+    update_columns(email: self.unconfirmed_email, unconfirmed_email: nil) if unconfirmed_email
   end
 
   def confirmed?
