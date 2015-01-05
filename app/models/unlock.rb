@@ -10,6 +10,6 @@
 #
 
 class Unlock < ActiveRecord::Base
-  belongs_to :capsule
-  belongs_to :user
+  belongs_to :capsule, touch: true
+  belongs_to :user, touch: true
 end
