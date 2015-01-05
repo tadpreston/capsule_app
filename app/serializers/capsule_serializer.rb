@@ -5,7 +5,7 @@ class CapsuleSerializer < ActiveModel::Serializer
 
   attributes :id, :comment, :creator, :recipients, :location, :relative_location, :payload_type, :status, :promotional_state
   attributes :thumbnail_path, :assets, :start_date, :lock_question, :lock_answer
-  attributes :likes_count, :comments_count, :is_read, :created_at, :updated_at
+  attributes :likes_count, :comments_count, :is_read, :is_unlocked, :created_at, :updated_at
 
   def assets
     object.assets.map do |asset|
@@ -25,5 +25,9 @@ class CapsuleSerializer < ActiveModel::Serializer
 
   def is_read
     object.read_by? current_user
+  end
+
+  def is_unlocked
+    object.is_unlocked? current_user
   end
 end
