@@ -267,7 +267,6 @@ class Capsule < ActiveRecord::Base
   def read(user)
     update_attributes(readers: readers + [user.id]) unless read_by?(user)
     user.touch
-    ReadCapsuleNotificationWorker.perform_async(id, user.id)
   end
 
   def unread(user)
