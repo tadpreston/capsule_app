@@ -24,6 +24,6 @@ class CapsuleSerializer < ActiveModel::Serializer
   end
 
   def is_read
-    object.read_by?(current_user)
+    object.read_by? current_user
   end
 end
