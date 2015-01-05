@@ -63,6 +63,7 @@ Rails.application.routes.draw do
           delete :unwatch
           post   :like
           delete :unlike
+          post   :unlock
         end
         resources :comments, only: [:index, :create, :destroy] do
           member do
