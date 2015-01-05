@@ -66,6 +66,7 @@ class User < ActiveRecord::Base
   has_many :objections
   has_many :assets, as: :assetable, dependent: :destroy
   has_many :notifications
+  has_many :unlocks
 
   def self.generate_token(column)
     token = ''

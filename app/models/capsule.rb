@@ -66,6 +66,7 @@ class Capsule < ActiveRecord::Base
   belongs_to :replied_to, -> { where 'TRIM(status) IS NULL' }, class_name: "Capsule", foreign_key: "in_reply_to", touch: true
   has_many :objections, as: :objectionable, dependent: :destroy
   has_many :notifications
+  has_many :unlocks
 
   delegate :full_name, to: :user, prefix: true
 
