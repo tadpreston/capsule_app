@@ -100,32 +100,32 @@ module API
 
       def read
         @capsule.read current_user
-        render :show
+        render json: @capsule
       end
 
       def unread
         @capsule.unread current_user
-        render :show
+        render json: @capsule
       end
 
       def watch
         @capsule.watch current_user
-        render :show
+        render json: @capsule
       end
 
       def unwatch
         @capsule.unwatch current_user
-        render :show
+        render json: @capsule
       end
 
       def like
         @capsule.like current_user
-        render :show
+        render json: @capsule
       end
 
       def unlike
         @capsule.unlike current_user
-        render :show
+        render json: @capsule
       end
 
       def loadtest
