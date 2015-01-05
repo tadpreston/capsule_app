@@ -275,6 +275,14 @@ class Capsule < ActiveRecord::Base
     user.touch
   end
 
+  def unlock user_id
+    unlocks.create user_id: user_id
+  end
+
+  def is_unlocked? user_id
+    unlocks.exists? user_id: user_id
+  end
+
   private
 
   def self.truncate_decimals(value, places = 1)
