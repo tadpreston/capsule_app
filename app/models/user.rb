@@ -41,11 +41,6 @@
 
 class ValidationError < StandardError; end
 class User < ActiveRecord::Base
-  before_save UserCallbacks
-  after_save UserCallbacks
-  before_validation UserCallbacks, unless: Proc.new { |user| user.persisted? }
-  after_create UserCallbacks
-
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   validates :email, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }, :if => "oauth.nil?" && Proc.new { |user| !user.email.blank? && user.email_changed? }
   validate :uid_and_provider_are_unique, if: "oauth"
@@ -88,6 +83,7 @@ class User < ActiveRecord::Base
     user = where('email = ? OR phone_number = ?', params[:email], params[:phone_number]).first
     user = new unless user
     user.update params
+    user.send_confirmation_email unless user.is_recipient?
     user
   end
 
@@ -99,6 +95,7 @@ class User < ActiveRecord::Base
     self.password = params.fetch :password
     self.password_confirmation = params.fetch :password_confirmation
     self.provider = 'capsule'
+    self.device_token = params.fetch :device_token
     save
   end
 
