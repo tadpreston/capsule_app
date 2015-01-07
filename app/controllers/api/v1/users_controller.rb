@@ -13,14 +13,11 @@ module API
       end
 
       def create
-        @user = User.new(user_params.merge(provider: 'capsule'))
-        if @user.save
-          @user.reload
-          @device = @user.devices.create(remote_ip: request.remote_ip, user_agent: request.user_agent, last_sign_in_at: Time.now)
-          render json: SessionSerializer.new(@user, root: false)
-        else
-          render :create, status: 422
-        end
+        @user = User.find_or_create user_params
+        @device = @user.devices.create(remote_ip: request.remote_ip, user_agent: request.user_agent, last_sign_in_at: Time.now)
+        render json: SessionSerializer.new(@user, root: false)
+      rescue ValidationError
+        render :create, status: 422
       end
 
       def update

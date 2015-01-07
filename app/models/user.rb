@@ -39,11 +39,12 @@
 #  full_name            :string(255)
 #
 
+class ValidationError < StandardError; end
 class User < ActiveRecord::Base
   before_save UserCallbacks
   after_save UserCallbacks
   before_validation UserCallbacks, unless: Proc.new { |user| user.persisted? }
-  after_create UserCallbacks, unless: Proc.new { |user| user.provider == 'contact' }
+  after_create UserCallbacks
 
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   validates :email, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }, :if => "oauth.nil?" && Proc.new { |user| !user.email.blank? && user.email_changed? }
@@ -81,6 +82,24 @@ class User < ActiveRecord::Base
   def self.find_all_by_phone_or_email query
     params = query.split ','
     where('phone_number IN (?) OR email IN (?)', params, params)
+  end
+
+  def self.find_or_create params
+    user = where('email = ? OR phone_number = ?', params[:email], params[:phone_number]).first
+    user = new unless user
+    user.update params
+    user
+  end
+
+  def update params
+    raise ValidationError if params.fetch(:phone_number).blank? and params.fetch(:email).blank?
+    self.phone_number = params.fetch :phone_number
+    self.email = params.fetch :email
+    self.full_name = params.fetch :full_name
+    self.password = params.fetch :password
+    self.password_confirmation = params.fetch :password_confirmation
+    self.provider = 'capsule'
+    save
   end
 
   def authenticate(password = nil)

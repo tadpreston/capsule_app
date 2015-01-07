@@ -5,17 +5,16 @@ class UserCallbacks
     user.email.downcase! if user.email_changed?
   end
 
-  def self.after_save(user)
-    process_image(user, :profile) if user.profile_image_changed?
-    process_image(user, :background) if user.background_image_changed?
-  end
-
   def self.before_validation(user)
     create_oauth(user) if user.oauth
   end
 
   def self.after_create(user)
     user.send_confirmation_email unless user.is_recipient?
+  end
+
+  def self.after_save user
+    user.send_confirmation_email if user.provider_changed?
   end
 
   private
