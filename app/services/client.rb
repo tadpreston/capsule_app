@@ -26,7 +26,8 @@ class Client
       device_tokens: [@device_token],
       aps: {
         alert: message,
-        badge: badge
+        badge: badge,
+        sound: 'yada.wav'
       }
     }.merge opt_args
   end
