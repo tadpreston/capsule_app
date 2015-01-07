@@ -27,7 +27,7 @@ class Client
       aps: {
         alert: message,
         badge: badge,
-        sound: 'yada.wav'
+        sound: 'yada'
       }
     }.merge opt_args
   end
