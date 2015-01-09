@@ -83,7 +83,7 @@ class User < ActiveRecord::Base
     user = where('email = ? OR phone_number = ?', params[:email], params[:phone_number]).first
     user = new unless user
     user.update params
-    user.send_confirmation_email unless user.is_recipient?
+#   user.send_confirmation_email unless user.is_recipient?
     user
   end
 
