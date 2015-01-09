@@ -47,6 +47,10 @@ class Notification < ActiveRecord::Base
     RecipientMailer.unlocked_capsule(user_id, capsule_id).deliver if emailable?
   end
 
+  def deliver_new_comment_email_notification
+    CommentMailer.new_comment(user_id, capsule_id, message).deliver if emailable?
+  end
+
   private
 
   def emailable?
