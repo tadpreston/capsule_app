@@ -10,12 +10,12 @@ class CapsuleCommentNotificationWorker
   end
 
   def notify_author capsule, commenter
-    Notification::CommentNotification.new(capsule).process "#{commenter.full_name} commented on your Yada"
+    Notifications::CommentNotification.new(capsule).process "#{commenter.full_name} commented on your Yada"
   end
 
   def notify_recipients capsule, commenter
     capsule.recipients.each do |recipient|
-      Notification::CommentNotification.new(capsule).process message(commenter, capsule) unless recipient.id == commenter.id
+      Notifications::CommentNotification.new(capsule).process message(commenter, capsule) unless recipient.id == commenter.id
     end
   end
 
