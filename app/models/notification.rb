@@ -36,15 +36,24 @@ class Notification < ActiveRecord::Base
   end
 
   def deliver_push_notification
-    push_notification = PushNotification.new(user_device_token)
-    push_notification.push message
+    PushNotification.new(user_device_token).push(message) if pushable?
   end
 
   def deliver_new_yada_email_notification
-    RecipientMailer.new_capsule(user_id, capsule_id, message).deliver
+    RecipientMailer.new_capsule(user_id, capsule_id, message).deliver if emailable?
   end
 
   def deliver_unlocked_email_notification
-    RecipientMailer.unlocked_capsule(user_id, capsule_id).deliver
+    RecipientMailer.unlocked_capsule(user_id, capsule_id).deliver if emailable?
+  end
+
+  private
+
+  def emailable?
+    !user.email.blank?
+  end
+
+  def pushable?
+    !user.device_token.blank?
   end
 end
