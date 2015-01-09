@@ -19,6 +19,8 @@ class Comment < ActiveRecord::Base
 
   is_likeable :likes_store
 
+  after_create CommentCallbacks
+
   belongs_to :user, counter_cache: true, touch: true
   belongs_to :commentable, polymorphic: true, counter_cache: true, touch: true
   has_many :replies, as: :commentable, class_name: 'Comment'   # Allows replies to the current comment
