@@ -21,6 +21,7 @@ class Notification < ActiveRecord::Base
   belongs_to :capsule
 
   delegate :device_token, to: :user, prefix: true
+  delegate :mode, to: :user, prefix: true
 
   def self.new_yada
     where notification_type: NEW_YADA
@@ -39,7 +40,7 @@ class Notification < ActiveRecord::Base
   end
 
   def deliver_push_notification
-    PushNotification.new(user_device_token).push(message) if pushable?
+    PushNotification.new(user_device_token, user_mode).push(message) if pushable?
   end
 
   def deliver_new_yada_email_notification
