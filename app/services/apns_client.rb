@@ -14,7 +14,7 @@ class ApnsClient
 
   def initialize_client
     APNS.pem = @file
-    APNS.host = 'gateway.push.apple.com'
+    APNS.host = ENV[APNS_HOST]
     APNS.port = 2195
   end
 
