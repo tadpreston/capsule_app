@@ -1,17 +1,18 @@
 class ApnsClient
   def initialize device_token
+    raise ArgumentError, 'Device token cannot be blank' if device_token.blank?
     @file = ApnsCert.new.file
     @device_token = device_token
-    setup_gateway
+    initialize_client
   end
 
-  def send message, badge=1
+  def push message, badge=1
     APNS.send_notification @device_token, alert: message, badge: badge, sound: 'yada.wav'
   end
 
   private
 
-  def setup_gateway
+  def initialize_client
     APNS.pem = @file
     APNS.host = 'gateway.push.apple.com'
     APNS.port = 2195
