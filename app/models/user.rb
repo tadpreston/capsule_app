@@ -76,7 +76,7 @@ class User < ActiveRecord::Base
 
   def self.find_all_registered_by_phone_or_email query
     params = query.split ','
-    where('phone_number IN (?) OR email IN (?) AND provider = (?)', params, params, 'capsule')
+    where('phone_number IN (?) OR email IN (?)', params, params).where(provider: 'capsule')
   end
 
   def self.find_or_create params
