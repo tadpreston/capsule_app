@@ -74,9 +74,9 @@ class User < ActiveRecord::Base
     token
   end
 
-  def self.find_all_by_phone_or_email query
+  def self.find_all_registered_by_phone_or_email query
     params = query.split ','
-    where('phone_number IN (?) OR email IN (?)', params, params)
+    where('phone_number IN (?) OR email IN (?) AND provider = (?)', params, params, 'capsule')
   end
 
   def self.find_or_create params

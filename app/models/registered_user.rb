@@ -11,7 +11,7 @@ class RegisteredUser
   end
 
   def self.find params
-    users = User.find_all_by_phone_or_email params
+    users = User.find_all_registered_by_phone_or_email params
     initialize_all_from_db users
   end
 
