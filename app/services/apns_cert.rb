@@ -1,11 +1,16 @@
 class ApnsCert
-  def initialize
+  def initialize mode
     @s3 = AWS::S3.new(
       access_key_id: ENV['AWS_ACCESS_KEY'],
       secret_access_key: ENV['AWS_SECRET_KEY']
     )
-    @pem_filename = ENV['APNS_PEM_FILE_NAME']
-    @local_filename = "#{ENV['APNS_PEM_FILE_NAME']}"
+    if mode == 'test'
+      @pem_filename = ENV['APNS_PEM_FILE_NAME_DEV']
+      @local_filename = "#{ENV['APNS_PEM_FILE_NAME_DEV']}"
+    else
+      @pem_filename = ENV['APNS_PEM_FILE_NAME']
+      @local_filename = "#{ENV['APNS_PEM_FILE_NAME']}"
+    end
   end
 
   def file
