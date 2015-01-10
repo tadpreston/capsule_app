@@ -31,8 +31,11 @@ class Notification < ActiveRecord::Base
   end
 
   def deliver
-    deliver_push_notification if delivery_type == PUSH
-    send "deliver_#{notification_type}_email_notification" if delivery_type == EMAIL
+    if delivery_type == PUSH
+      deliver_push_notification
+    else
+      send "deliver_#{notification_type}_email_notification"
+    end
   end
 
   def deliver_push_notification

@@ -43,13 +43,5 @@ describe Asset do
         expect(asset.resource_path).to eq('http://www.someurl.com/image')
       end
     end
-
-    context 'processing is not complete' do
-      let(:asset) { create_asset(resource: 'filename.png', complete: false) }
-
-      it 'returns waiting image' do
-        expect(asset.resource_path).to eq(AssetPaths::WAITING_PATH)
-      end
-    end
   end
 end

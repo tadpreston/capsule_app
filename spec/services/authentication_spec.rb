@@ -52,23 +52,5 @@ describe Authentication do
         Authentication.new({email: 'spectest@email.com', password: 'supersecret'}, request).authenticated?
       }.to_not change(Device, :count).by(1)
     end
-
-    describe 'with omniauth' do
-      it 'creates a new user record if one does not exist' do
-        expect {
-          Authentication.new({ oauth: oauth_attributes }, request).authenticated?
-        }.to change(User, :count).by(1)
-      end
-      it 'authenticates the user' do
-        expect(Authentication.new({ oauth: oauth_attributes }, request)).to be_authenticated
-      end
-      it 'authenticates the user if the user exists' do
-        FactoryGirl.create(:user, oauth: oauth_attributes)
-        expect {
-          Authentication.new({ oauth: oauth_attributes }, request).authenticated?
-        }.to_not change(User, :count).by(1)
-        expect(Authentication.new({ oauth: oauth_attributes }, request)).to be_authenticated
-      end
-    end
   end
 end

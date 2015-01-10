@@ -88,14 +88,14 @@ describe API::V1::SessionsController do
         }
       end
 
-      describe "user exists" do
-        before { @user = FactoryGirl.create(:user, oauth: oauth_attributes) }
-
-        it 'returns http success' do
-          post :create, { oauth: oauth_attributes }
-          expect(response).to be_success
-          expect(response.status).to eq(200)
-        end
+#      describe "user exists" do
+#        before { @user = FactoryGirl.create(:user, oauth: oauth_attributes) }
+#
+#        it 'returns http success' do
+#          post :create, { oauth: oauth_attributes }
+#          expect(response).to be_success
+#          expect(response.status).to eq(200)
+#        end
 
 # TODO: Move these tests to the authentication spec
 #        it 'creates a new device record since one does not exist' do
@@ -109,23 +109,23 @@ describe API::V1::SessionsController do
 #          post :create, { oauth: oauth_attributes }
 #          expect(assigns(:device).auth_token).to_not eq(device.auth_token)
 #        end
-      end
+#     end
 
-      describe "user does not exist" do
-        before do
-          @oauth_attrs = oauth_attributes
-          @oauth_attrs[:uid] = '4567890'
-        end
-
-        it 'creates user' do
-          expect { post :create, { oauth: @oauth_attrs } }.to change(User, :count).by(1)
-        end
+#      describe "user does not exist" do
+#        before do
+#          @oauth_attrs = oauth_attributes
+#          @oauth_attrs[:uid] = '4567890'
+#        end
+#
+#        it 'creates user' do
+#          expect { post :create, { oauth: @oauth_attrs } }.to change(User, :count).by(1)
+#        end
 
 #        it 'sends a confirmation email' do
 #          User.any_instance.should_receive(:send_confirmation_email)
 #          post :create, { oauth: @oauth_attrs }
 #        end
-      end
+#     end
     end
   end
 

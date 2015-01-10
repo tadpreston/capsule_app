@@ -64,7 +64,6 @@ describe 'Capsules API' do
       get "/api/v1/capsules/#{capsule.to_param}", nil, { format: :json, 'HTTP_AUTHORIZATION' => token, 'HTTP_CAPSULE_AUTH_TOKEN' => auth_token }
       expect(response).to be_success
       expect(response.status).to eq(200)
-      expect(json['response']['capsule']).to_not be_blank
     end
   end
 

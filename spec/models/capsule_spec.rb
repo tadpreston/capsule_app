@@ -66,23 +66,23 @@ describe Capsule do
 
     describe 'with recipients' do
       it 'returns a valid capsule with a phone_number' do
-        @capsule.recipients_attributes = [ { phone_number: '9728675309', first_name: 'Bob', last_name: 'Smith' } ]
+        @capsule.recipients_attributes = [ { phone_number: '9728675309', full_name: 'Bob Smith' } ]
         expect(@capsule).to be_valid
       end
 
       it 'returns a valid capsule with a valid email' do
-        @capsule.recipients_attributes = [ { email: 'test@email.com', first_name: 'Bob', last_name: 'Smith' } ]
+        @capsule.recipients_attributes = [ { email: 'test@email.com', full_name: 'Bob Smith' } ]
         expect(@capsule).to be_valid
       end
 
       it 'is not valid without an email and a phone number' do
-        @capsule.recipients_attributes = [ { first_name: 'Bob', last_name: 'Smith' } ]
+        @capsule.recipients_attributes = [ { full_name: 'Bob Smith' } ]
         expect(@capsule).to_not be_valid
         expect(@capsule.errors.messages[:recipients_attributes]).to eq(['Recipient key is missing'])
       end
 
       it 'is not valid with an invalid formatted email' do
-        @capsule.recipients_attributes = [ { email: 'invalidemail', first_name: 'Bob', last_name: 'Smith' } ]
+        @capsule.recipients_attributes = [ { email: 'invalidemail', full_name: 'Bob Smith' } ]
         expect(@capsule).to_not be_valid
         expect(@capsule.errors.messages[:recipients_attributes]).to eq(['Recipient email address is invalid'])
       end
@@ -90,34 +90,34 @@ describe Capsule do
 
     describe 'with multiple recipients' do
       it 'returns a valid capsule with phone_numbers' do
-        @capsule.recipients_attributes = [ { phone_number: '9728675309', first_name: 'Bob', last_name: 'Smith' }, { phone_number: '9728675309', first_name: 'Bob', last_name: 'Smith' } ]
+        @capsule.recipients_attributes = [ { phone_number: '9728675309', full_name: 'Bob Smith' }, { phone_number: '9728675309', full_name: 'Bob Smith' } ]
         expect(@capsule).to be_valid
       end
 
       it 'returns a valid capsule with valid emails' do
-        @capsule.recipients_attributes = [ { email: 'test@email.com', first_name: 'Bob', last_name: 'Smith' }, { email: 'test@email.com', first_name: 'Bob', last_name: 'Smith' } ]
+        @capsule.recipients_attributes = [ { email: 'test@email.com', full_name: 'Bob Smith' }, { email: 'test@email.com', full_name: 'Bob Smith' } ]
         expect(@capsule).to be_valid
       end
 
       it 'returns a valid capsule with valid emails and phone number' do
-        @capsule.recipients_attributes = [ { email: 'test@email.com', first_name: 'Bob', last_name: 'Smith' }, { phone_number: '8178675309', first_name: 'Bob', last_name: 'Smith' } ]
+        @capsule.recipients_attributes = [ { email: 'test@email.com', full_name: 'Bob Smith' }, { phone_number: '8178675309', full_name: 'Bob Smith' } ]
         expect(@capsule).to be_valid
       end
 
       it 'is not valid without an email and a phone number' do
-        @capsule.recipients_attributes = [ { email: 'test@email.com', first_name: 'Bob', last_name: 'Smith' }, { first_name: 'Bob', last_name: 'Smith' } ]
+        @capsule.recipients_attributes = [ { email: 'test@email.com', full_name: 'Bob Smith' }, { full_name: 'Bob Smith' } ]
         expect(@capsule).to_not be_valid
         expect(@capsule.errors.messages[:recipients_attributes]).to eq(['Recipient key is missing'])
-        @capsule.recipients_attributes = [ { first_name: 'Bob', last_name: 'Smith' }, { phone_number: '8178675309', first_name: 'Bob', last_name: 'Smith' } ]
+        @capsule.recipients_attributes = [ { full_name: 'Bob Smith' }, { phone_number: '8178675309', full_name: 'Bob Smith' } ]
         expect(@capsule).to_not be_valid
         expect(@capsule.errors.messages[:recipients_attributes]).to eq(['Recipient key is missing'])
       end
 
       it 'is not valid with an invalid formatted email' do
-        @capsule.recipients_attributes = [ { email: 'test@email.com', first_name: 'Bob', last_name: 'Smith' }, { email: 'invalidemail', first_name: 'Bob', last_name: 'Smith' } ]
+        @capsule.recipients_attributes = [ { email: 'test@email.com', full_name: 'Bob Smith' }, { email: 'invalidemail', full_name: 'Bob Smith' } ]
         expect(@capsule).to_not be_valid
         expect(@capsule.errors.messages[:recipients_attributes]).to eq(['Recipient email address is invalid'])
-        @capsule.recipients_attributes = [ { phone_number: '9992340987', first_name: 'Bob', last_name: 'Smith' }, { email: 'invalidemail', first_name: 'Bob', last_name: 'Smith' } ]
+        @capsule.recipients_attributes = [ { phone_number: '9992340987', full_name: 'Bob Smith' }, { email: 'invalidemail', full_name: 'Bob Smith' } ]
         expect(@capsule).to_not be_valid
         expect(@capsule.errors.messages[:recipients_attributes]).to eq(['Recipient email address is invalid'])
       end
@@ -161,7 +161,7 @@ describe Capsule do
       @capsule.save
       expect(@capsule.creator).to_not be_blank
       expect(@capsule.creator["id"]).to eq(@capsule.user_id.to_s)
-      expect(@capsule.creator["first_name"]).to eq(@capsule.user.first_name)
+      expect(@capsule.creator["full_name"]).to eq(@capsule.user.full_name)
     end
   end
 
@@ -430,21 +430,21 @@ describe Capsule do
     end
 
     it 'creates a user record for a new recipient' do
-      @capsule.recipients_attributes = [{phone_number: '2145787422', email: 'bobdylan@gmail.com', first_name: 'Bob', last_name: 'Dylan'}]
+      @capsule.recipients_attributes = [{phone_number: '2145787422', email: 'bobdylan@gmail.com', full_name: 'Bob Dylan'}]
       expect {
         @capsule.save
       }.to change(User, :count).by(1)
     end
 
     it 'does not create a record for an existing recipient' do
-      @capsule.recipients_attributes = [{phone_number: @user1.phone_number, email: @user1.email, first_name: @user1.first_name, last_name: @user1.last_name}]
+      @capsule.recipients_attributes = [{phone_number: @user1.phone_number, email: @user1.email, full_name: @user1.full_name}]
       expect {
         @capsule.save
       }.to_not change(User, :count).by(1)
     end
 
     it 'adds the contact to the capsule creator' do
-      recipient = {phone_number: '2145787422', email: 'bobdylan@gmail.com', first_name: 'Bob', last_name: 'Dylan'}
+      recipient = {phone_number: '2145787422', email: 'bobdylan@gmail.com', full_name: 'Bob Dylan'}
       @capsule.recipients_attributes = [recipient]
       expect {
         @capsule.save
@@ -452,7 +452,7 @@ describe Capsule do
     end
 
     it 'does not add the contact to the capsule creator because it already exists' do
-      recipient = {phone_number: @user1.phone_number, email: @user1.email, first_name: @user1.first_name, last_name: @user1.last_name}
+      recipient = {phone_number: @user1.phone_number, email: @user1.email, full_name: @user1.full_name}
       @capsule.user.contacts << @user1
       @capsule.recipients_attributes = [recipient]
       expect {

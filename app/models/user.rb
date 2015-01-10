@@ -100,13 +100,7 @@ class User < ActiveRecord::Base
   end
 
   def authenticate(password = nil)
-    if password
-      super(password)
-    elsif oauth
-      self
-    else
-      false
-    end
+    super(password)
   end
 
   def current_device

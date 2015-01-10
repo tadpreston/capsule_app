@@ -2,54 +2,6 @@ require 'spec_helper'
 
 describe Users::Search do
 
-  describe "#find_or_create_by_oauth(oauth)" do
-
-    let(:oauth_attributes) do
-      {
-        location: {
-          id: '113407485335936',
-          name: 'Frisco, Texas'
-        },
-        timezone: -5,
-        updated_time: '2014-03-02T16:01:04+0000',
-        name: 'Joe Bloggs',
-        email: 'joe@bloggs.com',
-        birthday: '06\/14\/1978',
-        locale: 'en_US',
-        first_name: 'Joe',
-        username: 'jbloggs',
-        id: '1234567',
-        provider: 'facebook',
-        uid: '1234567',
-        gender: 'male',
-        last_name: 'Bloggs',
-        hometown: {
-          id: '987654321',
-          name: 'Frisco, Texas'
-        },
-        link: 'https:\/\/www.facebook.com\/steelyb'
-      }
-    end
-
-    it 'finds an existing user' do
-      user = FactoryGirl.create(:user, oauth: oauth_attributes)
-      expect(Users::Search.find_or_create_by_oauth(oauth_attributes)).to eq(user)
-    end
-
-    it 'creates a new user' do
-      expect {
-        Users::Search.find_or_create_by_oauth(oauth_attributes)
-      }.to change(User, :count).by(1)
-    end
-
-    it 'returns the new user' do
-      user = Users::Search.find_or_create_by_oauth(oauth_attributes)
-      expect(user).to_not be_nil
-      expect(user.provider).to eq(oauth_attributes[:provider])
-      expect(user.uid).to eq(oauth_attributes[:uid])
-    end
-  end
-
   describe "#find_or_create_by_phone_number(phone_number, user_attributes)" do
     it "finds an existing user" do
       FactoryGirl.create(:user, phone_number: '2145551212')
@@ -60,12 +12,12 @@ describe Users::Search do
 
     it "creates a user if not found" do
       expect {
-        Users::Search.find_or_create_by_phone_number('2145551212', {email: 'bobdylan@gmail.com', first_name: 'Bob', last_name: 'Dylan'})
+        Users::Search.find_or_create_by_phone_number('2145551212', {email: 'bobdylan@gmail.com', full_name: 'Bob Dylan'})
       }.to change(User, :count).by(1)
     end
 
     it "persists a user object" do
-      user = Users::Search.find_or_create_by_phone_number('2145551212', {email: 'bobdylan@gmail.com', first_name: 'Bob', last_name: 'Dylan'})
+      user = Users::Search.find_or_create_by_phone_number('2145551212', {email: 'bobdylan@gmail.com', full_name: 'Bob Dylan'})
       expect(user).to be_persisted
       expect(user).to be_a(User)
     end
@@ -97,10 +49,9 @@ describe Users::Search do
       end
 
       it "creates a user with various values" do
-        contact = Users::Search.find_or_create_recipient({phone_number: '9725551212', email: 'testing@email.com', first_name: 'tester', last_name: 'person'})
+        contact = Users::Search.find_or_create_recipient({phone_number: '9725551212', email: 'testing@email.com', full_name: 'tester person'})
         expect(contact.email).to eq('testing@email.com')
-        expect(contact.first_name).to eq('tester')
-        expect(contact.last_name).to eq('person')
+        expect(contact.full_name).to eq('tester person')
         expect(contact.phone_number).to eq('9725551212')
       end
     end
@@ -133,9 +84,9 @@ describe Users::Search do
   end
 
   describe "#search_by_name(query)" do
-    let!(:user_william) { FactoryGirl.create(:user, first_name: 'William', last_name: 'Johnson') }
-    let!(:user_john) { FactoryGirl.create(:user, first_name: 'John', last_name: 'Wilson') }
-    let!(:user_mary) { FactoryGirl.create(:user, first_name: 'Mary', last_name: 'Jones') }
+    let!(:user_william) { FactoryGirl.create(:user, full_name: 'William Johnson') }
+    let!(:user_john) { FactoryGirl.create(:user, full_name: 'John Wilson') }
+    let!(:user_mary) { FactoryGirl.create(:user, full_name: 'Mary Jones') }
 
     context 'with one param' do
       it 'returns the matches' do
