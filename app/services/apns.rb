@@ -1,4 +1,4 @@
-class APNSClient
+class Apns
 
 	fname = 'tmp.pem'
 	#fkey = "pinyada_apns_development.pem"
@@ -15,11 +15,11 @@ class APNSClient
 	file = File.new(fname)
 
 	# use the newly created file as the PEM file for the APNS gem
-	APNS.pem = file 
-	APNS.host = 'gateway.push.apple.com' 
+	APNS.pem = file
+	APNS.host = 'gateway.push.apple.com'
 	# gateway.sandbox.push.apple.com is default
 
-	APNS.port = 2195 
+	APNS.port = 2195
 		# Me
 		device_token = '7f6520e59526469a847666ded75ab9b7b742a92251c70c6b1d832fb2647cbe46'
 		# Dalton
