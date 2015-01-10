@@ -107,8 +107,7 @@ describe User do
 
   subject { @user }
 
-  it { should respond_to(:first_name) }
-  it { should respond_to(:last_name) }
+  it { should respond_to(:full_name) }
   it { should respond_to(:email) }
   it { should respond_to(:password_digest) }
   it { should respond_to(:password) }
@@ -161,16 +160,6 @@ describe User do
     it { should_not be_valid }
   end
 
-  describe "email address with mixed case" do
-    let(:mixed_case_email) { "Foo@ExAMPle.CoM" }
-
-    it "should be saved as all lower-case" do
-      @user.email = mixed_case_email
-      @user.save
-      expect(@user.reload.email).to eq mixed_case_email.downcase
-    end
-  end
-
   describe "with oauth" do
     describe "email should not be validated" do
       before do
@@ -212,7 +201,7 @@ describe User do
 
   describe "when password is not present" do
     before do
-      @user = User.new(first_name: "Example", last_name: "User", email: "user@example.com", password: "", password_confirmation: "")
+      @user = User.new(full_name: "Example User", email: "user@example.com", password: "", password_confirmation: "")
     end
     it { should_not be_valid }
   end
@@ -249,31 +238,12 @@ describe User do
     end
   end
 
-  describe '#find_all_by_phone_number' do
-    let(:user1) { FactoryGirl.create(:user, phone_number: '1234567890') }
-    let(:user2) { FactoryGirl.create(:user, phone_number: '5018675309') }
-    let(:user3) { FactoryGirl.create(:user, phone_number: '2148675309') }
-
-    subject { User.find_all_by_phone('5018675309,1234567890') }
-
-    it 'returns the correct users' do
-      expect(subject).to match_array([user1,user2])
-    end
-
-    it 'does not return users not asked for' do
-      expect(subject).to_not include(user3)
-    end
-  end
-
   describe ".authenticate(password)" do
-    before do
-      @user.oauth = oauth_attributes
-      @user.save
-    end
-    let(:found_user) { User.find_by(provider: 'facebook', uid: '1234567') }
+    let(:password) { 'supersecret' }
+    let(:user) { FactoryGirl.create(:user, email: 'test@testing.com', password: password, password_confirmation: password) }
 
-    describe 'return value of authenticate method' do
-      it { should eq found_user.authenticate }
+    it 'returns the current user' do
+      expect(user.authenticate(password)).to eq(user)
     end
   end
 
@@ -283,13 +253,6 @@ describe User do
 
     it 'returns the current_device for the user' do
       expect(user.current_device).to eq(device)
-    end
-  end
-
-  describe ".full_name" do
-    it "returns the first and last name as one string" do
-      user = FactoryGirl.create(:user, first_name: 'Russell', last_name: 'Wilson')
-      expect(user.full_name).to eq('Russell Wilson')
     end
   end
 

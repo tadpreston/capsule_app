@@ -52,7 +52,7 @@ describe API::V1::ContactsController do
 
     it "creates a new user and adds as a contact" do
       expect {
-        post :create, { user_id: user.to_param, contact: { phone_number: '2145551212', email: 'test@test.com', first_name: 'Test', last_name: 'Person' } }
+        post :create, { user_id: user.to_param, contact: { phone_number: '2145551212', email: 'test@test.com', full_name: 'Test Person' } }
       }.to change(User, :count).by(1)
       expect(user.is_a_contact?(assigns(:contact))).to be_true
       expect(assigns(:contact).provider).to eq('contact')
