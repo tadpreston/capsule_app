@@ -5,7 +5,7 @@ class ApnsCert
       secret_access_key: ENV['AWS_SECRET_KEY']
     )
     @pem_filename = ENV['APNS_PEM_FILE_NAME']
-    @local_filename = "tmp/#{ENV['APNS_PEM_FILE_NAME']}"
+    @local_filename = "#{ENV['APNS_PEM_FILE_NAME']}"
   end
 
   def file
