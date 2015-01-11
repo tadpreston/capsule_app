@@ -80,8 +80,6 @@ class Capsule < ActiveRecord::Base
 
   # Capsule scopes
 
-  default_scope -> { where(tenant_id: Tenant.current_id) }
-
   scope :by_updated_at, -> { order(updated_at: :desc) }
   scope :hidden, -> { where(incognito: true) }
   scope :not_hidden, -> { where(incognito: false) }

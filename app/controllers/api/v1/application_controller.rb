@@ -2,7 +2,6 @@ class API::V1::ApplicationController < ActionController::Base
   skip_before_action :verify_authenticity_token
   before_action :verify_api_token
   before_action :authorize_auth_token
-  around_action :scope_current_tenant
 
   serialization_scope :view_context
 
@@ -13,8 +12,7 @@ class API::V1::ApplicationController < ActionController::Base
     end
 
     def authorize_api_token
-#     authenticate_with_http_token { |token, options| CapsuleApp::Application.config.api_secret_key_base == token }
-      current_tenant
+      authenticate_with_http_token { |token, options| CapsuleApp::Application.config.api_secret_key_base == token }
     end
 
     def render_api_unauthorized
