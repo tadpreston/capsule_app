@@ -1,4 +1,4 @@
-class Apns
+class TmpApnsClient
 
 	fname = 'tmp.pem'
 	#fkey = "pinyada_apns_development.pem"
