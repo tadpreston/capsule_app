@@ -39,18 +39,7 @@ class API::V1::ApplicationController < ActionController::Base
     end
     helper_method :current_tenant
 
-    def current_tenant_key
-      @current_tenant_key ||= TenantKey.find_by(token: request_token)
-    end
-
     def request_token
       request.headers['Authorization'][/(?:.+")(.+)(?:")/,1] if request.headers['Authorization']
-    end
-
-    def scope_current_tenant
-      Tenant.current_id = current_tenant.id
-      yield
-    ensure
-      Tenant.current_id = nil
     end
 end
