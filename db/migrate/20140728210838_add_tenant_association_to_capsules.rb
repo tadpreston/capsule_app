@@ -5,7 +5,7 @@ class AddTenantAssociationToCapsules < ActiveRecord::Migration
 
     unless ENV['RAILS_ENV'] == 'test'
       tenant = Tenant.find_or_create_by(name: 'Capsule')
-      Capsule.update_all tenant_id: tenant.id
+      Capsule.unscoped.update_all tenant_id: tenant.id
     end
   end
 

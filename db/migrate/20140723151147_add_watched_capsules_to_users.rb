@@ -2,7 +2,7 @@ class AddWatchedCapsulesToUsers < ActiveRecord::Migration
   def up
     add_column :users, :watching, :integer, array: true, default: []
 
-    Capsule.all.each do |capsule|
+    Capsule.unscoped.all.each do |capsule|
       unless capsule.watchers.empty?
         users = User.find(capsule.watchers)
         users.each do |user|
