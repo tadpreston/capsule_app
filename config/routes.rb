@@ -34,6 +34,7 @@ Rails.application.routes.draw do
           patch :recipient
           delete :unfollow
           delete :remove_follower
+          patch :password
         end
         collection do
           post :follow
