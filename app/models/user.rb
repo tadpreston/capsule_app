@@ -40,6 +40,7 @@
 #
 
 class ValidationError < StandardError; end
+class PasswordChangeError < StandardError; end
 class User < ActiveRecord::Base
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   validates :email, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }, :if => "oauth.nil?" && Proc.new { |user| !user.email.blank? && user.email_changed? }
@@ -105,6 +106,12 @@ class User < ActiveRecord::Base
 
   def current_device
     @current_device ||= devices.order(last_sign_in_at: :desc).limit(1).take
+  end
+
+  def change_password params
+    raise PasswordChangeError, 'Invalid Password' unless authenticate params[:old_password]
+    raise PasswordChangeError, 'New Password does not match' unless params[:password] == params[:password_confirmation]
+    update_attributes password: params[:password], password_confirmation: params[:password_confirmation]
   end
 
   # Following and unfollowing

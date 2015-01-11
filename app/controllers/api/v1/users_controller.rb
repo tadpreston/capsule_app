@@ -2,8 +2,8 @@ module API
   module V1
 
     class UsersController < API::V1::ApplicationController
-      before_action :set_user, only: [:show, :update, :following, :followers]
-      skip_before_action :authorize_auth_token, only: [:index, :show, :create, :following, :followers, :recipient, :registered]
+      before_action :set_user, only: [:show, :update, :following, :followers, :password]
+      skip_before_action :authorize_auth_token, only: [:index, :show, :create, :following, :followers, :recipient, :registered, :password]
 
       def index
         @users = User.all.order(:last_name)
@@ -72,6 +72,14 @@ module API
         render json: @registered_users, each_serializer: RegisteredUserSerializer
       end
 
+      def password
+        @user.change_password user_params
+      rescue User::PasswordChangeError => e
+        render json: password_not_changed(e.message, @user.id), status: 403
+      else
+        render json: SessionSerializer.new(@user, root: false)
+      end
+
       private
 
       def set_user
@@ -84,7 +92,7 @@ module API
 
       def user_params
         params.required(:user).permit(:email, :username, :full_name, :location, :password, :password_confirmation, :time_zone, :tutorial_progress, :phone_number,
-                                      :motto, :background_image, :facebook_username, :twitter_username, :profile_image, :device_token,
+                                      :motto, :background_image, :facebook_username, :twitter_username, :profile_image, :device_token, :old_password,
                                       oauth: [
                                         { location: [:id, :name] }, { friends: [:name, :id, :username, :full_name] }, :birthday, :quotes, :verified, :work, :education,
                                         :timezone, :updated_time, :name, :email, :birthdate, :locale, :full_name, :id, :provider, :uid,
@@ -92,6 +100,18 @@ module API
                                       ]
                                      )
 
+      end
+
+      def password_not_changed message, id
+        {
+          errors: [{
+            status: '403',
+            code: '403',
+            title: 'Password Not Changed',
+            detail: message,
+            links: id
+          }]
+        }
       end
     end
   end
