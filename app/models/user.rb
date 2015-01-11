@@ -43,9 +43,9 @@ class ValidationError < StandardError; end
 class User < ActiveRecord::Base
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   validates :email, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }, :if => "oauth.nil?" && Proc.new { |user| !user.email.blank? && user.email_changed? }
-  validate :uid_and_provider_are_unique, if: "oauth"
   has_secure_password
   validates :password, confirmation: true, length: { minimum: 6 }, unless: Proc.new { |u| u.password.blank? && u.password_confirmation.blank? }
+  validates :phone_number, uniqueness: true
 
   has_many :devices, dependent: :destroy
   has_many :capsules, -> { where 'TRIM(status) IS NULL' }, dependent: :destroy
