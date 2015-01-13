@@ -1,9 +1,31 @@
 class Notifications::CommentNotification < Notifications::Base
-  def process msg
+  def initialize capsule_id, commenter_id
+    @commenter_id = commenter_id
+    @capsule = Capsule.unscoped.find capsule_id
+    @commenter = User.find commenter_id
+  end
+
+  def process
     @notification_type = Notification::NEW_COMMENT
-    create_notification msg
+    notify_author unless @capsule.user_id == @commenter_id
+    notify_recipients
+  end
+
+  def notify_author
+    send_notification @capsule.user, "#{@commenter.full_name} commented on your Yada"
+  end
+
+  def notify_recipients
+    @capsule.recipients.each do |recipient|
+      send_notification recipient, message unless recipient.id == @commenter_id
+    end
   end
 
   def message
+    if @commenter_id == @capsule.user_id
+      "#{@commenter.full_name} commented on their own Yada"
+    else
+      "#{@commenter.full_name} commented on #{@capsule.user_full_name}'s Yada"
+    end
   end
 end
