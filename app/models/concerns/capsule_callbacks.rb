@@ -27,5 +27,6 @@ class CapsuleCallbacks
 
   def self.after_create(capsule)
     CapsuleWorker.perform_in(1.second, capsule.id)
+    UnlockNotificationWorker.perform_at(capsule.start_date, capsule.id) if capsule.start_date
   end
 end
