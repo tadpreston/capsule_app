@@ -11,6 +11,9 @@ Rails.application.routes.draw do
   resources :users
   post 'process_response', to: 'process_responses#create', as: :process_response
 
+# Map - Added 1/23/2015
+  get '/locations/map'
+
 # Admin Routes
   namespace :admin do
     resources :sessions, only: [:new, :create, :destroy]
