@@ -58,6 +58,11 @@ module API
         render json: @capsules, each_serializer: CapsuleSerializer
       end
 
+      def feed
+        @capsules = current_user.received_capsules.includes(:user) + current_user.cached_capsules
+        render json: @capsules, each_serializer: CapsuleSerializer
+      end
+
       def suggested
         @capsules  = Capsule.find_in_rec({ lat: 33.2342834, long: -97.5861393 }, { lat: 1.4511453, long: 1.7329357 }).includes(:user).limit(5)
         render json: @capsules, each_serializer: CapsuleSerializer

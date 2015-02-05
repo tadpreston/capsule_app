@@ -58,6 +58,7 @@ Rails.application.routes.draw do
           get :loadtest
           get :hidden
           get :relative
+          get :feed
         end
         member do
           get    :replies
