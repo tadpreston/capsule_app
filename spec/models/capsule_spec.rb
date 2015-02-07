@@ -4,7 +4,7 @@
 #
 #  id                :integer          not null, primary key
 #  user_id           :integer
-#  comment           :string(255)
+#  comment           :text
 #  hash_tags         :string(255)
 #  location          :hstore
 #  status            :string(255)
@@ -27,9 +27,9 @@
 #  start_date        :datetime
 #  watchers          :integer          default([]), is an Array
 #  readers           :integer          default([]), is an Array
+#  tenant_id         :integer
 #  creator           :hstore
 #  likes             :integer          default([]), is an Array
-#  tenant_id         :integer
 #
 
 require 'spec_helper'
