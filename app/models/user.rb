@@ -37,6 +37,7 @@
 #  can_send_text        :boolean
 #  device_token         :string(255)
 #  full_name            :string(255)
+#  mode                 :string(255)
 #
 
 class ValidationError < StandardError; end
