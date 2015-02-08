@@ -14,7 +14,7 @@ class CapsuleSerializer < ActiveModel::Serializer
   end
 
   def creator
-    CreatorSerializer.new object.user, root: false
+    CreatorSerializer.new object.user, root: false if object.user
   end
 
   def recipients
