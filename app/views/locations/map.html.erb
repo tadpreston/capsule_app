@@ -34,7 +34,7 @@ function initialize() {
 			position: thisLatLng,
 			map: map,
 			title:location.name,
-			icon: '/assets/yada_map_pin.png'
+			icon: '<%= asset_url "yada_map_pin.png" %>'
 		});
 		var infowindow = new google.maps.InfoWindow({
 			content: location.name
