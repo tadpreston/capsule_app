@@ -13,9 +13,12 @@ gem 'oj', '~> 2.9.3'
 gem 'oj_mimic_json', '~> 1.0.0'
 gem 'transloadit', '~> 1.1.1'
 gem 'aws-sdk', '~> 1.42.0'
+gem 'aws-s3'
 gem 'kaminari', '~> 0.16.1'
 gem 'fastimage', '~> 1.6.3'
 gem 'active_model_serializers', '~> 0.8.1'
+gem 'apns'
+gem 'vincenty', '~> 1.0.6'
 
 gem 'sass-rails', '~> 4.0.3'
 gem 'uglifier', '~> 2.5.0'
@@ -36,11 +39,6 @@ gem 'jbuilder', '~> 2.0.6'
 gem 'sdoc', '~> 0.4.0',          group: :doc
 
 gem 'faker', '~> 1.3.0'
-
-gem 'urbanairship', '~> 2.4.1'
-
-gem 'apns'
-gem 'aws-s3'
 
 group :development do
   gem 'spring', '~> 1.1.2'

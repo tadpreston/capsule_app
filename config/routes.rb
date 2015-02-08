@@ -53,12 +53,12 @@ Rails.application.routes.draw do
           get :locationtags
           get :watched
           get :forme
-          get :suggested
           get :library
           get :loadtest
           get :hidden
           get :relative
           get :feed
+          get :location
         end
         member do
           get    :replies
