@@ -38,11 +38,6 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 
 gem 'faker', '~> 1.3.0'
 
-gem 'urbanairship', '~> 2.4.1'
-
-gem 'apns'
-gem 'aws-s3'
-
 group :development do
   gem 'spring', '~> 1.1.2'
   gem "annotate", "2.6.3"
