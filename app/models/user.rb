@@ -89,6 +89,11 @@ class User < ActiveRecord::Base
     user
   end
 
+  def feed
+    feed_capsules = capsules + received_capsules.includes(:user)
+    feed_capsules.sort { |capsule1,capsule2| capsule1.updated_at <=> capsule2.updated_at }
+  end
+
   def update params
     raise ValidationError if params.fetch(:phone_number).blank? and params.fetch(:email).blank?
     self.phone_number = params.fetch :phone_number

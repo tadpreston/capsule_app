@@ -59,7 +59,7 @@ module API
       end
 
       def feed
-        @capsules = current_user.received_capsules.includes(:user) + current_user.cached_capsules
+        @capsules = current_user.feed
         render json: @capsules, each_serializer: CapsuleSerializer
       end
 
