@@ -91,7 +91,7 @@ class User < ActiveRecord::Base
 
   def feed
     feed_capsules = capsules + received_capsules.includes(:user)
-    feed_capsules.sort { |capsule1,capsule2| capsule1.updated_at <=> capsule2.updated_at }
+    feed_capsules.sort { |capsule1,capsule2| capsule2.updated_at <=> capsule1.updated_at }
   end
 
   def update params
