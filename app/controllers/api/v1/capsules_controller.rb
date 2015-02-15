@@ -4,6 +4,7 @@ module API
     class CapsulesController < API::V1::ApplicationController
       before_action :set_capsule, only: [:show, :update, :destroy, :portable, :remove_portable, :read, :unread, :watch, :unwatch, :like, :unlike, :unlock]
       before_action :set_origin_span, only: [:explorer, :hidden, :locationtags]
+      before_action :set_pagination, only: [:index, :forme, :feed, :location]
       skip_before_action :authorize_auth_token, only: [:index, :explorer, :locationtags, :library, :read, :unread, :loadtest, :hidden, :show, :relative]
 
       def index
@@ -167,6 +168,11 @@ module API
                                          comments_attributes: [:user_id, :body],
                                          assets_attributes: [:media_type, :resource_path, :metadata],
                                          recipients_attributes: [:phone_number, :email, :full_name, :profile_image, :can_send_text])
+      end
+
+      def set_pagination
+        @offset = params.fetch(:offset, 0)
+        @limit = params.fetch(:limit, 500)
       end
     end
   end
