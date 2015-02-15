@@ -89,9 +89,11 @@ class User < ActiveRecord::Base
     user
   end
 
-  def feed
+  def feed params = {}
+    offset = params.fetch(:offset, 0).to_i
+    limit = params.fetch(:limit, 0).to_i
     feed_capsules = capsules + received_capsules.includes(:user)
-    feed_capsules.sort { |capsule1,capsule2| capsule2.updated_at <=> capsule1.updated_at }
+    feed_capsules.sort { |capsule1,capsule2| capsule2.updated_at <=> capsule1.updated_at }[offset..(offset+limit-1)]
   end
 
   def update params

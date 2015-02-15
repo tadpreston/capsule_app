@@ -6,11 +6,11 @@ class Location
     @user = user
   end
 
-  def find
-    Rails.cache.fetch "location_find_#{user.cache_key}_#{point.latitude.to_s}_#{point.longitude.to_s}", expire: 15.minutes do
-      sorted_capsules = capsules.map { |yada| YadaPoint.new(yada, point) }.sort { |yada_point1,yada_point2| yada_point1.distance <=> yada_point2.distance }
-      sorted_capsules.map(&:yada)
-    end
+  def find params = {}
+    offset = params.fetch(:offset, 0).to_i
+    limit = params.fetch(:limit, 0).to_i
+    sorted_capsules = capsules.map { |yada| YadaPoint.new(yada, point) }.sort { |yada_point1,yada_point2| yada_point1.distance <=> yada_point2.distance }
+    sorted_capsules.map(&:yada)[offset..(offset+limit-1)]
   end
 
   private
