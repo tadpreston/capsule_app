@@ -40,7 +40,7 @@ class Notification < ActiveRecord::Base
   end
 
   def deliver_push_notification
-    PushNotification.new(user_device_token, user_mode, { yada_id: capsule.id }).push(message) if pushable?
+    PushNotification.new(user_device_token, user_mode, { yada_id: capsule.id, yada_type: notification_type }).push(message) if pushable?
   end
 
   def deliver_new_yada_email_notification
