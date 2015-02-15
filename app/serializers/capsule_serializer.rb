@@ -1,7 +1,7 @@
 class CapsuleSerializer < ActiveModel::Serializer
-  cached
-  delegate :cache_key, to: :object
-  delegate :current_user, to: :scope
+#  cached
+#  delegate :cache_key, to: :object
+#  delegate :current_user, to: :scope
 
   attributes :id, :comment, :creator, :recipients, :location, :relative_location, :payload_type, :status, :promotional_state
   attributes :thumbnail_path, :assets, :start_date, :lock_question, :lock_answer
