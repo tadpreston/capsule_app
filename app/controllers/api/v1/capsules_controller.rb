@@ -11,9 +11,6 @@ module API
         render json: @capsules, each_serializer: CapsuleSerializer
       end
 
-      def watched
-        user = params[:user_id] ? User.find(params[:user_id]) : current_user
-        @capsules = user.watched_capsules
         render json: @capsules, each_serializer: CapsuleSerializer
       end
 
@@ -43,6 +40,24 @@ module API
         render json: { status: 'Deleted' }
       end
 
+      def read
+        @capsule.read current_user
+        render json: @capsule
+      end
+
+      def unread
+        @capsule.unread current_user
+        render json: @capsule
+      end
+
+      ###############################
+
+      def watched
+        user = params[:user_id] ? User.find(params[:user_id]) : current_user
+        @capsules = user.watched_capsules
+        render json: @capsules, each_serializer: CapsuleSerializer
+      end
+
       def explorer
         hashtag = params[:hashtag].blank? ? '' : params[:hashtag]
         @capsule_boxes = Explorer.new(@origin, @span, hashtag).find_capsules
@@ -51,21 +66,6 @@ module API
       def locationtags
         @capsules = Capsule.find_location_hash_tags(@origin, @span, params[:hashtags].gsub(/[|]/,' '))
         @capsule_count = @capsules.count(:all)
-      end
-
-      def forme
-        @capsules = current_user.received_capsules.includes(:user)
-        render json: @capsules, each_serializer: CapsuleSerializer
-      end
-
-      def feed
-        @capsules = current_user.feed
-        render json: @capsules, each_serializer: CapsuleSerializer
-      end
-
-      def location
-        @capsules = Location.new(params[:latitude], params[:longitude], current_user).find
-        render json: @capsules, each_serializer: CapsuleSerializer
       end
 
       def library
@@ -100,16 +100,6 @@ module API
       def replied_to
         capsule = Capsule.find params[:id]
         @capsule = capsule.replied_to
-        render json: @capsule
-      end
-
-      def read
-        @capsule.read current_user
-        render json: @capsule
-      end
-
-      def unread
-        @capsule.unread current_user
         render json: @capsule
       end
 
