@@ -50,16 +50,16 @@ class User < ActiveRecord::Base
   validates :phone_number, uniqueness: true
 
   has_many :devices, dependent: :destroy
-  has_many :capsules, -> { where 'TRIM(status) IS NULL' }, dependent: :destroy
+  has_many :capsules, dependent: :destroy
   has_many :favorites, dependent: :destroy
-  has_many :favorite_capsules, -> { where 'TRIM(status) IS NULL' }, through: :favorites, source: :capsule
-  has_many :comments, -> { where 'TRIM(status) IS NULL' }, dependent: :destroy
+  has_many :favorite_capsules, through: :favorites, source: :capsule
+  has_many :comments, dependent: :destroy
   has_many :recipient_users, dependent: :destroy
-  has_many :received_capsules, -> { where 'TRIM(status) IS NULL' }, through: :recipient_users, source: :capsule
+  has_many :received_capsules, through: :recipient_users, source: :capsule
   has_many :contact_users
   has_many :contacts, through: :contact_users
   has_many :reads, class_name: 'CapsuleRead'
-  has_many :read_capsules, -> { where 'TRIM(status) IS NULL' }, through: :reads, source: :capsule
+  has_many :read_capsules, through: :reads, source: :capsule
   has_many :location_watches
   has_many :objections
   has_many :assets, as: :assetable, dependent: :destroy

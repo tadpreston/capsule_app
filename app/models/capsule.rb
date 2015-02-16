@@ -58,7 +58,7 @@ class Capsule < ActiveRecord::Base
   belongs_to :tenant
   has_many :favorites
   has_many :favorite_users, through: :favorites, source: :user
-  has_many :comments, -> { where('TRIM(status) IS NULL').order(created_at: :asc) }, as: :commentable, dependent: :destroy
+  has_many :comments, -> { order(created_at: :asc) }, as: :commentable, dependent: :destroy
   has_many :assets, as: :assetable, dependent: :destroy
   has_many :recipient_users, dependent: :destroy
   has_many :recipients, through: :recipient_users, source: :user
