@@ -9,6 +9,6 @@ class Feed < CapsuleFeedBase
   private
 
   def capsule_scope
-    Capsule.feed user_id
+    Capsule.feed(user_id).by_updated_at
   end
 end

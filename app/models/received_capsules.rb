@@ -9,6 +9,6 @@ class ReceivedCapsules < CapsuleFeedBase
   private
 
   def capsule_scope
-    user.received_capsules.includes(:user)
+    Capsule.for_user(user.id).by_updated_at
   end
 end

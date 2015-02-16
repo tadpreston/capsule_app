@@ -9,6 +9,6 @@ class CapsuleIndex < CapsuleFeedBase
   private
 
   def capsule_scope
-    Capsule.capsules_for_user user_id
+    Capsule.for_user(user_id).by_updated_at
   end
 end

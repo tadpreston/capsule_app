@@ -97,7 +97,7 @@ class Capsule < ActiveRecord::Base
   end
 
   def self.feed user_id
-    union_scope(by_user(user_id), for_user(user_id)).order(updated_at: :desc)
+    union_scope(by_user(user_id), for_user(user_id))
   end
 
   def self.relative_location(tutorial_level = 0, user_id = nil)
