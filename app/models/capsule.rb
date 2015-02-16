@@ -283,16 +283,16 @@ class Capsule < ActiveRecord::Base
 
   private
 
-  def self.truncate_decimals(value, places = 1)
+  private_class_method def self.truncate_decimals(value, places = 1)
     precision = 10**places
     (value * precision).to_i / precision.to_f
   end
 
-  def self.promoted_tags
+  private_class_method def self.promoted_tags
     [ '#hometown', '#dallas', '#fishboy' ]
   end
 
-  def self.json_capsule_sql(user_id)
+  private_class_method def self.json_capsule_sql(user_id)
     sql = <<-SQL
       SELECT row_to_json(c) AS capsule_json
       FROM (
