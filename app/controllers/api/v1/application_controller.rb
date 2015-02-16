@@ -31,6 +31,7 @@ class API::V1::ApplicationController < ActionController::Base
   end
 
   def authorize_auth_token
+    render json: { status: 'Authorization Token Missing' }, status: 400 unless request.headers['HTTP_CAPSULE_AUTH_TOKEN']
     render json: { status: 'Not authenticated' }, status: 403 unless current_device
   end
 
