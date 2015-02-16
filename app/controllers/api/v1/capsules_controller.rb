@@ -8,23 +8,23 @@ module API
       skip_before_action :authorize_auth_token, only: [:index, :explorer, :locationtags, :library, :read, :unread, :loadtest, :hidden, :show, :relative]
 
       def index
-        @capsules = Capsule.capsules_for_user(params[:user_id]).offset(@offset).limit(@limit)
-        render json: @capsules, each_serializer: CapsuleSerializer
+        @capsule_index = CapsuleIndex.new current_user.id, @offset, @limit
+        render json: @capsule_index, serializer: CapsuleFeedSerializer, root: false
       end
 
       def forme
-        @capsules = current_user.received_capsules.includes(:user).offset(@offset).limit(@limit)
-        render json: @capsules, each_serializer: CapsuleSerializer
+        @received_capsules = ReceivedCapsules.new current_user, @offset, @limit
+        render json: @received_capsules, serializer: CapsuleFeedSerializer, root: false
       end
 
       def feed
-        @capsules = current_user.feed(offset: @offset, limit: @limit)
-        render json: @capsules, each_serializer: CapsuleSerializer
+        @feed = Feed.new current_user.id, @offset, @limit
+        render json: @feed, serializer: CapsuleFeedSerializer, root: false
       end
 
       def location
-        @capsules = Location.new(params[:latitude], params[:longitude], current_user).find(offset: @offset, limit: @limit)
-        render json: @capsules, each_serializer: CapsuleSerializer
+        @location = Location.new params[:latitude], params[:longitude], current_user.id, @offset, @limit
+        render json: @location, serializer: CapsuleFeedSerializer, root: false
       end
 
       def show
