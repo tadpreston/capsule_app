@@ -88,6 +88,18 @@ class Capsule < ActiveRecord::Base
   scope :without_objections, -> { where('TRIM(status) IS NULL') }
   scope :location, -> { where("location IS NOT NULL") }
 
+  def self.by_user user_id
+    where user_id: user_id
+  end
+
+  def self.for_user user_id
+    joins('LEFT OUTER JOIN recipient_users r ON r.capsule_id = capsules.id').where('r.user_id = ?', user_id)
+  end
+
+  def self.feed user_id
+    union_scope(by_user(user_id), for_user(user_id)).order(updated_at: :desc)
+  end
+
   def self.relative_location(tutorial_level = 0, user_id = nil)
     where(longitude: nil, latitude: nil).where("(relative_location -> 'tutorial_level')::int = #{tutorial_level}").public_with_user(user_id)
   end
@@ -282,6 +294,12 @@ class Capsule < ActiveRecord::Base
   end
 
   private
+
+  private_class_method def self.union_scope *scopes
+    id_column = "#{table_name}.id"
+    sub_query = scopes.map { |s| s.select(id_column).to_sql }.join(" UNION ")
+    where "#{id_column} IN (#{sub_query})"
+  end
 
   private_class_method def self.truncate_decimals(value, places = 1)
     precision = 10**places
