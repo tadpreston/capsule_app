@@ -27,13 +27,13 @@ module API
       end
 
       def show
-        render json: @capsule
+        render json: @capsule, serializer: CapsuleSerializer
       end
 
       def create
         @capsule = current_user.capsules.build(capsule_params)
         if @capsule.save
-          render json: @capsule
+          render json: @capsule, serializer: CapsuleSerializer
         else
           render_capsule_errors
         end
@@ -41,7 +41,7 @@ module API
 
       def update
         if @capsule.update_attributes(capsule_params)
-          render json: @capsule
+          render json: @capsule, serializer: CapsuleSerializer
         else
           render_capsule_errors
         end
@@ -54,7 +54,7 @@ module API
 
       def read
         @capsule.read current_user
-        render json: @capsule
+        render json: @capsule, serializer: CapsuleSerializer
       end
 
       private
