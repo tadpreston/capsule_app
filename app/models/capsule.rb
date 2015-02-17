@@ -45,15 +45,15 @@ class Capsule < ActiveRecord::Base
   end
 
   def self.feed user_id
-    union_scope(by_user(user_id), for_user(user_id))
+    union_scope by_user(user_id), for_user(user_id)
   end
 
-  def recipients_attributes=(recipients)
+  def recipients_attributes=recipients
     @recipients_attributes = recipients
   end
 
-  def add_as_recipient(recipient)
-    recipients << recipient unless is_a_recipient?(recipient)
+  def add_as_recipient recipient
+    recipients << recipient unless recipients.exists? recipient
   end
 
   def read_by? user
@@ -64,8 +64,8 @@ class Capsule < ActiveRecord::Base
     readers << user
   end
 
-  def unlock user_id
-    unlocks.create user_id: user_id
+  def unlock user
+    unlocks << user
   end
 
   def is_unlocked? user_id
@@ -83,9 +83,5 @@ class Capsule < ActiveRecord::Base
     id_column = "#{table_name}.id"
     sub_query = scopes.map { |s| s.select(id_column).to_sql }.join(" UNION ")
     where "#{id_column} IN (#{sub_query})"
-  end
-
-  def is_a_recipient?(recipient)
-    recipients.include?(recipient)
   end
 end
