@@ -23,6 +23,8 @@ class Capsule < ActiveRecord::Base
   has_many :assets, as: :assetable, dependent: :destroy
   has_many :recipient_users, dependent: :destroy
   has_many :recipients, through: :recipient_users, source: :user
+  has_many :capsule_reads, dependent: :destroy
+  has_many :readers, through: :capsule_reads, source: :user
   has_many :notifications
   has_many :unlocks
 
@@ -54,17 +56,12 @@ class Capsule < ActiveRecord::Base
     recipients << recipient unless is_a_recipient?(recipient)
   end
 
-  def read_by?(user)
-    if user
-      readers.include?(user.id)
-    else
-      false
-    end
+  def read_by? user
+    readers.exists? user
   end
 
-  def read(user)
-    update_attributes(readers: readers + [user.id]) unless read_by?(user)
-    user.touch
+  def read user
+    readers << user
   end
 
   def unlock user_id
