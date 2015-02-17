@@ -1,11 +1,11 @@
 class CapsuleSerializer < ActiveModel::Serializer
-#  cached
-#  delegate :cache_key, to: :object
+  cached
+  delegate :cache_key, to: :object
   delegate :current_user, to: :scope
 
-  attributes :id, :comment, :creator, :recipients, :location, :relative_location, :payload_type, :status, :promotional_state
+  attributes :id, :comment, :creator, :recipients, :location, :status
   attributes :thumbnail_path, :assets, :start_date, :lock_question, :lock_answer
-  attributes :likes_count, :comments_count, :is_read, :is_unlocked, :created_at, :updated_at
+  attributes :comments_count, :is_read, :is_unlocked, :created_at, :updated_at
 
   def assets
     object.assets.map do |asset|
