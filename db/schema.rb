@@ -11,11 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150207195342) do
+ActiveRecord::Schema.define(version: 20150217022003) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_trgm"
+  enable_extension "fuzzystrmatch"
   enable_extension "plpgsql"
   enable_extension "hstore"
+  enable_extension "pg_stat_statements"
   enable_extension "uuid-ossp"
 
   create_table "admin_users", force: true do |t|
@@ -88,7 +91,7 @@ ActiveRecord::Schema.define(version: 20150207195342) do
     t.string   "thumbnail"
     t.datetime "start_date"
     t.integer  "watchers",          default: [], array: true
-    t.integer  "readers",           default: [], array: true
+    t.integer  "read_array",        default: [], array: true
     t.integer  "tenant_id"
     t.hstore   "creator"
     t.integer  "likes",             default: [], array: true
@@ -98,7 +101,7 @@ ActiveRecord::Schema.define(version: 20150207195342) do
   add_index "capsules", ["latitude", "longitude"], name: "index_capsules_on_latitude_and_longitude", using: :btree
   add_index "capsules", ["latitude"], name: "index_capsules_on_latitude", using: :btree
   add_index "capsules", ["longitude"], name: "index_capsules_on_longitude", using: :btree
-  add_index "capsules", ["readers"], name: "index_capsules_on_readers", using: :gin
+  add_index "capsules", ["read_array"], name: "index_capsules_on_read_array", using: :gin
   add_index "capsules", ["relative_location"], name: "capsules_relative_location", using: :gin
   add_index "capsules", ["tenant_id"], name: "index_capsules_on_tenant_id", using: :btree
   add_index "capsules", ["user_id"], name: "index_capsules_on_user_id", using: :btree
