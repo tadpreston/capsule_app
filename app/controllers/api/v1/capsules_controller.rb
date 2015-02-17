@@ -57,6 +57,11 @@ module API
         render json: @capsule, serializer: CapsuleSerializer
       end
 
+      def unlock
+        @capsule.unlock current_user
+        render json: @capsule, serializer: CapsuleSerializer
+      end
+
       private
 
       def render_capsule_errors
