@@ -75,6 +75,11 @@ class Capsule < ActiveRecord::Base
     unlocks.exists? user_id: user_id
   end
 
+  def thumbnail_path
+    return nil if thumbnail.blank? or !thumbnail.include? '/'
+    thumbnail
+  end
+
   private
 
   private_class_method def self.union_scope *scopes
