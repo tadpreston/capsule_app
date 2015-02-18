@@ -11,14 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150217022003) do
+ActiveRecord::Schema.define(version: 20150218040241) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pg_trgm"
-  enable_extension "fuzzystrmatch"
   enable_extension "plpgsql"
   enable_extension "hstore"
-  enable_extension "pg_stat_statements"
   enable_extension "uuid-ossp"
 
   create_table "admin_users", force: true do |t|
@@ -263,7 +260,7 @@ ActiveRecord::Schema.define(version: 20150217022003) do
   add_index "unlocks", ["user_id"], name: "index_unlocks_on_user_id", using: :btree
 
   create_table "users", force: true do |t|
-    t.uuid     "public_id",            default: "uuid_generate_v4()"
+    t.uuid     "public_id",              default: "uuid_generate_v4()"
     t.string   "email"
     t.string   "username"
     t.string   "phone_number"
@@ -283,21 +280,23 @@ ActiveRecord::Schema.define(version: 20150217022003) do
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string   "unconfirmed_email"
-    t.integer  "tutorial_progress",    default: 0
+    t.integer  "tutorial_progress",      default: 0
     t.string   "recipient_token"
-    t.integer  "comments_count",       default: 0
+    t.integer  "comments_count",         default: 0
     t.string   "facebook_username"
     t.string   "twitter_username"
     t.string   "motto"
     t.string   "background_image"
     t.string   "job_id"
-    t.boolean  "complete",             default: false
-    t.integer  "following",            default: [],                   array: true
-    t.integer  "watching",             default: [],                   array: true
+    t.boolean  "complete",               default: false
+    t.integer  "following",              default: [],                   array: true
+    t.integer  "watching",               default: [],                   array: true
     t.boolean  "can_send_text"
     t.string   "device_token"
     t.string   "full_name"
     t.string   "mode"
+    t.string   "password_reset_token"
+    t.datetime "password_reset_sent_at"
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", using: :btree
