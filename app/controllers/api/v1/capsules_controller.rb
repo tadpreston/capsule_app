@@ -4,7 +4,6 @@ module API
     class CapsulesController < API::V1::ApplicationController
       before_action :set_capsule, only: [:show, :update, :destroy, :read, :unread]
       before_action :set_pagination, only: [:index, :forme, :feed, :location]
-      skip_before_action :authorize_auth_token
 
       def index
         @capsule_index = CapsuleIndex.new current_user.id, @offset, @limit
