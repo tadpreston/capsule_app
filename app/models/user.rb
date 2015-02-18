@@ -265,7 +265,7 @@ class User < ActiveRecord::Base
     provider == 'recipient'
   end
 
-  protected
+  private
 
   def uid_and_provider_are_unique
     unless self.persisted?
