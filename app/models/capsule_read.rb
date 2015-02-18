@@ -11,5 +11,5 @@
 
 class CapsuleRead < ActiveRecord::Base
   belongs_to :user, touch: true
-  belongs_to :capsule, touch: true
+  belongs_to :capsule
 end
