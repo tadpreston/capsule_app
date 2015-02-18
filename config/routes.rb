@@ -25,6 +25,8 @@ Rails.application.routes.draw do
 
 # API Routes
 
+  resources :password_resets
+
   namespace :api, defaults: {format: 'json'} do
     namespace :v1 do
       get 'config', to: 'configs#index'
@@ -80,6 +82,7 @@ Rails.application.routes.draw do
       end
       resources :hashtags, only: [:index]
       resources :location_watches, only: [:create, :destroy]
+      resources :password_resets
 
       get 'profile/loadtest/(:id)', to: 'profile#loadtest', as: 'profile_loadtest'
       get 'profile/loadtest_jbuilder/(:id)', to: 'profile#loadtest_jbuilder', as: 'profile_loadtest_jbuilder'
