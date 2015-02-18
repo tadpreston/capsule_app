@@ -265,6 +265,13 @@ class User < ActiveRecord::Base
     provider == 'recipient'
   end
 
+  def send_password_reset
+    generate_token(:password_reset_token)
+    self.password_reset_sent_at = Time.zone.now
+    save!
+    UserMailer.password_reset(self).deliver
+  end
+
   private
 
   def uid_and_provider_are_unique
