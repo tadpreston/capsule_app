@@ -1,7 +1,7 @@
 class PushNotification
 
   def initialize device_token, user_mode='', other_data={}
-    raise ArgumentError, 'Device token cannot be blank' if device_token.blank?
+    device_token.blank? and raise ArgumentError
     @client = ApnsClient.new device_token, user_mode, other_data
   end
 

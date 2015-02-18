@@ -1,15 +1,15 @@
 class ApnsClient
   def initialize device_token, mode='', other_data={}
-    raise ArgumentError, 'Device token cannot be blank' if device_token.blank?
+    device_token.blank? and raise ArgumentError, 'Device token cannot be blank'
     @file = ApnsCert.new(mode).file
     @device_token = device_token
     @mode = mode
-    @other_data=other_data
+    @other_data = other_data
     initialize_client
   end
 
   def push message, badge=1
-    APNS.send_notification @device_token, alert: message, badge: badge, sound: 'yada.wav', other: @other
+    APNS.send_notification @device_token, alert: message, badge: badge, sound: 'yada.wav', other: @other_data
   end
 
   private
