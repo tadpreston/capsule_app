@@ -22,13 +22,13 @@ class Comment < ActiveRecord::Base
   after_create CommentCallbacks
 
   belongs_to :user, counter_cache: true, touch: true
-  belongs_to :commentable, polymorphic: true, counter_cache: true, touch: true
-  has_many :replies, as: :commentable, class_name: 'Comment'   # Allows replies to the current comment
+  belongs_to :commentable, polymorphic: true, counter_cache: true
   has_many :objections, as: :objectionable, dependent: :destroy
 
   delegate :full_name, to: :user, prefix: true
   delegate :device_token, to: :user, prefix: true
   delegate :profile_image, to: :user, prefix: true
+  delegate :user_id, to: :commentable, prefix: true
 
   def liked_by?(user)
     if user
@@ -40,6 +40,10 @@ class Comment < ActiveRecord::Base
 
   def likes_count
     likes.size
+  end
+
+  def commentable_owner?
+    commentable_user_id == user_id
   end
 
 end
