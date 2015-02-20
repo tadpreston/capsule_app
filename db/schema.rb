@@ -235,11 +235,13 @@ ActiveRecord::Schema.define(version: 20150220173437) do
   create_table "relevances", force: true do |t|
     t.integer  "user_id"
     t.integer  "capsule_id"
+    t.datetime "relevant_date"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "relevances", ["capsule_id"], name: "index_relevances_on_capsule_id", using: :btree
+  add_index "relevances", ["relevant_date"], name: "index_relevances_on_relevant_date", using: :btree
   add_index "relevances", ["user_id"], name: "index_relevances_on_user_id", using: :btree
 
   create_table "tenant_keys", force: true do |t|
