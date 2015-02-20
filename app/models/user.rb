@@ -65,6 +65,8 @@ class User < ActiveRecord::Base
   has_many :assets, as: :assetable, dependent: :destroy
   has_many :notifications
   has_many :unlocks
+  has_many :relevances
+  has_many :relevant_yadas, through: :relevances, source: :capsule
 
   def self.generate_token(column)
     token = ''
