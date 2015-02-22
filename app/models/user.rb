@@ -126,6 +126,14 @@ class User < ActiveRecord::Base
     update_attributes password: params[:password], password_confirmation: params[:password_confirmation]
   end
 
+  def logged_in?
+    current_device.has_token?
+  end
+
+  def has_device_token?
+    device_token
+  end
+
   def has_email?
     !email.blank?
   end

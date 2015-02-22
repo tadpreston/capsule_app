@@ -59,6 +59,6 @@ class Notification < ActiveRecord::Base
   end
 
   def pushable?
-    !user.device_token.blank?
+    user.has_device_token? && user.logged_in?
   end
 end
