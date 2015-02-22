@@ -15,23 +15,13 @@
 #
 
 class Device < ActiveRecord::Base
-  # callbacks
   before_create :generate_auth_token
 
-  # validations
-
-  # associations
   belongs_to :user, touch: true
-
-  # scopes
-
-  # class methods
 
   def self.current_device(remote_ip, user_agent)
     find_by remote_ip: remote_ip, user_agent: user_agent
   end
-
-  # instance methods
 
   def reset_auth_token!
     generate_auth_token
