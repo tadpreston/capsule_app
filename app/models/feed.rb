@@ -9,6 +9,10 @@ class Feed < CapsuleFeedBase
   private
 
   def capsule_scope
-    Capsule.feed(user_id).by_updated_at
+    user.relevant_yadas.order('relevances.relevant_date DESC')
+  end
+
+  def user
+    @user ||= User.find user_id
   end
 end

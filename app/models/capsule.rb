@@ -27,6 +27,7 @@ class Capsule < ActiveRecord::Base
   has_many :readers, through: :capsule_reads, source: :user
   has_many :notifications
   has_many :unlocks
+  has_many :relevances, dependent: :destroy
 
   delegate :full_name, to: :user, prefix: true
 
@@ -65,7 +66,8 @@ class Capsule < ActiveRecord::Base
   end
 
   def unlock user
-    unlocks << user
+    unlocks.create user_id: user.id
+    Relevance.update_relevance id, [user.id, user_id]
   end
 
   def is_unlocked? user_id

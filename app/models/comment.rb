@@ -22,7 +22,7 @@ class Comment < ActiveRecord::Base
   after_create CommentCallbacks
 
   belongs_to :user, counter_cache: true, touch: true
-  belongs_to :commentable, polymorphic: true, counter_cache: true
+  belongs_to :commentable, polymorphic: true, counter_cache: true, touch: true
   has_many :objections, as: :objectionable, dependent: :destroy
 
   delegate :full_name, to: :user, prefix: true
