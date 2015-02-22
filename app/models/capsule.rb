@@ -66,7 +66,8 @@ class Capsule < ActiveRecord::Base
   end
 
   def unlock user
-    unlocks << user
+    unlocks.create user_id: user.id
+    Relevance.update_relevance id, [user.id, user_id]
   end
 
   def is_unlocked? user_id
