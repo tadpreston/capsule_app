@@ -3,6 +3,7 @@ module API
 
     class UsersController < API::V1::ApplicationController
       before_action :set_user, only: [:show, :update, :following, :followers, :password]
+      before_action :verify_update, only: [:update, :password]
       skip_before_action :authorize_auth_token, only: [:index, :show, :create, :following, :followers, :recipient, :registered, :password]
 
       def index
@@ -21,18 +22,10 @@ module API
       end
 
       def update
-        if current_user.id == @user.id
-          original_email = @user.email
-          unless @user.update_attributes(user_params)
-            render :update, status: 422
-          else
-            if user_params[:email]
-              @user.send_confirmation_email
-              @user.update_columns(unconfirmed_email: user_params[:email], email: original_email)
-            end
-          end
+        if @user.update_attributes(user_params)
+          render json: @user, serializer: UserSerializer
         else
-          render json: { status: 'Not Authorized', response: { errors: [ { user: [ "Not authorized to update id: #{params[:id]}" ] } ] } }, status: 401
+          render json: user_not_updated(@user.errors, @user.id)
         end
       end
 
@@ -102,12 +95,30 @@ module API
 
       end
 
+      def verify_update
+        unless current_user.id == @user.id
+          render json: { status: 'Not Authorized', response: { errors: [ { user: [ "Not authorized to update id: #{params[:id]}" ] } ] } }, status: 401
+        end
+      end
+
       def password_not_changed message, id
         {
           errors: [{
             status: '403',
             code: '403',
             title: 'Password Not Changed',
+            detail: message,
+            links: id
+          }]
+        }
+      end
+
+      def user_not_updated message, id
+        {
+          errors: [{
+            status: '403',
+            code: '403',
+            title: 'User not updated',
             detail: message,
             links: id
           }]

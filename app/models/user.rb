@@ -43,9 +43,11 @@
 class ValidationError < StandardError; end
 class PasswordChangeError < StandardError; end
 class User < ActiveRecord::Base
-  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
-  validates :email, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }, :if => "oauth.nil?" && Proc.new { |user| !user.email.blank? && user.email_changed? }
   has_secure_password
+
+  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+
+  validates :email, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }
   validates :password, confirmation: true, length: { minimum: 6 }, unless: Proc.new { |u| u.password.blank? && u.password_confirmation.blank? }
   validates :phone_number, uniqueness: true
 
