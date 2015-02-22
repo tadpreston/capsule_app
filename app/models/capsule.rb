@@ -35,7 +35,8 @@ class Capsule < ActiveRecord::Base
   accepts_nested_attributes_for :assets, allow_destroy: true
   accepts_nested_attributes_for :recipients
 
-  scope :by_updated_at, -> { order(updated_at: :desc) }
+  scope :by_updated_at, -> { order updated_at: :desc }
+  scope :location, -> { where 'latitude IS NOT NULL AND latitude IS NOT NULL' }
 
   def self.by_user user_id
     where user_id: user_id
