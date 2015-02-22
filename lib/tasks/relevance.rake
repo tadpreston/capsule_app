@@ -4,7 +4,9 @@ namespace :db do
       Capsule.all.each do |capsule|
         capsule.relevances.create user_id: capsule.user_id, relevant_date: capsule.updated_at
         capsule.recipients.each do |recipient|
-          capsule.relevances.create user_id: recipient.id, relevant_date: capsule.updated_at
+          unless Relevance.where(user_id: recipient.id, capsule_id: capsule.id).exists?
+            capsule.relevances.create user_id: recipient.id, relevant_date: capsule.updated_at
+          end
         end
       end
     end

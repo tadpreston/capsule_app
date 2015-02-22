@@ -16,7 +16,9 @@ class CapsuleCallbacks
         user = Users::Search.find_or_create_recipient(recipient)
         capsule.add_as_recipient user
         capsule.user.add_as_contact user
-        capsule.relevances.create user_id: user.id, relevant_date: DateTime.now
+        unless user.id == capsule.user_id
+          capsule.relevances.create user_id: user.id, relevant_date: DateTime.now
+        end
       end
     end
 
