@@ -58,7 +58,7 @@ class Notification < ActiveRecord::Base
   private
 
   def emailable?
-    !user.email.blank?
+    user.has_email?
   end
 
   def pushable?

@@ -126,6 +126,10 @@ class User < ActiveRecord::Base
     update_attributes password: params[:password], password_confirmation: params[:password_confirmation]
   end
 
+  def has_email?
+    !email.blank?
+  end
+
   # Following and unfollowing
 
   def follow!(other_user)

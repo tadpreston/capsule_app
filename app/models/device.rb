@@ -33,6 +33,10 @@ class Device < ActiveRecord::Base
     save!
   end
 
+  def has_token?
+    auth_token
+  end
+
   private
 
   def generate_auth_token
