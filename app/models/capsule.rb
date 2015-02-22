@@ -27,7 +27,7 @@ class Capsule < ActiveRecord::Base
   has_many :readers, through: :capsule_reads, source: :user
   has_many :notifications
   has_many :unlocks
-  has_many :relevances
+  has_many :relevances, dependent: :destroy
 
   delegate :full_name, to: :user, prefix: true
 
