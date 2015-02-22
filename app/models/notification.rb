@@ -20,9 +20,6 @@ class Notification < ActiveRecord::Base
   belongs_to :user
   belongs_to :capsule
 
-  delegate :device_token, to: :user, prefix: true
-  delegate :mode, to: :user, prefix: true
-
   def self.new_yada
     where notification_type: NEW_YADA
   end
