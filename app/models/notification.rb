@@ -20,6 +20,12 @@ class Notification < ActiveRecord::Base
   belongs_to :user
   belongs_to :capsule
 
+  delegate :device_token, to: :user
+  delegate :mode, to: :user
+  delegate :has_email?, to: :user
+  delegate :has_device_token?, to: :user
+  delegate :logged_in?, to: :user
+
   def self.new_yada
     where notification_type: NEW_YADA
   end
@@ -37,7 +43,7 @@ class Notification < ActiveRecord::Base
   end
 
   def deliver_push_notification
-    PushNotification.new(user_device_token, user_mode, { yada_id: capsule.id, yada_type: notification_type }).push(message) if pushable?
+    PushNotification.new(device_token, mode, { yada_id: capsule.id, yada_type: notification_type }).push(message) if pushable?
   end
 
   def deliver_new_yada_email_notification
@@ -55,10 +61,10 @@ class Notification < ActiveRecord::Base
   private
 
   def emailable?
-    user.has_email?
+    has_email?
   end
 
   def pushable?
-    user.has_device_token? && user.logged_in?
+    has_device_token? && logged_in?
   end
 end
