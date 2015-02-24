@@ -93,6 +93,10 @@ class User < ActiveRecord::Base
     user
   end
 
+  def self.find_by_password_reset_token token
+    find_by password_reset_token: token
+  end
+
   def feed params = {}
     offset = params.fetch(:offset, 0).to_i
     limit = params.fetch(:limit, 0).to_i
