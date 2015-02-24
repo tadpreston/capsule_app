@@ -2,7 +2,7 @@ module API
   module V1
 
     class CapsulesController < API::V1::ApplicationController
-      before_action :set_capsule, only: [:show, :update, :destroy, :read, :unread]
+      before_action :set_capsule, only: [:show, :update, :destroy, :read, :unlock]
       before_action :set_pagination, only: [:index, :forme, :feed, :location]
 
       def index
