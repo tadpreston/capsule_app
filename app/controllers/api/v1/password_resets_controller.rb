@@ -43,30 +43,6 @@ module API
           true
         end
       end
-
-      def bad_request_response resource, message, id=nil
-        {
-          errors: [{
-            status: '400',
-            code: '400',
-            title: 'Bad Request',
-            detail: (message || "Details not provided"),
-            links: Hash[resource.to_sym, [id]]
-          }]
-        }
-      end
-
-      def resource_not_found_response resource, id
-        {
-          errors: [{
-            status: '404',
-            code: '404',
-            title: 'Not Found',
-            detail: 'Resource not found',
-            links: Hash[resource.to_sym, [id]]
-          }]
-        }
-      end
     end
   end
 end
