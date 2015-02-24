@@ -76,11 +76,9 @@ module API
       end
 
       def set_capsule
-        begin
-          @capsule = Capsule.find params[:id]
-        rescue
-          render json: { status: 'Not Found', response: { errors: [ { capsule: [ "Not found with id: #{params[:id]}" ] } ] } }, status: 404
-        end
+        @capsule = Capsule.find params[:id]
+      rescue ActiveRecord::RecordNotFound
+        render json: resource_not_found_response(:capsules, params[:id]), status: 404
       end
 
       def capsule_params
