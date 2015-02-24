@@ -82,7 +82,7 @@ module API
       end
 
       def capsule_params
-        params.required(:capsule).permit(:user_id, :comment, { location: [:name, :latitude, :longitude, :radius] }, :status, :payload_type, :promotional_state, :passcode,
+        params.required(:capsule).permit(:user_id, :comment, { location: [:name, :vicinity, :latitude, :longitude, :radius] }, :status, :payload_type, :promotional_state, :passcode,
                                          :visibility, :thumbnail, :in_reply_to, :is_portable, :start_date, :lock_question, :lock_answer, :is_incognito,
                                          { relative_location: [:distance, :radius, :fixed_positioning, :tutorial_level] },
                                          comments_attributes: [:user_id, :body],
