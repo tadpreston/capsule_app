@@ -48,26 +48,12 @@ Rails.application.routes.draw do
       end
       resources :capsules do
         collection do
-          get :explorer
-          get :locationtags
-          get :watched
           get :forme
-          get :library
-          get :loadtest
-          get :hidden
-          get :relative
           get :feed
           get :location
         end
         member do
-          get    :replies
-          get    :replied_to
           post   :read
-          delete :unread
-          post   :watch
-          delete :unwatch
-          post   :like
-          delete :unlike
           post   :unlock
         end
         resources :comments, only: [:index, :create, :destroy] do
