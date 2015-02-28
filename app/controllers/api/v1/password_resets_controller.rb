@@ -3,11 +3,6 @@ module API
     class PasswordResetsController < API::V1::ApplicationController
       skip_before_action :authorize_auth_token
       before_action :set_user, only: [:edit, :update]
-      before_filter :add_allow_origin_headers
-
-      def add_allow_origin_headers
-        response.headers['Access-Control-Allow-Origin'] = request.headers['Origin'] || '*'
-      end 
 
       def create
         user = User.find_by email: params[:email]
