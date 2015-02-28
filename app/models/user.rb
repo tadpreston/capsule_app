@@ -130,6 +130,13 @@ class User < ActiveRecord::Base
     update_attributes password: params[:password], password_confirmation: params[:password_confirmation]
   end
 
+  def reset_password params
+    raise PasswordChangeError, 'New Password does not match' unless params[:password] == params[:password_confirmation]
+    update_attributes password: params[:password],
+                      password_confirmation: params[:password_confirmation],
+                      password_reset_token: nil, password_reset_sent_at: nil
+  end
+
   def logged_in?
     current_device.has_token?
   end

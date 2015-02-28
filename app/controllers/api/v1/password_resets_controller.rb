@@ -16,7 +16,7 @@ module API
 
       def update
         if verify_password_token @user
-          if @user.update_attributes user_attributes
+          if @user.reset_password user_attributes
             render json: @user, serializer: UserSerializer
           else
             render json: bad_request_response(:password_resets, @user.errors.messages, @user.id), status: 400
