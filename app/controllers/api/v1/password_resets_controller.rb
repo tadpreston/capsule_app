@@ -3,6 +3,7 @@ module API
     class PasswordResetsController < API::V1::ApplicationController
       skip_before_action :authorize_auth_token
       before_action :set_user, only: [:edit, :update]
+      rescue_from('User::PasswordChangeError') { |exception| password_reset_error exception }
 
       def create
         user = User.find_by email: params[:email]
@@ -18,8 +19,6 @@ module API
         if verify_password_token @user
           if @user.reset_password user_attributes
             render json: @user, serializer: UserSerializer
-          else
-            render json: bad_request_response(:password_resets, @user.errors.messages, @user.id), status: 400
           end
         end
       end
@@ -42,6 +41,10 @@ module API
         else
           true
         end
+      end
+
+      def password_reset_error exception
+        render json: bad_request_response(:password_resets, exception.message, @user.id), status: 400
       end
     end
   end
