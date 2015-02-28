@@ -21,8 +21,6 @@ Rails.application.routes.draw do
     root 'home#index'
   end
 
-  resources :password_resets
-
   namespace :api, defaults: {format: 'json'} do
     namespace :v1 do
       get 'config', to: 'configs#index'
