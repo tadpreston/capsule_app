@@ -28,7 +28,7 @@ module CapsuleApp
 #       origins ['http://pinyadaapp.com', /http:\/\/localhost:(\d+)?/]
 #       resource '*', :headers => :any, :methods => [:get, :put, :patch, :options]
         origins '*'
-        resources '*', headers: :any, methods: [:get, :post, :put, :patch, :delete, :options]
+        resource '*', headers: :any, methods: [:get, :post, :put, :patch, :delete, :options]
       end
     end
   end
