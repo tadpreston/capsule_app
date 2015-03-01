@@ -15,6 +15,6 @@ class Location < CapsuleFeedBase
   private
 
   def capsule_scope
-    @capsules ||= Capsule.feed(user_id).location
+    @capsules ||= Capsule.feed(user_id).location.locked
   end
 end

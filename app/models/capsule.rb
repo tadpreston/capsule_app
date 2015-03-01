@@ -46,6 +46,10 @@ class Capsule < ActiveRecord::Base
     joins('LEFT OUTER JOIN recipient_users r ON r.capsule_id = capsules.id').where('r.user_id = ?', user_id)
   end
 
+  def self.locked
+    joins('LEFT OUTER JOIN unlocks u ON u.user_id = capsules.user_id').where('u.user_id IS NULL')
+  end
+
   def self.feed user_id
     union_scope by_user(user_id), for_user(user_id)
   end
