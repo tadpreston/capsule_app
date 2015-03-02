@@ -5,6 +5,6 @@ class Notifications::UnlockNotification < Notifications::Base
   end
 
   def message
-    'A Yada has been unlocked for you!'
+    'Hey! You just unlocked a Yada!'
   end
 end
