@@ -15,6 +15,6 @@ class Location < CapsuleFeedBase
   private
 
   def capsule_scope
-    @capsule_scope ||= Capsule.for_user(user_id).location.select { |capsule| capsule.is_unlocked? user_id }
+    @capsule_scope ||= Capsule.for_user(user_id).location.select { |capsule| !capsule.is_unlocked? user_id }
   end
 end
