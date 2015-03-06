@@ -1,4 +1,7 @@
 class CapsuleFeedSerializer < ActiveModel::Serializer
+  cached
+  delegate :cache_key, to: :object
+
   attributes *(Feed::ATTRIBUTES)
   delegate :current_user, to: :scope
 
