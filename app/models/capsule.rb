@@ -84,11 +84,36 @@ class Capsule < ActiveRecord::Base
     thumbnail
   end
 
+  def remove_capsule user
+    if user_is_the_author user
+      if has_been_read_or_unlocked?
+        Relevance.remove user_id: user_id
+      else
+        destroy
+      end
+    else
+      Relevance.remove user_id: user_id
+    end
+  end
+
   private
 
   private_class_method def self.union_scope *scopes
     id_column = "#{table_name}.id"
     sub_query = scopes.map { |s| s.select(id_column).to_sql }.join(" UNION ")
     where "#{id_column} IN (#{sub_query})"
+  end
+
+  def user_is_the_author user
+    user_id == user.id
+  end
+
+  def has_been_read_or_unlocked?
+    read_or_unlocked = false
+    recipients.each do |recipient|
+      read_or_unlocked = true if is_unlocked? recipient.id
+      read_or_unlocked = true if read_by? recipient
+    end
+    read_or_unlocked
   end
 end

@@ -47,7 +47,7 @@ module API
       end
 
       def destroy
-        @capsule.destroy
+        @capsule.remove_capsule current_user
         render json: { status: 'Deleted' }
       end
 

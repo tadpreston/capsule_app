@@ -9,4 +9,9 @@ class Relevance < ActiveRecord::Base
       end
     end
   end
+
+  def self.remove params
+    relevance = Relevance.find_by params
+    relevance.destroy
+  end
 end
