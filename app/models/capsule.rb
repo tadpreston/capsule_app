@@ -87,12 +87,12 @@ class Capsule < ActiveRecord::Base
   def remove_capsule user
     if user_is_the_author user
       if has_been_read_or_unlocked?
-        Relevance.remove user_id: user_id
+        Relevance.remove user_id: user_id, capsule_id: id
       else
         destroy
       end
     else
-      Relevance.remove user_id: user_id
+      Relevance.remove user_id: user.id, capsule_id: id
     end
   end
 
