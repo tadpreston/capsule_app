@@ -13,6 +13,7 @@ class User::Blocker < User
   def remove_block phone_number
     user = set_user phone_number
     Block.remove_block id, user.id
+    add_to_feed user.id
   end
 
   private
@@ -30,5 +31,10 @@ class User::Blocker < User
 
   def yada_ids_from user_id
     relevant_yadas.where(user_id: user_id).ids
+  end
+
+  def add_to_feed user_id
+    capsule_ids = received_capsules.where(user_id: user_id).ids
+    capsule_ids.each { |capsule_id| Relevance.create capsule_id: capsule_id, user_id: id, relevant_date: DateTime.now }
   end
 end
