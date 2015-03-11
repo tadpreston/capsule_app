@@ -64,6 +64,7 @@ Rails.application.routes.draw do
       resources :hashtags, only: [:index]
       resources :location_watches, only: [:create, :destroy]
       resources :password_resets
+      resources :block_users, only: [:index, :create, :destroy]
 
       get 'profile/loadtest/(:id)', to: 'profile#loadtest', as: 'profile_loadtest'
       get 'profile/loadtest_jbuilder/(:id)', to: 'profile#loadtest_jbuilder', as: 'profile_loadtest_jbuilder'
