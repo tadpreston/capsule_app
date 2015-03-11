@@ -25,8 +25,7 @@ class User::Blocker < User
   end
 
   def remove_from_feeds user_id
-    relevances = Relevance.where capsule_id: yada_ids_from(user_id), user_id: id
-    relevances.destroy_all
+    Relevance.remove_feed_for id, yada_ids_from(user_id)
   end
 
   def yada_ids_from user_id
@@ -34,7 +33,10 @@ class User::Blocker < User
   end
 
   def add_to_feed user_id
-    capsule_ids = received_capsules.where(user_id: user_id).ids
-    capsule_ids.each { |capsule_id| Relevance.create capsule_id: capsule_id, user_id: id, relevant_date: DateTime.now }
+    Relevance.restore_feed_for id, received_yada_ids(user_id)
+  end
+
+  def received_yada_ids user_id
+    received_capsules.where(user_id: user_id).ids
   end
 end
