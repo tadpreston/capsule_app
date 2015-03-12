@@ -16,6 +16,10 @@ class User::Blocker < User
     add_to_feed user.id
   end
 
+  def is_blocked_by user
+    blocked_by.exists? id: user.id
+  end
+
   private
 
   def set_user phone_number

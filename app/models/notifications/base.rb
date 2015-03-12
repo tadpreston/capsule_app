@@ -10,8 +10,11 @@ class Notifications::Base
   end
 
   def create_notification message
+    user = User::Blocker.find @capsule.user_id
     @capsule.recipients.each do |recipient|
-      send_notification recipient, message
+      unless user.is_blocked_by recipient
+        send_notification recipient, message
+      end
     end
   end
 
