@@ -7,8 +7,6 @@ class CapsuleCallbacks
   end
 
   def self.after_save(capsule)
-    capsule.recipients.clear if capsule.recipients.empty?   # Assumption is that the recipient array sent in the capsule always represents the full list
-
     unless capsule.recipients_attributes.nil?
       recipients = capsule.recipients_attributes
       author = User::Blocker.find capsule.user_id

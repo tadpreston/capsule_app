@@ -17,7 +17,7 @@ class Notifications::CommentNotification < Notifications::Base
 
   def notify_recipients
     @capsule.recipients.each do |recipient|
-      send_notification recipient, message unless recipient.id == @commenter_id
+      send_notification recipient, message if ok_to_send?(recipient)
     end
   end
 
@@ -27,5 +27,11 @@ class Notifications::CommentNotification < Notifications::Base
     else
       "#{@commenter.full_name} commented on #{@capsule.user_full_name}'s Yada"
     end
+  end
+
+  private
+
+  def ok_to_send? recipient
+    @capsule.is_unlocked?(recipient.id) && recipient.id != @commenter_id
   end
 end
