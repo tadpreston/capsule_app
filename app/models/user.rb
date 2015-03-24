@@ -87,14 +87,6 @@ class User < ActiveRecord::Base
     where('phone_number IN (?) OR email IN (?)', params, params).where(provider: 'capsule')
   end
 
-  def self.find_or_create params
-    user = where('email = ? OR phone_number = ?', params[:email], params[:phone_number]).first
-    user = new unless user
-    user.update params
-#   user.send_confirmation_email unless user.is_recipient?
-    user
-  end
-
   def self.find_by_password_reset_token token
     find_by password_reset_token: token
   end
@@ -104,18 +96,6 @@ class User < ActiveRecord::Base
     limit = params.fetch(:limit, 0).to_i
     feed_capsules = capsules + received_capsules.includes(:user)
     feed_capsules.sort { |capsule1,capsule2| capsule2.updated_at <=> capsule1.updated_at }[offset..(offset+limit-1)]
-  end
-
-  def update params
-    raise ValidationError if params.fetch(:phone_number).blank? and params.fetch(:email).blank?
-    self.phone_number = params.fetch :phone_number
-    self.email = params.fetch :email
-    self.full_name = params.fetch :full_name
-    self.password = params.fetch :password
-    self.password_confirmation = params.fetch :password_confirmation
-    self.provider = 'capsule'
-    self.device_token = params.fetch :device_token
-    save
   end
 
   def authenticate(password = nil)
