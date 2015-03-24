@@ -48,8 +48,10 @@ class User < ActiveRecord::Base
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 
   validates :email, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }, allow_blank: true
+  validates :email, presence: true, if: Proc.new { |u| u.phone_number.blank? }
   validates :password, confirmation: true, length: { minimum: 6 }, unless: Proc.new { |u| u.password.blank? && u.password_confirmation.blank? }
   validates :phone_number, uniqueness: true, allow_blank: true
+  validates :phone_number, presence: true, if: Proc.new { |u| u.email.blank? }
 
   has_many :devices, dependent: :destroy
   has_many :capsules, dependent: :destroy
