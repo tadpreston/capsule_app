@@ -14,9 +14,9 @@ module API
       end
 
       def create
-        @user = User.find_or_create user_params
-        @device = @user.devices.create(remote_ip: request.remote_ip, user_agent: request.user_agent, last_sign_in_at: Time.now)
-        render json: SessionSerializer.new(@user, root: false)
+        user = UserForm.create_user user_params
+        Device.create({ remote_ip: request.remote_ip, user_agent: request.user_agent, last_sign_in_at: Time.now, user_id: user.id })
+        render json: SessionSerializer.new(user, root: false)
       rescue ValidationError
         render :create, status: 422
       end
