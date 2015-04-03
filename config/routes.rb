@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   post 'process_response', to: 'process_responses#create', as: :process_response
 
   get '/locations/map'
+  get 'reports/registrations', to: 'reports#registrations'
 
   namespace :admin do
     resources :sessions, only: [:new, :create, :destroy]
