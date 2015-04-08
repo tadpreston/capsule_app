@@ -9,7 +9,7 @@ class ApnsClient
   end
 
   def push message, badge=1
-    APNS.send_notification @device_token, alert: message, badge: badge, sound: 'yada.wav', other: @other_data
+    APNS.send_notification @device_token, alert: message, badge: badge, sound: 'yada.wav', content_available: 1, other: @other_data
   end
 
   private
