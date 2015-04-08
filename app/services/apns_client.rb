@@ -1,4 +1,6 @@
 class ApnsClient
+  attr_reader :file, :device_token, :mode, :other_data
+
   def initialize device_token, mode='', other_data={}
     device_token.blank? and raise ArgumentError, 'Device token cannot be blank'
     @file = ApnsCert.new(mode).file
@@ -15,9 +17,9 @@ class ApnsClient
   private
 
   def initialize_client
-    APNS.pem = @file
+    APNS.pem = file
     APNS.host = ENV['APNS_HOST']
-    APNS.host = ENV['APNS_HOST_DEV'] if @mode == 'test'
+    APNS.host = ENV['APNS_HOST_DEV'] if mode == 'test'
     APNS.port = 2195
   end
 
