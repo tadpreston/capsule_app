@@ -1,5 +1,5 @@
 class UserSerializer < ActiveModel::Serializer
-  cached
+# cached
   delegate :cache_key, to: :object
 
   attributes :id, :full_name, :email, :phone_number, :location, :username

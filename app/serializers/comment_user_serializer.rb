@@ -1,5 +1,5 @@
 class CommentUserSerializer < ActiveModel::Serializer
-  cached
+# cached
   delegate :cache_key, to: :object
 
   attributes :id, :email, :full_name, :phone_number, :profile_image

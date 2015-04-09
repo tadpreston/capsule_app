@@ -1,5 +1,5 @@
 class SessionSerializer < ActiveModel::Serializer
-  cached
+# cached
   delegate :cache_key, to: :object
 
   attributes :authentication_token, :user
