@@ -1,6 +1,6 @@
 class UserSerializer < ActiveModel::Serializer
 # cached
-  delegate :cache_key, to: :object
+# delegate :cache_key, to: :object
 
   attributes :id, :full_name, :email, :phone_number, :location, :username
   attributes :motto, :facebook_username, :twitter_username, :device_token
