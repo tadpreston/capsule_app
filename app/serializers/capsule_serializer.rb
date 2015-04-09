@@ -1,5 +1,5 @@
 class CapsuleSerializer < ActiveModel::Serializer
-  cached
+# cached
   delegate :cache_key, to: :object
   delegate :current_user, to: :scope
 
