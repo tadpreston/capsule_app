@@ -27,6 +27,8 @@ module API
 
       def show
         render json: @capsule, serializer: CapsuleSerializer
+      rescue Exception => error
+        NewRelic::Agent.notice_error error, custom_params: { params: params }
       end
 
       def create
