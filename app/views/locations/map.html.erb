@@ -2,6 +2,8 @@
 <script type="text/javascript">
 	var locations = <%= raw @locations.to_json.html_safe %>;
 	var markerURL = '<%= asset_url "yada_map_pin.png" %>';
+	var timeYadaCount = <%= @timeYadaCount %>;
+	var totalYadaCount = <%= @totalYadaCount %>;
 
 	document.addEventListener("DOMContentLoaded", function(event) { 
 	  	setupMapWithLocations(locations, markerURL);
