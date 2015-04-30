@@ -18,6 +18,7 @@ gem 'fastimage', '~> 1.6.3'
 gem 'active_model_serializers', '~> 0.8.1'
 gem 'apns'
 gem 'vincenty', '~> 1.0.6'
+gem 'aws_cf_signer', '~> 0.1.3'
 
 gem 'sass-rails', '~> 4.0.3'
 gem 'uglifier', '~> 2.5.0'
