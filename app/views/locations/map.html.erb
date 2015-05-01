@@ -1,11 +1,11 @@
 <div id="map-canvas"></div>
 <script type="text/javascript">
-	var locations = <%= raw @locations.to_json.html_safe %>;
-	var markerURL = '<%= asset_url "yada_map_pin.png" %>';
-	var timeYadaCount = <%= @timeYadaCount %>;
-	var totalYadaCount = <%= @totalYadaCount %>;
+  var locations = <%= raw @yada_location.locations.to_json.html_safe %>;
+  var markerURL = '<%= asset_url "yada_map_pin.png" %>';
+  var timeYadaCount = <%= @yada_location.time_yada_count %>;
+  var totalYadaCount = <%= @yada_location.yada_count %>;
 
-	document.addEventListener("DOMContentLoaded", function(event) { 
-	  	setupMapWithLocations(locations, markerURL);
-	});
+  document.addEventListener("DOMContentLoaded", function(event) { 
+    setupMapWithLocations(locations, markerURL);
+  });
 </script>
