@@ -23,7 +23,7 @@ class Asset < ActiveRecord::Base
   validates :resource, presence: true
 
   def resource_path
-    UrlSigner.new("#{ENV['CLOUDFRONT_DOMAIN']}/#{resource}").signed_url
+    UrlSigner.new("https://#{ENV['CLOUDFRONT_DOMAIN']}/#{resource}").signed_url
   end
 
   def resource_path= path
