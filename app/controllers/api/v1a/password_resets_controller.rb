@@ -12,13 +12,13 @@ module API
       end
 
       def edit
-        render json: @user, serializer: UserSerializer
+        render json: @user, serializer: API::V1a::UserSerializer
       end
 
       def update
         if verify_password_token @user
           if @user.reset_password user_attributes
-            render json: @user, serializer: UserSerializer
+            render json: @user, serializer: API::V1a::UserSerializer
           end
         end
       end

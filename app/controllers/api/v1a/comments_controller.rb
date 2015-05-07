@@ -7,7 +7,7 @@ module API
 
       def index
         @comments = @capsule.comments
-        render json: @comments, each_serializer: CommentSerializer
+        render json: @comments, each_serializer: API::V1a::CommentSerializer
       end
 
       def create

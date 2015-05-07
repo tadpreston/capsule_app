@@ -15,14 +15,14 @@ module API
       def create
         user = UserForm.create_user user_params
         Device.create({ remote_ip: request.remote_ip, user_agent: request.user_agent, last_sign_in_at: Time.now, user_id: user.id })
-        render json: SessionSerializer.new(user, root: false)
+        render json: API::V1a::SessionSerializer.new(user, root: false)
       rescue ValidationError
         render :create, status: 422
       end
 
       def update
         if @user.update_attributes(user_params)
-          render json: @user, serializer: UserSerializer
+          render json: @user, serializer: API::V1a::UserSerializer
         else
           render json: user_not_updated(@user.errors, @user.id)
         end
@@ -61,7 +61,7 @@ module API
 
       def registered
         @registered_users = RegisteredUser.find params[:q]
-        render json: @registered_users, each_serializer: RegisteredUserSerializer
+        render json: @registered_users, each_serializer: API::V1a::RegisteredUserSerializer
       end
 
       def password
@@ -69,7 +69,7 @@ module API
       rescue User::PasswordChangeError => e
         render json: password_not_changed(e.message, @user.id), status: 403
       else
-        render json: SessionSerializer.new(@user, root: false)
+        render json: API::V1a::SessionSerializer.new(@user, root: false)
       end
 
       private

@@ -1,6 +1,6 @@
 class RegisteredUser
   ATTRIBUTES = [:id, :name, :phone_number, :email, :profile_image]
-  attr_accessor *ATTRIBUTES
+  attr_accessor *ATTRIBUTES + [:signed_profile_image]
 
   def initialize params
     @id = params[:id]
@@ -27,7 +27,8 @@ class RegisteredUser
           name: user.full_name,
           phone_number: user.phone_number,
           email: user.email,
-          profile_image: user.profile_image
+          profile_image: user.profile_image,
+          signed_profile_image: user.signed_profile_image
     end
   end
 end

@@ -4,7 +4,7 @@ module API
       skip_before_action :authorize_auth_token
 
       def index
-        render json: { force_upgrade: false }
+        render json: { force_upgrade: true }
       end
     end
   end

@@ -246,10 +246,20 @@ class User < ActiveRecord::Base
 
   def profile_image_path
     return '' if profile_image.blank?
+    profile_image
+  end
+
+  def signed_profile_image_path
+    return '' if profile_image.blank?
     UrlSigner.new("https://#{ENV['CLOUDFRONT_DOMAIN']}/#{profile_image}").signed_url
   end
 
   def background_image_path
+    return '' if background_image.blank?
+    background_image
+  end
+
+  def signed_background_image_path
     return '' if background_image.blank?
     UrlSigner.new("https://#{ENV['CLOUDFRONT_DOMAIN']}/#{background_image}").signed_url
   end

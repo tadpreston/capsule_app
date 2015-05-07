@@ -4,7 +4,7 @@ module API
       before_action :set_user_block
 
       def index
-        render json: @user_block.blocked_users, each_serializer: BlockedUsersSerializer
+        render json: @user_block.blocked_users, each_serializer: API::V1a::BlockedUsersSerializer
       end
 
       def create
