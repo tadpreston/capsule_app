@@ -34,7 +34,7 @@ class AwsMigrate
     object_keys.each do |key|
       begin
         object = Aws::S3::Object.new WEST_BUCKET, key, client: target_s3
-        object.upload_file Rails.root.join('tmp','migration',key).to_s
+        object.upload_file Rails.root.join('tmp','migration',key).to_s unless object.exists?
       rescue Exception => e
         puts "Key: #{key} -- #{e}"
       end
