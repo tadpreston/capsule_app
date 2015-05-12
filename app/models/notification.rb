@@ -14,7 +14,7 @@
 #
 
 class Notification < ActiveRecord::Base
-  NOTIFICATION_TYPES = [UNLOCKED = 'unlocked', NEW_YADA = 'new_yada', NEW_COMMENT = 'new_comment']
+  NOTIFICATION_TYPES = [UNLOCKED = 'unlocked', NEW_YADA = 'new_yada', NEW_COMMENT = 'new_comment', READ_YADA = 'read_yada']
   DELIVERY_TYPES = [EMAIL = 'email', PUSH = 'push', SMS = 'sms']
 
   belongs_to :user
@@ -56,6 +56,10 @@ class Notification < ActiveRecord::Base
 
   def deliver_new_comment_email_notification
     CommentMailer.new_comment(user_id, capsule_id, message).deliver if emailable?
+  end
+
+  def deliver_read_yada_email_notification
+    RecipientMailer.read_yada(user_id, capsule_id, message).deliver if emailable?
   end
 
   private

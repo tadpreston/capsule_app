@@ -16,6 +16,12 @@ class RecipientMailer < ActionMailer::Base
     mail(to: @user.email, subject: message, content_type: "text/html")
   end
 
+  def read_yada user_id, capsule_id, message
+    @message = message
+    get_user_and_capsule user_id, capsule_id
+    mail(to: @user.email, subject: message, content_type: "text/html")
+  end
+
   private
 
   def get_user_and_capsule user_id, capsule_id

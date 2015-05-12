@@ -10,6 +10,8 @@
 #
 
 class CapsuleRead < ActiveRecord::Base
+  after_create CapsuleReadCallbacks
+
   belongs_to :user, touch: true
   belongs_to :capsule, touch: true
 end

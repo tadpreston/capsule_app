@@ -1,5 +1,5 @@
 class Notifications::Base
-  attr_accessor :notification_type
+  attr_accessor :notification_type, :capsule
 
   def initialize capsule
     @capsule = capsule
@@ -10,8 +10,8 @@ class Notifications::Base
   end
 
   def create_notification message
-    user = User::Blocker.find @capsule.user_id
-    @capsule.recipients.each do |recipient|
+    user = User::Blocker.find capsule.user_id
+    capsule.recipients.each do |recipient|
       unless user.is_blocked_by recipient
         send_notification recipient, message
       end
@@ -19,7 +19,7 @@ class Notifications::Base
   end
 
   def send_notification recipient, message
-    notification = Notification.create capsule_id: @capsule.id,
+    notification = Notification.create capsule_id: capsule.id,
                                        user_id: recipient.id,
                                        message: message,
                                        notification_type: notification_type,
