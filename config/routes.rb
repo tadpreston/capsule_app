@@ -4,6 +4,9 @@ Rails.application.routes.draw do
   require 'sidekiq/web'
   mount Sidekiq::Web => '/sidekiq'
 
+  get '/resetpassword' => 'password_reset#index'
+  get '/resetpassword/:token' => 'password_reset#index'
+
   get 'confirmations', to: 'confirmations#email', as: :confirmation
   get 'home/index'
   get 'home/pubnub'

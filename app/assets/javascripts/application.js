@@ -17,3 +17,4 @@
 //= require maps-api
 //= require home
 //= require locations
+//= require password_reset
