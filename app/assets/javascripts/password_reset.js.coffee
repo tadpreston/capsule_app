@@ -75,13 +75,51 @@ Message.prototype =
     $(@elementID).slideUp 1000, handler
     return
 
-ResetForm = (elementID) ->
+window.ResetForm = (elementID) ->
   @elementID = elementID
   @elements =
     password: '#password'
     confirmPassword: '#confirm-password'
     button: '#btn-do-reset'
     passwordValidationMessage: '#passwordValidationMessage'
+  return
+
+window.ResetForm.prototype = new Message
+
+ResetForm::initialize = (handler) ->
+  _this = this
+  $(@elements.button).click (e) ->
+    e.preventDefault()
+    if _this.validates()
+      handler.messages.passwordForm.hide ->
+        handler.messages.processing.show ->
+          handler.doRequest $(_this.elements.password).val(), $(_this.elements.confirmPassword).val()
+          return
+        return
+    return
+  return
+
+ResetForm::validates = ->
+  password = $(@elements.password).val()
+  cPassword = $(@elements.confirmPassword).val()
+  requiredLength = 6
+  everythingOK = true
+  @resetValidation()
+  if password.length < requiredLength
+    $(@elements.passwordValidationMessage).text 'Your password must be at least ' + requiredLength + ' characters.'
+    everythingOK = false
+    $(@elements.password).css 'border', '1px solid red'
+  else if password != cPassword
+    $(@elements.passwordValidationMessage).text 'Your passwords do not match.'
+    everythingOK = false
+    $(@elements.password).css 'border', '1px solid red'
+    $(@elements.confirmPassword).css 'border', '1px solid red'
+  everythingOK
+
+ResetForm::resetValidation = ->
+  $(@elements.passwordValidationMessage).text ''
+  $(@elements.password).css 'border', 'none'
+  $(@elements.confirmPassword).css 'border', 'none'
   return
 
 window.Token = (tokenString) ->
