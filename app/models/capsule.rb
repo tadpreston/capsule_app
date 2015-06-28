@@ -1,6 +1,8 @@
 class Capsule < ActiveRecord::Base
   attr_reader :recipients_attributes
 
+  TOKEN_EXPIRE_DATE_TIME = 7.days.ago.utc
+
   before_save CapsuleCallbacks
   after_save CapsuleCallbacks
   after_create CapsuleCallbacks
@@ -96,12 +98,25 @@ class Capsule < ActiveRecord::Base
     end
   end
 
+  def token
+    generate_access_token unless access_token && access_token_created_at < TOKEN_EXPIRE_DATE_TIME
+    access_token
+  end
+
   private
 
   private_class_method def self.union_scope *scopes
     id_column = "#{table_name}.id"
     sub_query = scopes.map { |s| s.select(id_column).to_sql }.join(" UNION ")
     where "#{id_column} IN (#{sub_query})"
+  end
+
+  def generate_access_token
+    begin
+      self.access_token = SecureRandom.urlsafe_base64
+    end while Capsule.exists?(access_token: self.access_token)
+    self.access_token_created_at = Time.current
+    save!
   end
 
   def user_is_the_author user
