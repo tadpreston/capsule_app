@@ -20,6 +20,6 @@ class RecipientMailer < ActionMailer::Base
 
   def get_user_and_capsule user_id, capsule_id
     @user = User.find user_id
-    @capsule = Capsule.unscoped.find capsule_id
+    @capsule = Capsule.find capsule_id
   end
 end
