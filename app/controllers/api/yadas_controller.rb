@@ -1,4 +1,4 @@
-module Api
+module API
   class YadasController < ApplicationController
     before_action :set_yada
     rescue_from 'RecordNotFound', with: :render_resource_not_found
