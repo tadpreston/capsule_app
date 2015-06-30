@@ -4,7 +4,7 @@ module Api
     rescue_from 'RecordNotFound', with: :render_resource_not_found
 
     def show
-      render json: @yada
+      render json: @yada, serializer: YadaSerializer
     end
 
     private
