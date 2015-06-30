@@ -99,7 +99,7 @@ class Capsule < ActiveRecord::Base
   end
 
   def token
-    generate_access_token unless access_token && access_token_created_at < TOKEN_EXPIRE_DATE_TIME
+    generate_access_token if access_token.nil? || access_token_created_at < TOKEN_EXPIRE_DATE_TIME
     access_token
   end
 
@@ -112,11 +112,10 @@ class Capsule < ActiveRecord::Base
   end
 
   def generate_access_token
-    begin
-      self.access_token = SecureRandom.urlsafe_base64
-    end while Capsule.exists?(access_token: self.access_token)
+    token = TokenGenerator.new(object: self, column: :access_token).generate
+    self.access_token = token
     self.access_token_created_at = Time.current
-    save!
+    save
   end
 
   def user_is_the_author user
