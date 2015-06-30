@@ -10,8 +10,8 @@ module API
     private
 
     def set_yada
-      @yada = Capsule.find_by token: params[:id]
-      render json: token_expired_response(params[:id]) if @yada.token_created_at.utc < Capsule::TOKEN_EXPIRE_DATE_TIME
+      @yada = Capsule.find_by access_token: params[:token]
+      render json: token_expired_response(params[:token]) if @yada.access_token_created_at.utc < Capsule::TOKEN_EXPIRE_DATE_TIME
     end
 
     def render_resource_not_found
