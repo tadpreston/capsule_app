@@ -47,5 +47,4 @@ class UserCallbacks
     user.password = tmp_pwd
     user.password_confirmation = tmp_pwd
   end
-
 end
