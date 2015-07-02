@@ -26,6 +26,8 @@ Rails.application.routes.draw do
   end
 
   namespace :api, defaults: {format: 'json'} do
+    get 'yada/:token', to: 'yadas#show', as: 'yada'
+
     namespace :v1 do
       get 'config', to: 'configs#index'
       get 'search', to: 'searches#index'

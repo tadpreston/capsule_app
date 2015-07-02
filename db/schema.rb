@@ -11,12 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150324125628) do
+ActiveRecord::Schema.define(version: 20150628211422) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
-  enable_extension "pg_stat_statements"
   enable_extension "uuid-ossp"
 
   create_table "admin_users", force: true do |t|
@@ -92,16 +91,18 @@ ActiveRecord::Schema.define(version: 20150324125628) do
     t.hstore   "relative_location"
     t.boolean  "incognito"
     t.integer  "in_reply_to"
-    t.integer  "comments_count",    default: 0
+    t.integer  "comments_count",          default: 0
     t.hstore   "likes_store"
     t.boolean  "is_portable"
     t.string   "thumbnail"
     t.datetime "start_date"
-    t.integer  "watchers",          default: [], array: true
-    t.integer  "read_array",        default: [], array: true
+    t.integer  "watchers",                default: [], array: true
+    t.integer  "read_array",              default: [], array: true
     t.integer  "tenant_id"
     t.hstore   "creator"
-    t.integer  "likes",             default: [], array: true
+    t.integer  "likes",                   default: [], array: true
+    t.string   "access_token"
+    t.datetime "access_token_created_at"
   end
 
   add_index "capsules", ["in_reply_to"], name: "index_capsules_on_in_reply_to", using: :btree

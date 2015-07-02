@@ -161,7 +161,7 @@ describe Capsule do
       @capsule.save
       expect(@capsule.creator).to_not be_blank
       expect(@capsule.creator["id"]).to eq(@capsule.user_id.to_s)
-      expect(@capsule.creator["full_name"]).to eq(@capsule.user.full_name)
+      expect(@capsule.creator["full_name"]).to eq(@capsule.user_full_name)
     end
   end
 
