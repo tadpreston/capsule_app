@@ -27,8 +27,8 @@ class RegisteredUser
           name: user.full_name,
           phone_number: user.phone_number,
           email: user.email,
-          profile_image: user.profile_image,
-          signed_profile_image: user.signed_profile_image
+          profile_image: user.profile_image_path,
+          signed_profile_image: user.signed_profile_image_path
     end
   end
 end
