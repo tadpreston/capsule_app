@@ -10,6 +10,7 @@ module API
       end
 
       def show
+        render json: @user, serializer: API::V1a::UserSerializer
       end
 
       def create
