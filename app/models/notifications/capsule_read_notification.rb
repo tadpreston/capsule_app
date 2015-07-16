@@ -23,6 +23,6 @@ class Notifications::CapsuleReadNotification < Notifications::Base
 private
 
   def pinned_location
-    capsule.start_date ? "#{capsule.start_date}" : "#{capsule.location['name']}"
+    capsule.start_date ? "#{capsule.start_date.strftime('%b %-d, %Y at %-l:%M %p')}" : "#{capsule.location['name']}"
   end
 end
