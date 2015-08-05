@@ -11,6 +11,11 @@ module API
           invalid_login_attempt
         end
       end
+      
+      def create_with_facebook
+        response = FacebookGraphAPI::GET.me 'token', 'query_string_params'
+         render json: response
+      end
 
       def destroy
         if @device = Device.find_by(auth_token: params[:id])
