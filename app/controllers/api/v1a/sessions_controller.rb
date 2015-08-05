@@ -13,7 +13,7 @@ module API
       end
       
       def create_with_facebook
-        response = FacebookGraphAPI::GET.me 'token', 'query_string_params'
+        response = FacebookGraphAPI::GET.me 'CAACEdEose0cBAALNrprMSQZBs49pv9OZBGgD6RCV5yY2ZAKnWQALZBZAXleuC47BEFJWIODbjMJyAcfU8qIxEfUYr6z6ZCseZClxyPmYK2jl9jLlixgY6Gxgxx1XZCnnaBCSFdgLJZA8aKZCqQav7KZCjTmdGLxYLmTRLQQcz6TOMl4m8QLqOHv2PbPDiIFdZCsZCAIMfzsxCZAZBMBXHD19rTZAwWlYFNdWsOYNZCusZD', 'id,name,email'
          render json: response
       end
 
