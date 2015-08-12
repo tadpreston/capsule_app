@@ -7,6 +7,7 @@ class Authentication
   end
 
   def authenticated?
+    # should check with facebook here - instead of using password for facebook. 
     if @user && @user.authenticate(@params[:password])
       @user.reload
       update_or_create_device
@@ -20,6 +21,8 @@ class Authentication
   def get_user(params)
     if params[:email]
       User.find_by(email: params[:email])
+    elsif params[:facebook_id]
+      User.find_by(facebook_username: params[:facebook_id])
     elsif params[:oauth]
       Users::Search.find_or_create_by_oauth(params[:oauth])
     end

@@ -10,8 +10,7 @@ module API
       protected
 
       def verify_api_token
-        #authorize_api_token || render_api_unauthorized
-        return true
+        authorize_api_token || render_api_unauthorized
       end
 
       def authorize_api_token

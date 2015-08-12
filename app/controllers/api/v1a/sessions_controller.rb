@@ -13,9 +13,6 @@ module API
       end
 
       def create_with_facebook
-        response = FacebookGraphAPI::GET.me 'CAACEdEose0cBAJqMDTZBtwtjvfrdZA3Pajl3myd27Bq8giksn6P35WEJO2ZAnqmeVt2URfwyLTaJe6PyrfnenXy16WZCBO84nLVLTHXWlRD6hnZCGgZBfEM2mTeEXESzCQSM9rgsOq1iaxRsi6w5TOczJLoQBaN7x6GMg1E1PqqF5eUXlFitJTbo6pFZAdc5QLyZBvHuwXNEZASyhszduPHzt', 'id'
-         #r = { id: response['id'], t: params[:token] }
-
         validator = FacebookValidator.new params[:facebook_id], params[:facebook_token]
         r = { fbid: params[:facebook_id], t: params[:facebook_token], valid: validator.validates }
 
