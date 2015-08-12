@@ -11,10 +11,15 @@ module API
           invalid_login_attempt
         end
       end
-      
+
       def create_with_facebook
-        response = FacebookGraphAPI::GET.me 'CAACEdEose0cBAALNrprMSQZBs49pv9OZBGgD6RCV5yY2ZAKnWQALZBZAXleuC47BEFJWIODbjMJyAcfU8qIxEfUYr6z6ZCseZClxyPmYK2jl9jLlixgY6Gxgxx1XZCnnaBCSFdgLJZA8aKZCqQav7KZCjTmdGLxYLmTRLQQcz6TOMl4m8QLqOHv2PbPDiIFdZCsZCAIMfzsxCZAZBMBXHD19rTZAwWlYFNdWsOYNZCusZD', 'id,name,email'
-         render json: response
+        response = FacebookGraphAPI::GET.me 'CAACEdEose0cBAJqMDTZBtwtjvfrdZA3Pajl3myd27Bq8giksn6P35WEJO2ZAnqmeVt2URfwyLTaJe6PyrfnenXy16WZCBO84nLVLTHXWlRD6hnZCGgZBfEM2mTeEXESzCQSM9rgsOq1iaxRsi6w5TOczJLoQBaN7x6GMg1E1PqqF5eUXlFitJTbo6pFZAdc5QLyZBvHuwXNEZASyhszduPHzt', 'id'
+         #r = { id: response['id'], t: params[:token] }
+
+        validator = FacebookValidator.new params[:facebook_id], params[:facebook_token]
+        r = { fbid: params[:facebook_id], t: params[:facebook_token], valid: validator.validates }
+
+         render json: r
       end
 
       def destroy
