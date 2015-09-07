@@ -4,9 +4,9 @@ class FacebookValidator
     @token = token
   end
 
-  def validates
+  def validates?
     # return (user_exists && user_id_matches)
-    return (user_id_matches)
+    user_id_matches?
   end
 
   private
@@ -15,8 +15,8 @@ class FacebookValidator
   #   return User.where(facebook_username: @facebook_user_id).first != nil
   # end
 
-  def user_id_matches
+  def user_id_matches?
     response = FacebookGraphAPI::GET.me @token, 'id'
-    return response['id'] == @facebook_user_id
+    response['id'] == @facebook_user_id
   end
 end
