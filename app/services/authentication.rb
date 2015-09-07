@@ -22,7 +22,7 @@ class Authentication
     if @params[:password]
       @user.authenticate @params[:password]
     else
-      FacebookValidator.validate @params[:facebook_id], @params[:facebook_token]
+      FacebookValidator.validate_user @params[:facebook_id], @params[:facebook_token]
     end
   end
 
