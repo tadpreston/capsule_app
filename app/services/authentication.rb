@@ -8,7 +8,7 @@ class Authentication
 
   def authenticated?
     return nil unless @user
-    if authenticate
+    if user_is_authenticated?
       @user.reload
       update_or_create_device
       set_mode
@@ -18,7 +18,7 @@ class Authentication
 
   private
 
-  def authenticate
+  def user_is_authenticated?
     if @params[:password]
       @user.authenticate @params[:password]
     else

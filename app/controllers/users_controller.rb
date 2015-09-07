@@ -15,7 +15,7 @@ class UsersController < ApplicationController
   end
 
   def create
-    @user = User.new user_params
+    set_user
     if @user.save
       redirect_to @user, notice: 'User has been created'
     else
@@ -37,7 +37,14 @@ class UsersController < ApplicationController
       @user = User.find params[:id]
     end
 
+    def set_new_user
+      @user = User.new user_params
+      if FacebookValidator.validate @params[:facebook_id], @params[:facebook_token]
+        @user.password, @user.password_confirmation = 'some_string', 'some_string'
+      end
+    end
+
     def user_params
-      params.require(:user).permit(:email, :full_name, :password, :password_confirmation)
+      params.require(:user).permit(:email, :full_name, :password, :password_confirmation, :facebook_id)
     end
 end
