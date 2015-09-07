@@ -291,6 +291,10 @@ class User < ActiveRecord::Base
     UserMailer.password_reset(self).deliver
   end
 
+  def facebook_id=(facebook_id)
+    self.facebook_username = facebook_id
+  end
+
   private
 
   def uid_and_provider_are_unique
