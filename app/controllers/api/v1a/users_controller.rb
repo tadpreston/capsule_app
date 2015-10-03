@@ -22,6 +22,22 @@ module API
       end
 
       def update
+        if params[:user][:facebook_username]
+          update_with_facebook params[:user][:facebook_username], params[:user][:facebook_token]
+        else
+          try_update
+        end
+      end
+
+      def update_with_facebook(fb_id, fb_token)
+        if FacebookValidator.validate_user fb_id, fb_token
+          try_update
+        else
+          render json: user_not_updated('Invalid facebook token', @user.id)
+        end
+      end
+
+      def try_update
         if @user.update_attributes(user_params)
           render json: @user, serializer: API::V1a::UserSerializer
         else
