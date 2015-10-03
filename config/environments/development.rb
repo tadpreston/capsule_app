@@ -43,6 +43,6 @@ Rails.application.configure do
     port: ENV['SMTP_PORT'],
     domain: 'pinyadaapp.com',
     user_name: ENV['SMTP_USERNAME'],
-    password: ENV['MANDRILL_APIKEY']
+    password: ENV['SMTP_APIKEY']
   }
 end
