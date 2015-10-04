@@ -22,8 +22,8 @@ module API
       end
 
       def update
-        if params[:user][:facebook_username]
-          update_with_facebook params[:user][:facebook_username], params[:user][:facebook_token]
+        if params[:user][:facebook_id]
+          update_with_facebook params[:user][:facebook_id], params[:user][:facebook_token]
         else
           try_update
         end
