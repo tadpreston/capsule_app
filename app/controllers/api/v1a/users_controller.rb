@@ -22,6 +22,22 @@ module API
       end
 
       def update
+        if params[:user][:facebook_id]
+          update_with_facebook params[:user][:facebook_id], params[:user][:facebook_token]
+        else
+          try_update
+        end
+      end
+
+      def update_with_facebook(fb_id, fb_token)
+        if FacebookValidator.validate_user fb_id, fb_token
+          try_update
+        else
+          render json: user_not_updated('Invalid facebook token', @user.id)
+        end
+      end
+
+      def try_update
         if @user.update_attributes(user_params)
           render json: @user, serializer: API::V1a::UserSerializer
         else
@@ -85,7 +101,7 @@ module API
 
       def user_params
         params.required(:user).permit(:email, :username, :full_name, :location, :password, :password_confirmation, :time_zone, :tutorial_progress, :phone_number,
-                                      :motto, :background_image, :facebook_username, :twitter_username, :profile_image, :device_token, :old_password, :facebook_id,
+                                      :motto, :background_image, :facebook_username, :facebook_id, :twitter_username, :profile_image, :device_token, :old_password, :facebook_id,
                                       oauth: [
                                         { location: [:id, :name] }, { friends: [:name, :id, :username, :full_name] }, :birthday, :quotes, :verified, :work, :education,
                                         :timezone, :updated_time, :name, :email, :birthdate, :locale, :full_name, :id, :provider, :uid,
