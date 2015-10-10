@@ -1,13 +1,14 @@
 class Authentication
 
-  def initialize(params, request)
+  def initialize params, request
     @params = params
-    @user = get_user(@params)
+    @user = get_user @params
     @request = request
   end
 
   def authenticated?
-    if @user && @user.authenticate(@params[:password])
+    return nil unless @user
+    if user_is_authenticated?
       @user.reload
       update_or_create_device
       set_mode
@@ -17,11 +18,19 @@ class Authentication
 
   private
 
-  def get_user(params)
-    if params[:email]
-      User.find_by(email: params[:email])
-    elsif params[:oauth]
-      Users::Search.find_or_create_by_oauth(params[:oauth])
+  def user_is_authenticated?
+    if @params[:password]
+      @user.authenticate @params[:password]
+    else
+      FacebookValidator.validate_user @params[:facebook_id], @params[:facebook_token]
+    end
+  end
+
+  def get_user params
+    if params[:facebook_id]
+      User.find_by(facebook_username: params[:facebook_id])
+    else
+      User.find_by(email: params[:email]) if params[:email]
     end
   end
 
