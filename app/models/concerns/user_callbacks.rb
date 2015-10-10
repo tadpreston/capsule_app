@@ -10,7 +10,7 @@ class UserCallbacks
   end
 
   def self.after_create(user)
-    user.send_confirmation_email unless user.is_recipient?
+    MailchimpLists.subscribe email: user.email unless user.email.blank?
   end
 
   def self.after_save user
