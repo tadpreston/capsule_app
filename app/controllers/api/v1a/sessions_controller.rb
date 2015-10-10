@@ -12,6 +12,13 @@ module API
         end
       end
 
+      def create_with_facebook
+        validator = FacebookValidator.new params[:facebook_id], params[:facebook_token]
+        r = { fbid: params[:facebook_id], t: params[:facebook_token], valid: validator.validates }
+
+         render json: r
+      end
+
       def destroy
         if @device = Device.find_by(auth_token: params[:id])
           @device.expire_auth_token!
