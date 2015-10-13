@@ -20,6 +20,7 @@ gem 'apns'
 gem 'vincenty', '~> 1.0.6'
 gem 'aws_cf_signer', '~> 0.1.3'
 gem 'mandrill-api', '~> 1.0.53'
+gem 'mailchimp-api', '~> 2.0.6', require: 'mailchimp'
 
 gem 'sass-rails', '~> 4.0.3'
 gem 'uglifier', '~> 2.5.0'

@@ -45,6 +45,8 @@ class PasswordChangeError < StandardError; end
 class User < ActiveRecord::Base
   has_secure_password
 
+  after_create UserCallbacks
+
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 
   validates :email, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }, allow_blank: true
