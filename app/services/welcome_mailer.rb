@@ -1,5 +1,5 @@
 class WelcomeMailer
-  attr_reader :email, :subject, :from_name, :template_name
+  attr_reader :email, :subject, :from_name, :template_name, :status, :message_id, :reject_reason
 
   def initialize email, subject, from_name, template_name
     @email = email
@@ -13,9 +13,9 @@ class WelcomeMailer
   end
 
   def deliver
-    result = mandrill.messages.send message
-    raise WelcomeMailerRejectedError, error_message(result.first)  unless result.first['status'] == 'sent'
-    result
+    result = mandrill.messages.send(message).first
+    initialize_from_result result
+    self
   end
 
   private
@@ -38,7 +38,9 @@ class WelcomeMailer
     mandrill.templates.render template_name, options
   end
 
-  def error_message result
-    "#{result['status']} - #{result['reject_reason']}"
+  def initialize_from_result result
+    @status = result['status']
+    @message_id = result['_id']
+    @reject_reason = result['reject_reason']
   end
 end

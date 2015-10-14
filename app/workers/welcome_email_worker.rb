@@ -2,12 +2,13 @@ class WelcomeEmailWorker
   include Sidekiq::Worker
 
   def perform user_id
-    WelcomeMailer.deliver email: user(user_id).email, subject: 'Welcome To PinYada!', from_name: 'PinYada'
+    result = WelcomeMailer.deliver(email: user(user_id).email, subject: 'Welcome To PinYada!', from_name: 'PinYada').first
+    Mandrill.create email: user.email, status: result.status, message_id: result.message_id, reason: result.reject_reason
   end
 
   private
 
-  def user user_id
+  def user user_id=nil
     @user ||= User.find user_id
   end
 end
