@@ -1,5 +1,5 @@
-class MandrillMailerRejectedError < StandardError; end
-class MandrillMailer
+class WelcomeMailerRejectedError < StandardError; end
+class WelcomeMailer
   attr_reader :email, :subject, :from_name, :template_name
 
   def initialize email, subject, from_name, template_name
@@ -15,7 +15,7 @@ class MandrillMailer
 
   def deliver
     result = mandrill.messages.send message
-    raise MandrillMailerRejectedError, error_message(result.first)  unless result.first['status'] == 'sent'
+    raise WelcomeMailerRejectedError, error_message(result.first)  unless result.first['status'] == 'sent'
     result
   end
 
