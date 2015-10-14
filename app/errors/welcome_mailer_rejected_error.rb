@@ -1,0 +1,1 @@
+class WelcomeMailerRejectedError < StandardError; end

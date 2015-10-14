@@ -1,4 +1,3 @@
-class WelcomeMailerRejectedError < StandardError; end
 class WelcomeMailer
   attr_reader :email, :subject, :from_name, :template_name
 
