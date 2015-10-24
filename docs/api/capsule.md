@@ -24,7 +24,7 @@ __Request Payload__
         "email": "tommy.tutone@yahoo.com",
         "full_name": "Tommy Tutone"
       }
-    }
+    ]
   }
 }
 ```
@@ -51,7 +51,7 @@ __Response__ 200 OK
           "id": 5432,
           "phone_number": "9728326262",
           "email": "homer.simpson@gmail.com",
-          "full_name": "Homer Sipmson"
+          "full_name": "Homer Sipmson",
           "location": null,
           "profile_image": "",
           "created_at": "2015-01-11T04:26:50.010Z",
@@ -94,7 +94,7 @@ __Response__ 200 OK
           "id": 5432,
           "phone_number": "8178675309",
           "email": "tommy.tutone@yahoo.com",
-          "full_name": "Tommy Tutone"
+          "full_name": "Tommy Tutone",
           "location": null,
           "profile_image": "",
           "created_at": "2015-01-11T04:26:50.010Z",
