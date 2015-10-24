@@ -76,6 +76,7 @@ class User < ActiveRecord::Base
   has_many :unlocks
   has_many :relevances
   has_many :relevant_yadas, through: :relevances, source: :capsule
+  has_many :mandrill_results
 
   def self.generate_token(column)
     token = ''
