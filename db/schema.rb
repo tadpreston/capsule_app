@@ -192,13 +192,15 @@ ActiveRecord::Schema.define(version: 20151014024314) do
   add_index "location_watches", ["user_id"], name: "index_location_watches_on_user_id", using: :btree
 
   create_table "mandrill_results", force: true do |t|
-    t.string   "email"
+    t.integer  "user_id"
     t.string   "status"
     t.string   "message_id"
     t.string   "reason"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "mandrill_results", ["user_id"], name: "index_mandrill_results_on_user_id", using: :btree
 
   create_table "notifications", force: true do |t|
     t.integer  "user_id"
