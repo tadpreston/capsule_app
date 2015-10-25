@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150628211422) do
+ActiveRecord::Schema.define(version: 20151025181225) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -52,6 +52,16 @@ ActiveRecord::Schema.define(version: 20150628211422) do
   end
 
   add_index "blocks", ["user_id"], name: "index_blocks_on_user_id", using: :btree
+
+  create_table "capsule_categories", force: true do |t|
+    t.integer  "capsule_id"
+    t.integer  "category_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "capsule_categories", ["capsule_id"], name: "index_capsule_categories_on_capsule_id", using: :btree
+  add_index "capsule_categories", ["category_id"], name: "index_capsule_categories_on_category_id", using: :btree
 
   create_table "capsule_reads", force: true do |t|
     t.integer  "user_id"
@@ -114,6 +124,12 @@ ActiveRecord::Schema.define(version: 20150628211422) do
   add_index "capsules", ["tenant_id"], name: "index_capsules_on_tenant_id", using: :btree
   add_index "capsules", ["user_id"], name: "index_capsules_on_user_id", using: :btree
   add_index "capsules", ["watchers"], name: "index_capsules_on_watchers", using: :gin
+
+  create_table "categories", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "comments", force: true do |t|
     t.integer  "user_id"
@@ -190,6 +206,17 @@ ActiveRecord::Schema.define(version: 20150628211422) do
   add_index "location_watches", ["longitude", "latitude"], name: "index_location_watches_on_longitude_and_latitude", using: :btree
   add_index "location_watches", ["longitude"], name: "index_location_watches_on_longitude", using: :btree
   add_index "location_watches", ["user_id"], name: "index_location_watches_on_user_id", using: :btree
+
+  create_table "mandrill_results", force: true do |t|
+    t.integer  "user_id"
+    t.string   "status"
+    t.string   "message_id"
+    t.string   "reason"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "mandrill_results", ["user_id"], name: "index_mandrill_results_on_user_id", using: :btree
 
   create_table "notifications", force: true do |t|
     t.integer  "user_id"
