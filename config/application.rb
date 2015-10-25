@@ -26,8 +26,6 @@ module CapsuleApp
 
     config.middleware.insert_before 0, "Rack::Cors" do
       allow do
-#       origins ['http://pinyadaapp.com', /http:\/\/localhost:(\d+)?/]
-#       resource '*', :headers => :any, :methods => [:get, :put, :patch, :options]
         origins '*'
         resource '*', headers: :any, methods: [:get, :post, :put, :patch, :delete, :options]
       end

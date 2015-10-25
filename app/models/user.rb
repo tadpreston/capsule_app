@@ -54,7 +54,7 @@ class User < ActiveRecord::Base
 
   validates :email, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }, allow_blank: true
   validates :email, presence: true, if: Proc.new { |u| u.phone_number.blank? }
-  validates :password, confirmation: true, length: { minimum: 6 }, unless: Proc.new { |u| u.password.blank? && u.password_confirmation.blank? }
+  validates :password, confirmation: true, unless: Proc.new { |u| u.password.blank? && u.password_confirmation.blank? }
   validates :phone_number, uniqueness: true, allow_blank: true
   validates :phone_number, presence: true, if: Proc.new { |u| u.email.blank? }
 
@@ -76,6 +76,7 @@ class User < ActiveRecord::Base
   has_many :unlocks
   has_many :relevances
   has_many :relevant_yadas, through: :relevances, source: :capsule
+  has_many :mandrill_results
 
   def self.generate_token(column)
     token = ''

@@ -11,6 +11,7 @@ class UserCallbacks
 
   def self.after_create(user)
     MailchimpLists.subscribe email: user.email unless user.email.blank?
+    WelcomeEmailWorker.perform_in 1.hour, user.id
   end
 
   def self.after_save user

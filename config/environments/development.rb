@@ -15,7 +15,7 @@ Rails.application.configure do
 # config.cache_store = :dalli_store
 
   # Don't care if the mailer can't send.
-  config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.raise_delivery_errors = true
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
@@ -40,9 +40,9 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
     address: ENV['SMTP_ADDRESS'],
-    port: 25,
+    port: ENV['SMTP_PORT'],
     domain: 'pinyadaapp.com',
-    user_name: ENV['SENDGRID_USERNAME'],
-    password: ENV['SENDGRID_PASSWORD']
+    user_name: ENV['SMTP_USERNAME'],
+    password: ENV['SMTP_APIKEY']
   }
 end
