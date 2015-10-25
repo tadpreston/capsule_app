@@ -2,34 +2,36 @@
 #
 # Table name: capsules
 #
-#  id                :integer          not null, primary key
-#  user_id           :integer
-#  comment           :text
-#  hash_tags         :string(255)
-#  location          :hstore
-#  status            :string(255)
-#  visibility        :string(255)
-#  created_at        :datetime
-#  updated_at        :datetime
-#  lock_question     :string(255)
-#  lock_answer       :string(255)
-#  latitude          :decimal(, )
-#  longitude         :decimal(, )
-#  payload_type      :integer
-#  promotional_state :integer
-#  relative_location :hstore
-#  incognito         :boolean
-#  in_reply_to       :integer
-#  comments_count    :integer          default(0)
-#  likes_store       :hstore
-#  is_portable       :boolean
-#  thumbnail         :string(255)
-#  start_date        :datetime
-#  watchers          :integer          default([]), is an Array
-#  readers           :integer          default([]), is an Array
-#  tenant_id         :integer
-#  creator           :hstore
-#  likes             :integer          default([]), is an Array
+#  id                      :integer          not null, primary key
+#  user_id                 :integer
+#  comment                 :text
+#  hash_tags               :string(255)
+#  location                :hstore
+#  status                  :string(255)
+#  visibility              :string(255)
+#  created_at              :datetime
+#  updated_at              :datetime
+#  lock_question           :string(255)
+#  lock_answer             :string(255)
+#  latitude                :decimal(, )
+#  longitude               :decimal(, )
+#  payload_type            :integer
+#  promotional_state       :integer
+#  relative_location       :hstore
+#  incognito               :boolean
+#  in_reply_to             :integer
+#  comments_count          :integer          default(0)
+#  likes_store             :hstore
+#  is_portable             :boolean
+#  thumbnail               :string(255)
+#  start_date              :datetime
+#  watchers                :integer          default([]), is an Array
+#  read_array              :integer          default([]), is an Array
+#  tenant_id               :integer
+#  creator                 :hstore
+#  likes                   :integer          default([]), is an Array
+#  access_token            :string(255)
+#  access_token_created_at :datetime
 #
 
 require 'spec_helper'
