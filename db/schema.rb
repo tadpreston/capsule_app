@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150628211422) do
+ActiveRecord::Schema.define(version: 20151014024314) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -190,6 +190,17 @@ ActiveRecord::Schema.define(version: 20150628211422) do
   add_index "location_watches", ["longitude", "latitude"], name: "index_location_watches_on_longitude_and_latitude", using: :btree
   add_index "location_watches", ["longitude"], name: "index_location_watches_on_longitude", using: :btree
   add_index "location_watches", ["user_id"], name: "index_location_watches_on_user_id", using: :btree
+
+  create_table "mandrill_results", force: true do |t|
+    t.integer  "user_id"
+    t.string   "status"
+    t.string   "message_id"
+    t.string   "reason"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "mandrill_results", ["user_id"], name: "index_mandrill_results_on_user_id", using: :btree
 
   create_table "notifications", force: true do |t|
     t.integer  "user_id"

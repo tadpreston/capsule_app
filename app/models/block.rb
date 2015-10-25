@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: blocks
+#
+#  id         :integer          not null, primary key
+#  user_id    :integer
+#  blocked_id :integer
+#  created_at :datetime
+#  updated_at :datetime
+#
+
 class Block < ActiveRecord::Base
   belongs_to :user
   belongs_to :blocked, class_name: 'User'

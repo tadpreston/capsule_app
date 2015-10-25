@@ -1,16 +1,18 @@
 # == Schema Information
 #
-# Table name: blocks
+# Table name: mandrill_results
 #
 #  id         :integer          not null, primary key
-#  user_id    :integer
-#  blocked_id :integer
+#  email      :string(255)
+#  status     :string(255)
+#  message_id :string(255)
+#  reason     :string(255)
 #  created_at :datetime
 #  updated_at :datetime
 #
 
 require 'spec_helper'
 
-describe Block do
+describe MandrillResult do
   pending "add some examples to (or delete) #{__FILE__}"
 end
