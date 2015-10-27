@@ -73,8 +73,8 @@ __Response__ 200 OK
       "is_read": false,
       "is_unlocked": false,
       "is_forwarded": true,
-      "is_promo": true,
-      "is_redeemed": true,
+      "is_redeemed": false,
+      "promo_id": 1234,
       "created_at": "2015-01-11T04:26:50.010Z",
       "updated_at": "2015-09-23T20:16:38.015Z"
     },
@@ -118,6 +118,8 @@ __Response__ 200 OK
       "is_read": false,
       "is_unlocked": false,
       "is_forwarded": true,
+      "is_redeemed": false,
+      "promo_id": 1235,
       "created_at": "2015-01-11T04:26:50.010Z",
       "updated_at": "2015-09-23T20:16:38.015Z"
     }
