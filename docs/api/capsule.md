@@ -73,6 +73,8 @@ __Response__ 200 OK
       "is_read": false,
       "is_unlocked": false,
       "is_forwarded": true,
+      "is_promo": true,
+      "is_redeemed": true,
       "created_at": "2015-01-11T04:26:50.010Z",
       "updated_at": "2015-09-23T20:16:38.015Z"
     },
