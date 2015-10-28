@@ -3,7 +3,7 @@
 # Table name: mandrill_results
 #
 #  id         :integer          not null, primary key
-#  email      :string(255)
+#  user_id    :integer
 #  status     :string(255)
 #  message_id :string(255)
 #  reason     :string(255)
