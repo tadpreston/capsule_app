@@ -9,5 +9,6 @@
 #
 
 class Category < ActiveRecord::Base
-  has_many :templates
+  has_many :category_templates, dependent: :destroy
+  has_many :templates, through: :category_templates
 end
