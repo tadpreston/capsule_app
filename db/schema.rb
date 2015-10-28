@@ -11,11 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151028215534) do
+ActiveRecord::Schema.define(version: 20151028220059) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_trgm"
+  enable_extension "fuzzystrmatch"
   enable_extension "plpgsql"
   enable_extension "hstore"
+  enable_extension "pg_stat_statements"
   enable_extension "uuid-ossp"
 
   create_table "admin_users", force: true do |t|
@@ -127,6 +130,13 @@ ActiveRecord::Schema.define(version: 20151028215534) do
 
   create_table "categories", force: true do |t|
     t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "category_templates", force: true do |t|
+    t.integer  "category_id"
+    t.integer  "template_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
