@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151025181225) do
+ActiveRecord::Schema.define(version: 20151028215534) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -281,6 +281,12 @@ ActiveRecord::Schema.define(version: 20151025181225) do
   add_index "relevances", ["capsule_id"], name: "index_relevances_on_capsule_id", using: :btree
   add_index "relevances", ["relevant_date"], name: "index_relevances_on_relevant_date", using: :btree
   add_index "relevances", ["user_id"], name: "index_relevances_on_user_id", using: :btree
+
+  create_table "templates", force: true do |t|
+    t.string   "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "tenant_keys", force: true do |t|
     t.integer  "tenant_id"
