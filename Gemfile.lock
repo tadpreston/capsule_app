@@ -132,6 +132,9 @@ GEM
     mailchimp-api (2.0.6)
       excon (>= 0.16.0)
       json (>= 1.7.7)
+    mandrill-api (1.0.53)
+      excon (>= 0.16.0, < 1.0)
+      json (>= 1.7.7, < 2.0)
     memcachier (0.0.2)
     method_source (0.8.2)
     mime-types (1.25.1)
@@ -300,6 +303,7 @@ DEPENDENCIES
   jquery-rails (~> 3.1.0)
   kaminari (~> 0.16.1)
   mailchimp-api (~> 2.0.6)
+  mandrill-api (~> 1.0.53)
   memcachier
   minitest (~> 5.3.2)
   newrelic_rpm (~> 3.8.1.221)
