@@ -11,11 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151014024314) do
+ActiveRecord::Schema.define(version: 20151028220059) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_trgm"
+  enable_extension "fuzzystrmatch"
   enable_extension "plpgsql"
   enable_extension "hstore"
+  enable_extension "pg_stat_statements"
   enable_extension "uuid-ossp"
 
   create_table "admin_users", force: true do |t|
@@ -52,6 +55,16 @@ ActiveRecord::Schema.define(version: 20151014024314) do
   end
 
   add_index "blocks", ["user_id"], name: "index_blocks_on_user_id", using: :btree
+
+  create_table "capsule_categories", force: true do |t|
+    t.integer  "capsule_id"
+    t.integer  "category_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "capsule_categories", ["capsule_id"], name: "index_capsule_categories_on_capsule_id", using: :btree
+  add_index "capsule_categories", ["category_id"], name: "index_capsule_categories_on_category_id", using: :btree
 
   create_table "capsule_reads", force: true do |t|
     t.integer  "user_id"
@@ -114,6 +127,19 @@ ActiveRecord::Schema.define(version: 20151014024314) do
   add_index "capsules", ["tenant_id"], name: "index_capsules_on_tenant_id", using: :btree
   add_index "capsules", ["user_id"], name: "index_capsules_on_user_id", using: :btree
   add_index "capsules", ["watchers"], name: "index_capsules_on_watchers", using: :gin
+
+  create_table "categories", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "category_templates", force: true do |t|
+    t.integer  "category_id"
+    t.integer  "template_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "comments", force: true do |t|
     t.integer  "user_id"
@@ -265,6 +291,12 @@ ActiveRecord::Schema.define(version: 20151014024314) do
   add_index "relevances", ["capsule_id"], name: "index_relevances_on_capsule_id", using: :btree
   add_index "relevances", ["relevant_date"], name: "index_relevances_on_relevant_date", using: :btree
   add_index "relevances", ["user_id"], name: "index_relevances_on_user_id", using: :btree
+
+  create_table "templates", force: true do |t|
+    t.string   "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "tenant_keys", force: true do |t|
     t.integer  "tenant_id"
