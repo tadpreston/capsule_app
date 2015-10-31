@@ -108,8 +108,9 @@ Rails.application.routes.draw do
           get :location
         end
         member do
-          post   :read
-          post   :unlock
+          post :read
+          post :unlock
+          post :forward
         end
         resources :comments, only: [:index, :create, :destroy] do
           member do
