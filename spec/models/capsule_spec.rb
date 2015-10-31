@@ -53,6 +53,7 @@ describe Capsule do
   let!(:capsule_object) { FactoryGirl.create :capsule }
 
   it { should belong_to(:user) }
+  it { should belong_to(:campaign) }
   it { should have_many(:comments) }
   it { should have_many(:assets) }
   it { should have_many(:recipient_users) }
