@@ -14,11 +14,8 @@
 ActiveRecord::Schema.define(version: 20151031145522) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pg_trgm"
-  enable_extension "fuzzystrmatch"
   enable_extension "plpgsql"
   enable_extension "hstore"
-  enable_extension "pg_stat_statements"
   enable_extension "uuid-ossp"
 
   create_table "admin_users", force: true do |t|
@@ -57,15 +54,12 @@ ActiveRecord::Schema.define(version: 20151031145522) do
   add_index "blocks", ["user_id"], name: "index_blocks_on_user_id", using: :btree
 
   create_table "campaigns", force: true do |t|
-    t.integer  "capsule_id"
     t.string   "name"
     t.text     "description"
     t.string   "code"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  add_index "campaigns", ["capsule_id"], name: "index_campaigns_on_capsule_id", using: :btree
 
   create_table "capsule_categories", force: true do |t|
     t.integer  "capsule_id"

@@ -3,7 +3,6 @@
 # Table name: campaigns
 #
 #  id          :integer          not null, primary key
-#  capsule_id  :integer
 #  name        :string(255)
 #  description :text
 #  code        :string(255)
