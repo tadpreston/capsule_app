@@ -33,6 +33,7 @@
 #  access_token            :string(255)
 #  access_token_created_at :datetime
 #  campaign_id             :integer
+#  forwarded               :boolean
 #
 
 require 'spec_helper'

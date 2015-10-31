@@ -11,14 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151031150451) do
+ActiveRecord::Schema.define(version: 20151031181804) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pg_trgm"
-  enable_extension "fuzzystrmatch"
   enable_extension "plpgsql"
   enable_extension "hstore"
-  enable_extension "pg_stat_statements"
   enable_extension "uuid-ossp"
 
   create_table "admin_users", force: true do |t|
@@ -125,6 +122,7 @@ ActiveRecord::Schema.define(version: 20151031150451) do
     t.string   "access_token"
     t.datetime "access_token_created_at"
     t.integer  "campaign_id"
+    t.boolean  "forwarded"
   end
 
   add_index "capsules", ["campaign_id"], name: "index_capsules_on_campaign_id", using: :btree
