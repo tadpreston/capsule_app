@@ -78,6 +78,8 @@ class User < ActiveRecord::Base
   has_many :relevant_yadas, through: :relevances, source: :capsule
   has_many :mandrill_results
 
+  delegate :auth_token, to: :current_device
+
   def self.generate_token(column)
     token = ''
 
