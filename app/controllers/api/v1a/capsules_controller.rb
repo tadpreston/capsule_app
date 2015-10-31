@@ -62,6 +62,11 @@ module API
         render json: @capsule, serializer: API::V1a::CapsuleSerializer
       end
 
+      def forward
+        capsules = CapsuleForwarder.forward params[:capsule]
+        render json: capsules, each_serializer: API::V1a::CapsuleSerializer
+      end
+
       private
 
       def render_capsule_errors
