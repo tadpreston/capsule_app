@@ -32,6 +32,7 @@
 #  likes                   :integer          default([]), is an Array
 #  access_token            :string(255)
 #  access_token_created_at :datetime
+#  campaign_id             :integer
 #
 
 class Capsule < ActiveRecord::Base
@@ -57,6 +58,7 @@ class Capsule < ActiveRecord::Base
   end
 
   belongs_to :user, touch: true
+  belongs_to :campaign, touch: true
   has_many :comments, -> { order(created_at: :asc) }, as: :commentable, dependent: :destroy
   has_many :assets, as: :assetable, dependent: :destroy
   has_many :recipient_users, dependent: :destroy

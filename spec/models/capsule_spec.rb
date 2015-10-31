@@ -32,6 +32,7 @@
 #  likes                   :integer          default([]), is an Array
 #  access_token            :string(255)
 #  access_token_created_at :datetime
+#  campaign_id             :integer
 #
 
 require 'spec_helper'
