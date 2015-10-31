@@ -11,5 +11,5 @@
 #
 
 class Campaign < ActiveRecord::Base
-  belongs_to :capsule
+  has_many :capsules
 end
