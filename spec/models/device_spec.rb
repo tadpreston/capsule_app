@@ -17,9 +17,15 @@
 require 'spec_helper'
 
 describe Device do
-  before { @device = FactoryGirl.build(:device) }
+  before do
+    allow(UserCallbacks).to receive :before_save
+    allow(UserCallbacks).to receive :before_validation
+    allow(UserCallbacks).to receive :after_create
+    allow(UserCallbacks).to receive :after_save
+  end
 
-  subject { @device }
+  let!(:device_object) { FactoryGirl.create(:device) }
+  subject(:device) { device_object }
 
   it { should respond_to(:user_id) }
   it { should respond_to(:remote_ip) }
@@ -33,17 +39,17 @@ describe Device do
 
   describe 'before_create callback' do
     it 'generates an authentication token' do
-      @device.save
-      expect(@device.auth_token).to_not be_blank
+      device.save
+      expect(device.auth_token).to_not be_blank
     end
   end
 
   describe 'reset_auth_token!' do
     it 'generates a new authentication token' do
-      @device.save
-      orig_auth_token = @device.auth_token
-      @device.reset_auth_token!
-      expect(@device.auth_token).to_not eq(orig_auth_token)
+      device.save
+      orig_auth_token = device.auth_token
+      device.reset_auth_token!
+      expect(device.auth_token).to_not eq(orig_auth_token)
     end
   end
 
@@ -57,11 +63,9 @@ describe Device do
 
   describe 'expire_auth_token!' do
     it 'sets auth_token to nil' do
-      @device.save
-      expect(@device.auth_token).to_not be_blank
-      @device.expire_auth_token!
-      @device = Device.find @device.id
-      expect(@device.auth_token).to be_nil
+      expect(device.auth_token).to_not be_blank
+      device.expire_auth_token!
+      expect(device.auth_token).to be_nil
     end
   end
 end
