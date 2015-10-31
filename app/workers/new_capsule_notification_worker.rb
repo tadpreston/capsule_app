@@ -3,6 +3,10 @@ class NewCapsuleNotificationWorker
 
   def perform(capsule_id)
     capsule = Capsule.find capsule_id
-    Notifications::NewYadaNotification.new(capsule).process
+    if capsule.forwarded?
+      Notification::ForwardedYadaNotification.new(capsule).process
+    else
+      Notifications::NewYadaNotification.new(capsule).process
+    end
   end
 end
