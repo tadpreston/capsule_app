@@ -6,7 +6,8 @@ describe CapsuleForwarder do
   end
 
   let!(:forwarder) { FactoryGirl.create :user }
-  let!(:capsule_object) { FactoryGirl.create :capsule }
+  let!(:asset_object) { FactoryGirl.create :asset }
+  let!(:capsule_object) { FactoryGirl.create :capsule, assets: [asset_object] }
   let(:recipients) {
       [
         {
@@ -42,6 +43,12 @@ describe CapsuleForwarder do
     end
     it 'has the forwarder as the author' do
       capsule_forwarder.each { |capsule| expect(capsule.user).to eq forwarder }
+    end
+    it 'copies the assets' do
+      capsule_forwarder.each { |capsule| expect(capsule.assets).to_not be_empty }
+    end
+    it 'creates forwarded capsules' do
+      capsule_forwarder.each { |capsule| expect(capsule).to be_forwarded }
     end
   end
 end
