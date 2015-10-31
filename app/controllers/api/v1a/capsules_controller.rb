@@ -63,7 +63,7 @@ module API
       end
 
       def forward
-        capsules = CapsuleForwarder.forward params[:capsule]
+        capsules = CapsuleForwarder.forward params[:capsule].merge user_id: current_user.id
         render json: capsules, each_serializer: API::V1a::CapsuleSerializer
       end
 
