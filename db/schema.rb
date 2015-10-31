@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151028220059) do
+ActiveRecord::Schema.define(version: 20151031145522) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -55,6 +55,17 @@ ActiveRecord::Schema.define(version: 20151028220059) do
   end
 
   add_index "blocks", ["user_id"], name: "index_blocks_on_user_id", using: :btree
+
+  create_table "campaigns", force: true do |t|
+    t.integer  "capsule_id"
+    t.string   "name"
+    t.text     "description"
+    t.string   "code"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "campaigns", ["capsule_id"], name: "index_campaigns_on_capsule_id", using: :btree
 
   create_table "capsule_categories", force: true do |t|
     t.integer  "capsule_id"
