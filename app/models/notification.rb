@@ -14,7 +14,7 @@
 #
 
 class Notification < ActiveRecord::Base
-  NOTIFICATION_TYPES = [UNLOCKED = 'unlocked', NEW_YADA = 'new_yada', NEW_COMMENT = 'new_comment', READ_YADA = 'read_yada']
+  NOTIFICATION_TYPES = [UNLOCKED = 'unlocked', NEW_YADA = 'new_yada', NEW_COMMENT = 'new_comment', READ_YADA = 'read_yada', FORWARDED_YADA = 'forwarded_yada']
   DELIVERY_TYPES = [EMAIL = 'email', PUSH = 'push', SMS = 'sms']
 
   belongs_to :user

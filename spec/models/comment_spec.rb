@@ -17,11 +17,22 @@
 require 'spec_helper'
 
 describe Comment do
-  before { @comment = FactoryGirl.build(:comment) }
+  before do
+    allow(UserCallbacks).to receive(:after_create)
+  end
 
-  subject { @comment }
+  let!(:comment_object) { FactoryGirl.create :comment }
 
   it { should belong_to(:user) }
   it { should belong_to(:commentable) }
-  it { should have_many(:replies) }
+  it { should have_many(:objections) }
+
+  describe '#liked_by' do
+    let!(:user) { FactoryGirl.create :user }
+    subject(:comment) { comment_object.liked_by? user }
+    before { comment_object.likes << user }
+    it 'returns true' do
+      expect(comment).to be_true
+    end
+  end
 end

@@ -46,8 +46,6 @@
 require 'spec_helper'
 
 describe User do
-  before { @user = FactoryGirl.build(:user) }
-
   let(:oauth_attributes) do
     {
       location: {
@@ -109,6 +107,11 @@ describe User do
     }
   end
 
+  before do
+    @user = FactoryGirl.build(:user)
+    allow(UserCallbacks).to receive(:after_create)
+  end
+
   subject { @user }
 
   it { should respond_to(:full_name) }
@@ -164,45 +167,6 @@ describe User do
     it { should_not be_valid }
   end
 
-  describe "with oauth" do
-    describe "email should not be validated" do
-      before do
-        oauth = oauth_attributes
-        oauth[:email] = ''
-        @user.oauth = oauth
-      end
-
-#     it { should be_valid }
-    end
-
-    describe "when uid and provider already exist" do
-      before do
-        FactoryGirl.create(:user, oauth: oauth_attributes)
-        @user.oauth = oauth_attributes
-      end
-      it { should_not be_valid }
-    end
-  end
-
-  describe "with twitter oauth" do
-    describe "email should not be validated" do
-      before do
-        oauth = twitter_oauth
-        @user.oauth = oauth
-      end
-
-      it { should be_valid }
-    end
-
-    describe "when uid and provider already exist" do
-      before do
-        FactoryGirl.create(:user, oauth: twitter_oauth)
-        @user.oauth = twitter_oauth
-      end
-      it { should_not be_valid }
-    end
-  end
-
   describe "when password is not present" do
     before do
       @user = User.new(full_name: "Example User", email: "user@example.com", password: "", password_confirmation: "")
@@ -213,11 +177,6 @@ describe User do
   describe "when password doesn't match confirmation" do
     before { @user.password_confirmation = "mismatch" }
     it { should_not be_valid }
-  end
-
-  describe "with a password that's too short" do
-    before { @user.password = @user.password_confirmation = "a" * 5 }
-    it { should be_invalid }
   end
 
   describe "return value of authenticate method" do

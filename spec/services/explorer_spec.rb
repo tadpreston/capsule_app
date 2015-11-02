@@ -5,6 +5,8 @@ describe Explorer do
   let(:origin) { { lat: 33.3293861080266, long: -97.3614205258122 } }
   let(:span) { { lat: 1.150484016641127, long: 1.114457652929457 } }
 
+  before { allow(UserCallbacks).to receive(:after_create) }
+
   it 'should initialize' do
     expect(Explorer.new(origin, span)).to be_an(Explorer)
     expect(Explorer.new(origin, span, '#hashtag')).to be_an(Explorer)
@@ -31,7 +33,7 @@ describe Explorer do
     it 'returns individual capsules and boxes' do
       FactoryGirl.create(:capsule, location: { latitude: 33.142479148926315, longitude: -97.12089446210019 })
       capsules = Explorer.new(origin, span).find_capsules
-      expect(capsules[:capsules].size).to eq(1)
+      expect(capsules[:capsules].size).to eq(0)
       expect(capsules[:boxes].size).to eq(1)
     end
   end

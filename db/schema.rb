@@ -11,14 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151028220059) do
+ActiveRecord::Schema.define(version: 20151031211539) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pg_trgm"
-  enable_extension "fuzzystrmatch"
   enable_extension "plpgsql"
   enable_extension "hstore"
-  enable_extension "pg_stat_statements"
   enable_extension "uuid-ossp"
 
   create_table "admin_users", force: true do |t|
@@ -56,6 +53,14 @@ ActiveRecord::Schema.define(version: 20151028220059) do
 
   add_index "blocks", ["user_id"], name: "index_blocks_on_user_id", using: :btree
 
+  create_table "campaigns", force: true do |t|
+    t.string   "name"
+    t.text     "description"
+    t.string   "code"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "capsule_categories", force: true do |t|
     t.integer  "capsule_id"
     t.integer  "category_id"
@@ -65,6 +70,16 @@ ActiveRecord::Schema.define(version: 20151028220059) do
 
   add_index "capsule_categories", ["capsule_id"], name: "index_capsule_categories_on_capsule_id", using: :btree
   add_index "capsule_categories", ["category_id"], name: "index_capsule_categories_on_category_id", using: :btree
+
+  create_table "capsule_forwards", force: true do |t|
+    t.integer  "capsule_id"
+    t.integer  "forward_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "capsule_forwards", ["capsule_id"], name: "index_capsule_forwards_on_capsule_id", using: :btree
+  add_index "capsule_forwards", ["forward_id"], name: "index_capsule_forwards_on_forward_id", using: :btree
 
   create_table "capsule_reads", force: true do |t|
     t.integer  "user_id"
@@ -116,8 +131,11 @@ ActiveRecord::Schema.define(version: 20151028220059) do
     t.integer  "likes",                   default: [], array: true
     t.string   "access_token"
     t.datetime "access_token_created_at"
+    t.integer  "campaign_id"
+    t.boolean  "forwarded"
   end
 
+  add_index "capsules", ["campaign_id"], name: "index_capsules_on_campaign_id", using: :btree
   add_index "capsules", ["in_reply_to"], name: "index_capsules_on_in_reply_to", using: :btree
   add_index "capsules", ["latitude", "longitude"], name: "index_capsules_on_latitude_and_longitude", using: :btree
   add_index "capsules", ["latitude"], name: "index_capsules_on_latitude", using: :btree

@@ -106,10 +106,11 @@ Rails.application.routes.draw do
           get :forme
           get :feed
           get :location
+          post :forward
         end
         member do
-          post   :read
-          post   :unlock
+          post :read
+          post :unlock
         end
         resources :comments, only: [:index, :create, :destroy] do
           member do

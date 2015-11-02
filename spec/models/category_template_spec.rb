@@ -9,7 +9,8 @@
 #  updated_at  :datetime
 #
 
-class CategoryTemplate < ActiveRecord::Base
-  belongs_to :category
-  belongs_to :template
+require 'spec_helper'
+
+describe CategoryTemplate do
+  pending "add some examples to (or delete) #{__FILE__}"
 end
