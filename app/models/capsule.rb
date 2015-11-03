@@ -71,6 +71,7 @@ class Capsule < ActiveRecord::Base
   has_many :relevances, dependent: :destroy
   has_many :capsule_forwards, dependent: :destroy
   has_many :forwards, through: :capsule_forwards, source: :forward
+  has_many :campaigns
 
   delegate :full_name, to: :user, prefix: true
 
@@ -142,6 +143,14 @@ class Capsule < ActiveRecord::Base
   def token
     generate_access_token if access_token.nil? || access_token_created_at < TOKEN_EXPIRE_DATE_TIME
     access_token
+  end
+
+  def forwardable?
+    !forwarded? && campaign.budget_room?
+  end
+
+  def redeemable?
+    campaign.redeemed? && campaign.budget_room?
   end
 
   private
