@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: camaign_transactions
+# Table name: campaign_transactions
 #
 #  id         :integer          not null, primary key
 #  capsule_id :integer
@@ -11,8 +11,7 @@
 #  updated_at :datetime
 #
 
-require 'spec_helper'
-
-describe CamaignTransaction do
-  pending "add some examples to (or delete) #{__FILE__}"
+class CampaignTransaction < ActiveRecord::Base
+  belongs_to :capsule
+  belongs_to :user
 end

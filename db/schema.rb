@@ -53,7 +53,8 @@ ActiveRecord::Schema.define(version: 20151103022000) do
 
   add_index "blocks", ["user_id"], name: "index_blocks_on_user_id", using: :btree
 
-  create_table "camaign_transactions", force: true do |t|
+  create_table "campaign_transactions", force: true do |t|
+    t.integer  "campaign_id"
     t.integer  "capsule_id"
     t.integer  "user_id"
     t.string   "order_id"
@@ -62,8 +63,9 @@ ActiveRecord::Schema.define(version: 20151103022000) do
     t.datetime "updated_at"
   end
 
-  add_index "camaign_transactions", ["capsule_id"], name: "index_camaign_transactions_on_capsule_id", using: :btree
-  add_index "camaign_transactions", ["user_id"], name: "index_camaign_transactions_on_user_id", using: :btree
+  add_index "campaign_transactions", ["campaign_id"], name: "index_campaign_transactions_on_campaign_id", using: :btree
+  add_index "campaign_transactions", ["capsule_id"], name: "index_campaign_transactions_on_capsule_id", using: :btree
+  add_index "campaign_transactions", ["user_id"], name: "index_campaign_transactions_on_user_id", using: :btree
 
   create_table "campaigns", force: true do |t|
     t.string   "name"
