@@ -15,7 +15,7 @@
 require 'spec_helper'
 
 describe Campaign do
-  let!(:campaign_object) { FactoryGirl.build :campaign, budget: 100.00 }
+  let!(:campaign_object) { FactoryGirl.create :campaign, budget: 100.00 }
 
   describe 'associations' do
     it { should have_many :capsules }
@@ -23,15 +23,15 @@ describe Campaign do
   end
 
   describe '#budget_room?' do
-    let(:amount) { 25.00 }
     let(:transaction1) { double :transaction, amount: amount }
     let(:transaction2) { double :transaction, amount: amount }
 
     subject(:campaign) { campaign_object.budget_room? }
 
-    before { allow(campaign_object).to receive(:campaign_transactions).and_return [transaction1, transaction2] }
+    before { FactoryGirl.create_list :campaign_transaction, 2, campaign_id: campaign_object.id, amount: amount }
 
     context 'the budget is greater than the amount spent' do
+      let(:amount) { 25.00 }
       it 'returns true' do
         expect(campaign).to be_true
       end

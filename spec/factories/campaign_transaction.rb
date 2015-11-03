@@ -10,9 +10,6 @@
 
 FactoryGirl.define do
   factory :campaign_transaction do
-    campaign
-    capsule
-    user
     amount 50.00
   end
 end

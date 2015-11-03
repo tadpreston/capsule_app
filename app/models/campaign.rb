@@ -27,6 +27,6 @@ class Campaign < ActiveRecord::Base
   private
 
   def spent
-    campaign_transactions.map(&:amount).sum
+    campaign_transactions.sum 'amount'
   end
 end
