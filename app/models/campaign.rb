@@ -15,4 +15,18 @@
 class Campaign < ActiveRecord::Base
   has_many :capsules
   has_many :campaign_transactions
+
+  def budget_room?
+    spent < budget
+  end
+
+  def redeemed? user
+    campaign_transactions.exists? user_id: user.id
+  end
+
+  private
+
+  def spent
+    campaign_transactions.map(&:amount).sum
+  end
 end
