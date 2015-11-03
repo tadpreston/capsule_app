@@ -8,6 +8,8 @@
 #  code        :string(255)
 #  created_at  :datetime
 #  updated_at  :datetime
+#  budget      :decimal(, )
+#  base_url    :string(255)
 #
 
 class Campaign < ActiveRecord::Base
