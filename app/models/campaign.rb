@@ -14,4 +14,5 @@
 
 class Campaign < ActiveRecord::Base
   has_many :capsules
+  has_many :campaign_transactions
 end

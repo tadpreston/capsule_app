@@ -16,4 +16,5 @@ require 'spec_helper'
 
 describe Campaign do
   it { should have_many :capsules }
+  it { should have_many :campaign_transactions }
 end
