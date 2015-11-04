@@ -37,6 +37,13 @@ class TangoCard
 
     response = http.request(request)
 
+    #	sample response
+    # {
+    #   "success": true,
+    #   "fund_id": "115-11769822-04",
+    #   "amount": 500
+    # }
+
     if response.code == "200"
       # create CampaignTransaction
       return true
