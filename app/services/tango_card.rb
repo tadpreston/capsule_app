@@ -58,7 +58,7 @@ class TangoCard
       return true
     end
 
-    return nil
+    return response.body
   end
 
   def place_order
@@ -123,6 +123,6 @@ class TangoCard
       return true
     end
 
-    return nil
+    return response.body
   end
 end
