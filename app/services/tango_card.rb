@@ -36,6 +36,12 @@ class TangoCard
     }.to_json
 
     response = http.request(request)
-    return JSON.parse response.body
+
+    if response.code == "200"
+      # create CampaignTransaction
+      return true
+    end
+
+    return nil
   end
 end
