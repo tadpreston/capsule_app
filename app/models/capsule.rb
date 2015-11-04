@@ -74,6 +74,7 @@ class Capsule < ActiveRecord::Base
   has_many :campaigns
 
   delegate :full_name, to: :user, prefix: true
+  delegate :base_url, to: :campaign
 
   accepts_nested_attributes_for :comments, allow_destroy: true
   accepts_nested_attributes_for :assets, allow_destroy: true

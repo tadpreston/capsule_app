@@ -1,10 +1,14 @@
+class CapsuleForwardError < StandardError; end
 class CapsuleForwarder
   attr_reader :recipients, :user_id, :capsule_id
+  attr_accessor :capsules, :links
 
   def initialize params
     @recipients = params[:recipients]
     @user_id = params[:user_id]
     @capsule_id = params[:id]
+    @capsules = []
+    @links = []
   end
 
   def self.forward params
@@ -12,9 +16,11 @@ class CapsuleForwarder
   end
 
   def forward
-    recipients.map do |recipient|
+    raise CapsuleForwardError if any_participated?
+    recipients.each do |recipient|
       create_capsule_from_original recipient
     end
+    self
   end
 
   private
@@ -24,10 +30,11 @@ class CapsuleForwarder
   end
 
   def create_capsule_from_original recipient
+    create_link recipient unless registered? recipient
     new_capsule = initialize_from_original recipient
     capsule.capsule_forwards.create forward_id: new_capsule.id
     copy_assets new_capsule
-    new_capsule
+    capsules << new_capsule
   end
 
   def initialize_from_original recipient
@@ -41,5 +48,21 @@ class CapsuleForwarder
 
   def copy_assets new_capsule
     capsule.assets.each { |asset| new_capsule.assets.create media_type: asset.media_type, resource: asset.resource }
+  end
+
+  def registered? recipient
+    User.find_by phone_number: recipient[:phone_number]
+  end
+
+  def create_link recipient
+    links << recipient.merge(url: generate_url)
+  end
+
+  def generate_url
+    "#{capsule.base_url}/#{capsule.token}"
+  end
+
+  def any_participated?
+    CapsuleForward.find_by user_id: user_id
   end
 end
