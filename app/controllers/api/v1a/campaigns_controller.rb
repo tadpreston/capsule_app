@@ -4,7 +4,7 @@ module API
       skip_before_action :authorize_auth_token
 
       def redeem
-        render json: { foo: "bar" }
+        render json: TangoCard.fund(500)
       end
     end
   end

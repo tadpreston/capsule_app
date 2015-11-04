@@ -7,7 +7,7 @@ class TangoCard
   ACCOUNT_IDENTIFIER = "DrewCoffee"
   CLIENT_IP = "127.0.0.1"
   CC_TOKEN = "34547856"
-  SECURITY_CODE = 123
+  SECURITY_CODE = "123"
 
   def initialize(amount)
     @amount = amount
@@ -23,18 +23,19 @@ class TangoCard
     http.use_ssl = true
 
     request = Net::HTTP::Post.new(uri.request_uri)
-    request["Authorization"] = AUTHORIZATION
+    request.add_field("Authorization", AUTHORIZATION)
+    request.add_field("Content-Type", "application/json")
 
-    request.set_form_data({
+    request.body = {
       "customer" => CUSTOMER,
       "account_identifier" => ACCOUNT_IDENTIFIER,
       "amount" => @amount,
       "client_ip" => CLIENT_IP,
       "cc_token" => CC_TOKEN,
       "security_code" => SECURITY_CODE
-    })
+    }.to_json
 
     response = http.request(request)
-    return JSON.parse data.body
+    return JSON.parse response.body
   end
 end
