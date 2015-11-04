@@ -32,7 +32,7 @@ class CapsuleForwarder
   def create_capsule_from_original recipient
     create_link recipient unless registered? recipient
     new_capsule = initialize_from_original recipient
-    capsule.capsule_forwards.create forward_id: new_capsule.id
+    capsule.capsule_forwards.create forward_id: new_capsule.id, user_id: user_id
     copy_assets new_capsule
     capsules << new_capsule
   end
@@ -63,6 +63,10 @@ class CapsuleForwarder
   end
 
   def any_participated?
-    CapsuleForward.find_by user_id: user_id
+    CapsuleForward.find_by user_id: recipient_ids
+  end
+
+  def recipient_ids
+    recipients.map { |recipient| User.find_by(phone_number: recipient[:phone_number]) }.compact.map(&:id)
   end
 end
