@@ -26,12 +26,12 @@ class TangoCard
     request["Authorization"] = AUTHORIZATION
 
     request.set_form_data({
-      "customer": CUSTOMER,
-      "account_identifier": ACCOUNT_IDENTIFIER,
-      "amount": @amount,
-      "client_ip": CLIENT_IP,
-      "cc_token": CC_TOKEN,
-      "security_code": SECURITY_CODE
+      "customer" => CUSTOMER,
+      "account_identifier" => ACCOUNT_IDENTIFIER,
+      "amount" => @amount,
+      "client_ip" => CLIENT_IP,
+      "cc_token" => CC_TOKEN,
+      "security_code" => SECURITY_CODE
     })
 
     response = http.request(request)

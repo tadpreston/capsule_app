@@ -16,6 +16,7 @@ ActiveRecord::Schema.define(version: 20151103022000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
+  enable_extension "pg_stat_statements"
   enable_extension "uuid-ossp"
 
   create_table "admin_users", force: true do |t|

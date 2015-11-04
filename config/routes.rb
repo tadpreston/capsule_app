@@ -84,6 +84,8 @@ Rails.application.routes.draw do
       get 'search', to: 'searches#index'
       get 'upgrade', to: 'upgrades#index'
 
+      post 'campaigns/redeem', to: 'campaigns#redeem'
+
       resources :sessions, only: [:create, :destroy, :show]
       resources :users, only: [:index, :create, :update, :show] do
         member do
