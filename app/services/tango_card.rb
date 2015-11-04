@@ -9,12 +9,20 @@ class TangoCard
   CC_TOKEN = "34547856"
   SECURITY_CODE = "123"
 
-  def initialize(amount)
-    @amount = amount
+  def initialize(params)
+    @amount = params["amount"]
+    @recipient = params["recipient"]
+    @sku = params["sku"]
+    @amount = params["amount"]
+    @email = params["email"]
   end
 
   def self.fund(amount)
-    new(amount).fund
+    new({ "amount" => amount }).fund
+  end
+
+  def self.place_order(recipient, sku, amount, email)
+    new({ "recipient" => recipient, "sku" => sku, "amount" => amount, "email" => email }).place_order
   end
 
   def fund
@@ -50,5 +58,24 @@ class TangoCard
     end
 
     return nil
+  end
+
+  def place_order
+
+    # {
+    #   "customer": "PinYada",
+    #   "account_identifier": "DrewCoffee",
+    #   "campaign": "Coffee",
+    #   "recipient": {
+    #     "name": "A Friend",
+    #     "email": "drew.j.wyatt@gmail.com"
+    #   },
+    #   "sku": "SBUX-E-V-STD",
+    #   "amount": 500,
+    #   "reward_from": "PinYada",
+    #   "reward_subject": "A Coffee for You!",
+    #   "reward_message": "here you go. ",
+    #   "send_reward": true
+    # }
   end
 end
