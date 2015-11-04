@@ -85,13 +85,44 @@ class TangoCard
 
     response = http.request(request)
 
-    return JSON.parse response.body
+    # sample response
+    # {
+    #   "success": true,
+    #   "order": {
+    #     "order_id": "115-11769842-04",
+    #     "account_identifier": "DrewCoffee",
+    #     "customer": "PinYada",
+    #     "sku": "SBUX-E-V-STD",
+    #     "denomination": {
+    #       "value": 500,
+    #       "currency_code": "USD"
+    #     },
+    #     "amount_charged": {
+    #       "value": 500,
+    #       "currency_code": "USD"
+    #     },
+    #     "reward_message": "here you go. ",
+    #     "reward_subject": "A Coffee for You!",
+    #     "reward_from": "PinYada",
+    #     "delivered_at": "2015-11-04T05:37:32+00:00",
+    #     "recipient": {
+    #       "name": "A Friend",
+    #       "email": "drew.j.wyatt@gmail.com"
+    #     },
+    #     "external_id": null,
+    #     "reward": {
+    #       "token": "5639999d618a45.51310409",
+    #       "number": "R92JH8",
+    #       "redemption_url": "https://starbucks.semi.cashstar.com/gift-card/view/ADhLToy5obxztYM0yIkgOMtRF/"
+    #     }
+    #   }
+    # }
 
-    # if response.code == "200"
-    #   # create CampaignTransaction
-    #   return true
-    # end
-    #
-    # return nil
+    if response.code == "201"
+      # do something else?
+      return true
+    end
+
+    return nil
   end
 end
