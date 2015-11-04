@@ -69,6 +69,17 @@ module API
           }]
         }
       end
+
+      def render_status code, title, detail=nil
+        render json: {
+          errors: [{
+            status: code.to_s,
+            code: code.to_s,
+            title: title,
+            detail: (detail || title).to_s
+          }]
+        }, status: code
+      end
     end
   end
 end

@@ -16,7 +16,7 @@ class CapsuleForwarder
   end
 
   def forward
-    raise CapsuleForwardError if any_participated?
+    raise CapsuleForwardError, error_description if any_participated?
     recipients.each do |recipient|
       create_capsule_from_original recipient
     end
@@ -55,7 +55,7 @@ class CapsuleForwarder
   end
 
   def create_link recipient
-    links << recipient.merge(url: generate_url)
+    links << ForwardLink.new(email: recipient[:email], phone_number: recipient[:phone_number], url: generate_url)
   end
 
   def generate_url
@@ -63,10 +63,22 @@ class CapsuleForwarder
   end
 
   def any_participated?
-    CapsuleForward.find_by user_id: recipient_ids
+    participants
   end
 
   def recipient_ids
     recipients.map { |recipient| User.find_by(phone_number: recipient[:phone_number]) }.compact.map(&:id)
+  end
+
+  def participants
+    @participants ||= CapsuleForward.find_by user_id: recipient_ids
+  end
+
+  def error_description
+    "#{participant_phone_numbers.first} has already participated"
+  end
+
+  def participant_phone_numbers
+    [participants].flatten.map { |p| p.user.phone_number }
   end
 end
