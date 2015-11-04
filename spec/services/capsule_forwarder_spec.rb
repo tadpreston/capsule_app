@@ -60,6 +60,11 @@ describe CapsuleForwarder do
     it 'creates forwarded capsules' do
       capsule_forwarder.capsules.each { |capsule| expect(capsule).to be_forwarded }
     end
+    it 'removes the original capsule from the forwarders feed' do
+      allow(Capsule).to receive(:find).and_return capsule_object
+      expect(capsule_object).to receive(:remove_capsule).with capsule_object.user
+      capsule_forwarder
+    end
     context 'if there are unregistered recipients' do
       it 'returns the recipient with a link' do
         expect(capsule_forwarder.links.size).to eq 1

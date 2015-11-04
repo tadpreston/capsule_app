@@ -17,9 +17,8 @@ class CapsuleForwarder
 
   def forward
     raise CapsuleForwardError, error_description if any_participated?
-    recipients.each do |recipient|
-      create_capsule_from_original recipient
-    end
+    recipients.each { |recipient| create_capsule_from_original recipient }
+    capsule.remove_capsule capsule.user
     self
   end
 
