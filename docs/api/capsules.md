@@ -74,54 +74,19 @@ __Response__ 200 OK
       "is_unlocked": false,
       "is_forwarded": true,
       "is_redeemed": false,
+      "is_redeemable": false,
+      "is_forwardable": false,
       "campaign_id": 1234,
       "created_at": "2015-01-11T04:26:50.010Z",
       "updated_at": "2015-09-23T20:16:38.015Z"
-    },
+    }
+  ],
+  "links": [
     {
-      "id": 423,
-      "comment": "Leave me alone!",
-      "creator": {
-        "id": 3213,
-        "full_name": "George Burns",
-        "phone_number": "2145439873",
-        "email": "gburns@gmail.com",
-        "location": null,
-        "profile_image": "",
-        "created_at": "2015-01-11T04:26:50.010Z",
-        "updated_at": "2015-09-23T20:16:38.015Z"
-      },
-      "recipients": [
-        {
-          "id": 5432,
-          "phone_number": "8178675309",
-          "email": "tommy.tutone@yahoo.com",
-          "full_name": "Tommy Tutone",
-          "location": null,
-          "profile_image": "",
-          "created_at": "2015-01-11T04:26:50.010Z",
-          "updated_at": "2015-09-23T20:16:38.015Z"
-        }
-      ],
-      "location": null,
-      "status": null,
-      "thumbnail_path": null,
-      "assets": [
-        {
-          "id": 98792,
-          "media_type": "1",
-          "resource_path": "https://some_image.png"
-        }
-      ],
-      "start_date": "2015-10-24T13:30:00Z",
-      "comments_count": 0,
-      "is_read": false,
-      "is_unlocked": false,
-      "is_forwarded": true,
-      "is_redeemed": false,
-      "campaign_id": 1235,
-      "created_at": "2015-01-11T04:26:50.010Z",
-      "updated_at": "2015-09-23T20:16:38.015Z"
+      "phone_number": "8178675309",
+      "email": "tommy.tutone@yahoo.com",
+      "full_name": "Tommy Tutone",
+      "url": "https://someurl.com"
     }
   ]
 }
