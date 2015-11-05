@@ -147,11 +147,19 @@ class Capsule < ActiveRecord::Base
   end
 
   def forwardable?
-    !forwarded? && campaign.budget_room?
+    if campaign
+      !forwarded? && campaign.budget_room?
+    else
+      false
+    end
   end
 
   def redeemable?
-    campaign.redeemed? && campaign.budget_room?
+    if campaign
+      campaign.redeemed? && campaign.budget_room?
+    else
+      false
+    end
   end
 
   private
