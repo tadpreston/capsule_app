@@ -20,7 +20,7 @@ module API
       end
 
       def location
-        @location = Location.new params[:latitude], params[:longitude], current_user.id, @offset, @limit
+        @location = LocationFinder.new params[:latitude], params[:longitude], current_user.id, @offset, @limit
         render json: @location, serializer: API::V1a::CapsuleFeedSerializer, root: false
       end
 
