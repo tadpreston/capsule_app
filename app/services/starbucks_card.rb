@@ -15,7 +15,7 @@ class StarbucksCard
   end
 
   def redeem
-    if campaign.redeemable? && TangoCard.fund(GIFT_CARD_AMOUNT)
+    if redeemable? && TangoCard.fund(GIFT_CARD_AMOUNT)
       recipient = TangoRecipient.new("Hi #{recipient_name}", email)
       tango_email = TangoEmail.new("PinYada", "Your coffee, from PinYada", "Someone wants to make your day.")
       result = TangoCard.place_order(campaign.name, recipient, GIFT_CARD_SKU, GIFT_CARD_AMOUNT, tango_email)
@@ -27,6 +27,10 @@ class StarbucksCard
   end
 
   private
+
+  def redeemable?
+    campaign && campaign.budget_room? && !campaign.redeemed?(user)
+  end
 
   def yada
     @yada ||= yada_id ? Capsule.find(yada_id) : Capsule.find_by(access_token: access_token)
@@ -41,10 +45,10 @@ class StarbucksCard
   end
 
   def recipient_name
-    yada.full_name || 'Friend'
+    user.full_name || 'Friend'
   end
 
   def create_transaction result
-    campaign.campaign_transactions.create order_id: result[:order][:order_id]
+    campaign.campaign_transactions.create capsule_id: yada.id, user_id: user.id, order_id: 1234, amount: GIFT_CARD_AMOUNT / 100
   end
 end

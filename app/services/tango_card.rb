@@ -1,14 +1,4 @@
 class TangoCard
-  API_BASE_URL = "https://sandbox.tangocard.com/raas/v1.1/"
-  PLATFORM_NAME = "PinyadaTest"
-  PLATFORM_KEY = "k23vHRAFiMH0dGVFk7LGz9iyPbeMlV6Dm8EWHelhlqwlYLbQt808UaGwto"
-  AUTHORIZATION = "Basic UGlueWFkYVRlc3Q6azIzdkhSQUZpTUgwZEdWRms3TEd6OWl5UGJlTWxWNkRtOEVXSGVsaGxxd2xZTGJRdDgwOFVhR3d0bw=="
-  CUSTOMER = "PinYada"
-  ACCOUNT_IDENTIFIER = "DrewCoffee"
-  CLIENT_IP = "127.0.0.1"
-  CC_TOKEN = "34547856"
-  SECURITY_CODE = "123"
-
   def initialize(params)
     @amount = params["amount"]
     @campaign = params["campaign"]
@@ -27,21 +17,21 @@ class TangoCard
   end
 
   def fund
-    uri = URI.parse(API_BASE_URL + "cc_fund")
+    uri = URI.parse(ENV['TANGO_API_BASE_URL'] + "cc_fund")
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
 
     request = Net::HTTP::Post.new(uri.request_uri)
-    request.add_field("Authorization", AUTHORIZATION)
+    request.add_field("Authorization", ENV['TANGO_AUTHORIZATION'])
     request.add_field("Content-Type", "application/json")
 
     request.body = {
-      "customer" => CUSTOMER,
-      "account_identifier" => ACCOUNT_IDENTIFIER,
+      "customer" => ENV['TANGO_CUSTOMER'],
+      "account_identifier" => ENV['TANGO_ACCOUNT_IDENTIFIER'],
       "amount" => @amount,
-      "client_ip" => CLIENT_IP,
-      "cc_token" => CC_TOKEN,
-      "security_code" => SECURITY_CODE
+      "client_ip" => ENV['TANGO_CLIENT_IP'],
+      "cc_token" => ENV['TANGO_CC_TOKEN'],
+      "security_code" => ENV['TANGO_SECURITY_CODE']
     }.to_json
 
     response = http.request(request)
@@ -54,7 +44,6 @@ class TangoCard
     # }
 
     if response.code == "200"
-      # create CampaignTransaction
       return true
     end
 
@@ -62,17 +51,17 @@ class TangoCard
   end
 
   def place_order
-    uri = URI.parse(API_BASE_URL + "orders")
+    uri = URI.parse(ENV['TANGO_API_BASE_URL'] + "orders")
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
 
     request = Net::HTTP::Post.new(uri.request_uri)
-    request.add_field("Authorization", AUTHORIZATION)
+    request.add_field("Authorization", ENV['TANGO_AUTHORIZATION'])
     request.add_field("Content-Type", "application/json")
 
     request.body = {
-      "customer" => CUSTOMER,
-      "account_identifier" => ACCOUNT_IDENTIFIER,
+      "customer" => ENV['TANGO_CUSTOMER'],
+      "account_identifier" => ENV['TANGO_ACCOUNT_IDENTIFIER'],
       "campaign" => @campaign,
       "recipient" => @recipient,
       "sku" => @sku,
