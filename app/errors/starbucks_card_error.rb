@@ -1,0 +1,1 @@
+class StarbucksCardError < StandardError; end

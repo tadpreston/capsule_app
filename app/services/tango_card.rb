@@ -118,11 +118,6 @@ class TangoCard
     #   }
     # }
 
-    if response.code == "201"
-      # do something else?
-      return true
-    end
-
-    return response.body
+    response.body
   end
 end
