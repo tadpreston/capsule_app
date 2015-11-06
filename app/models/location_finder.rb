@@ -1,4 +1,4 @@
-class Location < CapsuleFeedBase
+class LocationFinder < CapsuleFeedBase
   attr_accessor :point, :user_id
 
   def initialize latitude, longitude, user_id, offset, limit

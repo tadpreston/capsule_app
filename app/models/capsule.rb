@@ -74,6 +74,7 @@ class Capsule < ActiveRecord::Base
   has_many :campaigns
 
   delegate :full_name, to: :user, prefix: true
+  delegate :base_url, to: :campaign
 
   accepts_nested_attributes_for :comments, allow_destroy: true
   accepts_nested_attributes_for :assets, allow_destroy: true
@@ -146,11 +147,19 @@ class Capsule < ActiveRecord::Base
   end
 
   def forwardable?
-    !forwarded? && campaign.budget_room?
+    if campaign
+      !forwarded? && campaign.budget_room?
+    else
+      false
+    end
   end
 
   def redeemable?
-    campaign.redeemed? && campaign.budget_room?
+    if campaign
+      campaign.redeemed? && campaign.budget_room?
+    else
+      false
+    end
   end
 
   private

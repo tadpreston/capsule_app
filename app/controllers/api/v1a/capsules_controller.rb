@@ -20,7 +20,7 @@ module API
       end
 
       def location
-        @location = Location.new params[:latitude], params[:longitude], current_user.id, @offset, @limit
+        @location = LocationFinder.new params[:latitude], params[:longitude], current_user.id, @offset, @limit
         render json: @location, serializer: API::V1a::CapsuleFeedSerializer, root: false
       end
 
@@ -63,8 +63,10 @@ module API
       end
 
       def forward
-        capsules = CapsuleForwarder.forward params[:capsule].merge(user_id: current_user.id)
-        render json: capsules, each_serializer: API::V1a::CapsuleSerializer
+        capsule_forward = CapsuleForwarder.forward params[:capsule].merge(user_id: current_user.id)
+        render json: capsule_forward, serializer: API::V1a::CapsuleForwardSerializer
+      rescue CapsuleForwardError => e
+        render_status 400, 'Bad Request', e.message
       end
 
       private
