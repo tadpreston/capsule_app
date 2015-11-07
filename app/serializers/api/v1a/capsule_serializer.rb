@@ -5,7 +5,7 @@ module API
 
       attributes :id, :comment, :creator, :recipients, :location, :status
       attributes :thumbnail_path, :assets, :start_date, :lock_question, :lock_answer
-      attributes :comments_count, :is_read, :is_unlocked, :forwarded?, :forwardable?, :redeemable?, :campaign_id, :created_at, :updated_at
+      attributes :comments_count, :is_read, :is_unlocked, :forwarded?, :forwardable?, :redeemable, :campaign_id, :created_at, :updated_at
 
       def assets
         object.assets.map do |asset|
@@ -29,6 +29,10 @@ module API
 
       def is_unlocked
         object.is_unlocked? current_user
+      end
+
+      def redeemable
+        object.redeemable? current_user
       end
     end
   end
