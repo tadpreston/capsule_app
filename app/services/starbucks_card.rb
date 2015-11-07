@@ -41,7 +41,7 @@ class StarbucksCard
   end
 
   def campaign
-    @campaign ||= yada.campaign
+    @campaign ||= yada ? yada.campaign : nil
   end
 
   def recipient_name
