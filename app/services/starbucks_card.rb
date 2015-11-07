@@ -49,6 +49,6 @@ class StarbucksCard
   end
 
   def create_transaction result
-    campaign.campaign_transactions.create capsule_id: yada.id, user_id: user.id, order_id: 1234, amount: GIFT_CARD_AMOUNT / 100
+    campaign.campaign_transactions.create capsule_id: yada.id, user_id: user.id, order_id: result['order']['order_id'], amount: GIFT_CARD_AMOUNT / 100
   end
 end
