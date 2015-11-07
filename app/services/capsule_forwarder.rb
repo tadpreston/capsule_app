@@ -64,7 +64,7 @@ class CapsuleForwarder
   end
 
   def any_participated?
-    participants
+    !participants.empty?
   end
 
   def recipient_ids

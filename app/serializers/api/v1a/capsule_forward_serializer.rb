@@ -8,7 +8,7 @@ module API
       end
 
       def links
-        object.links.map { |link| API::V1a::ForwardLinkSerializer.new link, scope: scope, root: false }
+        object.links.map { |link| API::V1a::ForwardLinkSerializer.new link, root: false }
       end
     end
   end
