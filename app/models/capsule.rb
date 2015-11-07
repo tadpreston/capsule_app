@@ -156,7 +156,8 @@ class Capsule < ActiveRecord::Base
 
   def redeemable? user
     if campaign
-      campaign.redeemed? user && campaign.budget_room?
+      #campaign.redeemed? user && campaign.budget_room?
+      campaign.budget_room?
     else
       false
     end
