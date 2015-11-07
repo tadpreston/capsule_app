@@ -1,4 +1,5 @@
 class CapsuleForwardError < StandardError; end
+class CapsuleAlreadyForwardedError < StandardError; end
 class CapsuleForwarder
   attr_reader :recipients, :user_id, :capsule_id
   attr_accessor :capsules, :links
@@ -16,6 +17,7 @@ class CapsuleForwarder
   end
 
   def forward
+    raise CapsuleAlreadyForwardedError, 'Yada has already been forwarded' if capsule.forwarded?
     raise CapsuleForwardError, error_description if any_participated?
     recipients.each { |recipient| create_capsule_from_original recipient }
     capsule.remove_capsule capsule.user
