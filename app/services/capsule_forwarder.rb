@@ -20,7 +20,7 @@ class CapsuleForwarder
     raise CapsuleAlreadyForwardedError, 'Yada has already been forwarded' if capsule.forwarded?
     raise CapsuleForwardError, error_description if any_participated?
     recipients.each { |recipient| create_capsule_from_original recipient }
-    capsule.remove_capsule capsule.user
+    capsule.update_attributes forwarded: true
     self
   end
 
@@ -42,7 +42,6 @@ class CapsuleForwarder
     new_capsule = capsule.dup
     new_capsule.user_id = user_id
     new_capsule.recipients_attributes = [recipient]
-    new_capsule.forwarded = true
     new_capsule.save
     new_capsule
   end
