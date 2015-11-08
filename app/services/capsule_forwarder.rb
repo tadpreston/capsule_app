@@ -76,7 +76,8 @@ class CapsuleForwarder
   end
 
   def error_description
-    "#{participant_phone_numbers.first} has already participated"
+    # "#{participant_phone_numbers.first} has already participated"
+    participant_phone_numbers
   end
 
   def participant_phone_numbers
