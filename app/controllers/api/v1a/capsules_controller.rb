@@ -66,9 +66,9 @@ module API
         capsule_forward = CapsuleForwarder.forward params[:capsule].merge(user_id: current_user.id)
         render json: capsule_forward, serializer: API::V1a::CapsuleForwardSerializer
       rescue CapsuleForwardError => e
-        render_status 400, 'Already Forwarded', e.message
-      rescue CapsuleAlreadyForwardedError => e
         render_status 400, 'Recipient Unforwardable', e.message
+      rescue CapsuleAlreadyForwardedError => e
+        render_status 400, 'Already Forwarded', e.message
       end
 
       private
