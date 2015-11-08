@@ -30,6 +30,22 @@ module API
       def is_unlocked
         object.is_unlocked? current_user
       end
+
+      def forwardable?
+        if object.user_id == current_user.id
+          false
+        else
+          object.forwardable?
+        end
+      end
+
+      def redeemable?
+        if object.user_id == current_user.id
+          false
+        else
+          object.redeemable?
+        end
+      end
     end
   end
 end
