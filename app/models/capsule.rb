@@ -69,7 +69,7 @@ class Capsule < ActiveRecord::Base
   has_many :notifications, dependent: :destroy
   has_many :unlocks, dependent: :destroy
   has_many :relevances, dependent: :destroy
-  has_many :capsule_forwards, dependent: :destroy
+  has_many :capsule_forwards
   has_many :forwards, through: :capsule_forwards, source: :forward
   has_many :campaigns
 
