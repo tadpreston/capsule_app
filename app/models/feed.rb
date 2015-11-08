@@ -9,7 +9,7 @@ class Feed < CapsuleFeedBase
   private
 
   def capsule_scope
-    user.relevant_yadas.order('relevances.relevant_date DESC')
+    user.relevant_yadas.where('capsules.forwarded IS NOT true').order('relevances.relevant_date DESC')
   end
 
   def user

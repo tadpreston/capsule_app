@@ -15,6 +15,6 @@ class LocationFinder < CapsuleFeedBase
   private
 
   def capsule_scope
-    @capsule_scope ||= Capsule.for_user(user_id).location.select { |capsule| !capsule.is_unlocked? user_id }
+    @capsule_scope ||= Capsule.for_user(user_id).where('capsules.forwarded IS NOT true').location.select { |capsule| !capsule.is_unlocked? user_id }
   end
 end
