@@ -17,7 +17,7 @@ class Relevance < ActiveRecord::Base
   def self.update_relevance capsule_id, *user_ids
     user_ids.each do |user_id|
       if relevance = find_by(capsule_id: capsule_id, user_id: user_id)
-        relevance.update_attributes relevant_date: DateTime.now
+        relevance.update_attributes relevant_date: Time.current
       end
     end
   end
@@ -32,6 +32,6 @@ class Relevance < ActiveRecord::Base
   end
 
   def self.restore_feed_for user_id, yada_ids
-    yada_ids.each { |capsule_id| create capsule_id: capsule_id, user_id: user_id, relevant_date: DateTime.now }
+    yada_ids.each { |capsule_id| create capsule_id: capsule_id, user_id: user_id, relevant_date: Time.current }
   end
 end
