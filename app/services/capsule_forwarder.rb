@@ -1,13 +1,14 @@
 class CapsuleForwardError < StandardError; end
 class CapsuleAlreadyForwardedError < StandardError; end
 class CapsuleForwarder
-  attr_reader :recipients, :user_id, :capsule_id
+  attr_reader :recipients, :user_id, :capsule_id, :start_date
   attr_accessor :capsules, :links
 
   def initialize params
     @recipients = params[:recipients]
     @user_id = params[:user_id]
     @capsule_id = params[:id]
+    @start_date = params[:start_date]
     @capsules = []
     @links = []
   end
@@ -42,6 +43,7 @@ class CapsuleForwarder
     new_capsule = capsule.dup
     new_capsule.user_id = user_id
     new_capsule.recipients_attributes = [recipient]
+    new_capsule.start_date = start_date
     new_capsule.save
     new_capsule
   end
