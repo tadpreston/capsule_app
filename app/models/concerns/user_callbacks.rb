@@ -14,6 +14,8 @@ class UserCallbacks
       MailchimpLists.subscribe email: user.email
       WelcomeEmailWorker.perform_in 1.hour, user.id
     end
+  rescue Mailchimp::ListAlreadySubscribedError
+    nil
   end
 
   def self.after_save user
