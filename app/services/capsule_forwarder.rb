@@ -51,7 +51,7 @@ class CapsuleForwarder
   end
 
   def copy_assets new_capsule
-    new_capsule.assets.create media_type: '3', resource: FORWARD_IMAGE
+    new_capsule.assets.create media_type: '1', resource: FORWARD_IMAGE
   end
 
   def registered? recipient
