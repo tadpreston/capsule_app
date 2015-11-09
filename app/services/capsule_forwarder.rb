@@ -4,6 +4,8 @@ class CapsuleForwarder
   attr_reader :recipients, :user_id, :capsule_id, :start_date
   attr_accessor :capsules, :links
 
+  FORWARD_IMAGE = 'assets/forwarded/CoffeeYadaImages_Forwarded.png'
+
   def initialize params
     @recipients = params[:recipients]
     @user_id = params[:user_id]
@@ -49,7 +51,7 @@ class CapsuleForwarder
   end
 
   def copy_assets new_capsule
-    capsule.assets.each { |asset| new_capsule.assets.create media_type: asset.media_type, resource: asset.resource }
+    new_capsule.assets.create media_type: '3', resource: FORWARD_IMAGE
   end
 
   def registered? recipient
