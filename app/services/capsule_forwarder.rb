@@ -46,6 +46,7 @@ class CapsuleForwarder
     new_capsule.user_id = user_id
     new_capsule.recipients_attributes = [recipient]
     new_capsule.start_date = start_date
+    new_capsule.comments_count = 0
     new_capsule.save
     new_capsule
   end
