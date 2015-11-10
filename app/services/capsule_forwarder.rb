@@ -21,13 +21,10 @@ class CapsuleForwarder
 
   def forward
     raise CapsuleAlreadyForwardedError, 'Yada has already been forwarded' if capsule.forwarded?
-    if any_participated?
-      raise CapsuleForwardError, error_description if any_participated?
-    else
-      recipients.each { |recipient| create_capsule_from_original recipient }
-      capsule.update_attributes forwarded: true
-      self
-    end
+    raise CapsuleForwardError, error_description if any_participated?
+    recipients.each { |recipient| create_capsule_from_original recipient }
+    capsule.update_attributes forwarded: true
+    self
   end
 
   private
