@@ -47,6 +47,7 @@ class CapsuleForwarder
     new_capsule.recipients_attributes = [recipient]
     new_capsule.start_date = start_date
     new_capsule.comments_count = 0
+    new_capsule.comment = 'So I chose to pin it to you! You can keep the coffee or pin-it-forward to two others and make their day. Whatever you choose know you’re appreciated.'
     new_capsule.save
     new_capsule
   end
