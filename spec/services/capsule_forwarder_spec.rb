@@ -48,8 +48,8 @@ describe CapsuleForwarder do
     it 'returns the same number of capsules as recipients' do
       expect(capsule_forwarder.capsules.size).to eq recipients.size
     end
-    it 'is a duplicate of the original capsule' do
-      capsule_forwarder.capsules.each { |capsule| expect(capsule.comment).to eq capsule_object.comment }
+    it 'has a specific comment' do
+      capsule_forwarder.capsules.each { |capsule| expect(capsule.comment).to eq CapsuleForwarder::FORWARD_COMMENT }
     end
     it 'has the forwarder as the author' do
       capsule_forwarder.capsules.each { |capsule| expect(capsule.user).to eq forwarder }
@@ -57,13 +57,10 @@ describe CapsuleForwarder do
     it 'copies the assets' do
       capsule_forwarder.capsules.each { |capsule| expect(capsule.assets).to_not be_empty }
     end
-    it 'creates forwarded capsules' do
-      capsule_forwarder.capsules.each { |capsule| expect(capsule).to be_forwarded }
-    end
-    it 'removes the original capsule from the forwarders feed' do
+    it 'sets forwarded to true' do
       allow(Capsule).to receive(:find).and_return capsule_object
-      expect(capsule_object).to receive(:remove_capsule).with capsule_object.user
       capsule_forwarder
+      expect(capsule_object).to be_forwarded
     end
     context 'if there are unregistered recipients' do
       it 'returns the recipient with a link' do
