@@ -4,7 +4,7 @@ module API
       skip_before_action :authorize_auth_token
 
       def index
-        render json: PINYADA_CONFIG
+        render json: PINYADA_CONFIG[:v1a]
       end
     end
   end
