@@ -5,6 +5,7 @@ class CapsuleForwarder
   attr_accessor :capsules, :links
 
   FORWARD_IMAGE = 'assets/forwarded/CoffeeYadaImages_Forwarded.png'
+  FORWARD_COMMENT = 'So I chose to pin it to you! You can keep the coffee or pin-it-forward to two others and make their day. Whatever you choose know you’re appreciated.'
 
   def initialize params
     @recipients = params[:recipients]
@@ -47,7 +48,7 @@ class CapsuleForwarder
     new_capsule.recipients_attributes = [recipient]
     new_capsule.start_date = start_date
     new_capsule.comments_count = 0
-    new_capsule.comment = 'So I chose to pin it to you! You can keep the coffee or pin-it-forward to two others and make their day. Whatever you choose know you’re appreciated.'
+    new_capsule.comment = FORWARD_COMMENT
     new_capsule.save
     new_capsule
   end
