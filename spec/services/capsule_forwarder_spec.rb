@@ -57,6 +57,9 @@ describe CapsuleForwarder do
     it 'copies the assets' do
       capsule_forwarder.capsules.each { |capsule| expect(capsule.assets).to_not be_empty }
     end
+    it 'has the correct asset' do
+      expect(capsule_forwarder.capsules.first.assets.first.resource).to eq CapsuleForwarder::FORWARD_IMAGE
+    end
     it 'sets forwarded to true' do
       allow(Capsule).to receive(:find).and_return capsule_object
       capsule_forwarder
@@ -74,6 +77,13 @@ describe CapsuleForwarder do
       before { CapsuleForward.create user_id: user.id }
       it 'raises a CapsuleForwardError' do
         expect { capsule_forwarder }.to raise_error CapsuleForwardError
+      end
+    end
+    context 'the capsule has already been forwarded' do
+      it 'raises a CapsuleAlreadyForwardedError' do
+        capsule_object.forwarded = true
+        allow(Capsule).to receive(:find).and_return capsule_object
+        expect { capsule_forwarder }.to raise_error CapsuleAlreadyForwardedError
       end
     end
   end
