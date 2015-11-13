@@ -281,60 +281,77 @@ describe Capsule do
   end
 
   describe '#forwardable?' do
-    let(:campaign_object) { double(budget_room?: true) }
-    before { allow(capsule_object).to receive(:campaign).and_return campaign_object }
+    context 'there is a campaign' do
+      let(:campaign_object) { double(budget_room?: true, redeemed?: false) }
+      before { allow(capsule_object).to receive(:campaign).and_return campaign_object }
 
-    subject(:capsule) { capsule_object.forwardable? }
+      subject(:capsule) { capsule_object.forwardable? }
 
-    context 'the capsule has not been forwarded' do
-      it 'returns true' do
-        expect(capsule).to be_true
+      context 'the capsule has not been forwarded' do
+        it 'returns true' do
+          expect(capsule).to be_true
+        end
+      end
+      context 'the capsule has been forwarded' do
+        before { capsule_object.forwarded = true }
+        it 'returns false' do
+          expect(capsule).to be_false
+        end
+      end
+      context 'the balance is below the budget' do
+        it 'returns true' do
+          expect(capsule).to be_true
+        end
+        it 'calls Campaign.budget_room?' do
+          capsule
+          expect(campaign_object).to have_received :budget_room?
+        end
+      end
+      context 'the balance is above the budget' do
+        let(:campaign_object) { double(budget_room?: false, redeemed?: false) }
+        it 'returns false' do
+          expect(capsule).to be_false
+        end
       end
     end
-    context 'the capsule has been forwarded' do
-      before { capsule_object.forwarded = true }
+    context 'there is no campaign' do
       it 'returns false' do
-        expect(capsule).to be_false
-      end
-    end
-    context 'the balance is below the budget' do
-      it 'returns true' do
-        expect(capsule).to be_true
-      end
-      it 'calls Campaign.budget_room?' do
-        capsule
-        expect(campaign_object).to have_received :budget_room?
-      end
-    end
-    context 'the balance is above the budget' do
-      let(:campaign_object) { double(budget_room?: false) }
-      it 'returns false' do
-        expect(capsule).to be_false
+        expect(capsule_object).to_not be_forwardable
       end
     end
   end
 
   describe '#redeemable' do
-    let(:campaign_object) { double(budget_room?: true, redeemed?: true) }
-    before { allow(capsule_object).to receive(:campaign).and_return campaign_object }
+    context 'there is a campaign' do
+      let(:redeemed) { true }
+      let(:budget_room) { true }
+      let(:campaign_object) { double(budget_room?: budget_room, redeemed?: redeemed) }
 
-    subject(:capsule) { capsule_object.redeemable? }
+      before { allow(capsule_object).to receive(:campaign).and_return campaign_object }
 
-    context 'the promotion has not been redeemed' do
-      it 'returns true' do
-        expect(subject).to be_true
+      subject(:capsule) { capsule_object.redeemable? }
+
+      context 'the promotion has not been redeemed' do
+        let(:redeemed) { false }
+        it 'returns true' do
+          expect(subject).to be_true
+        end
+      end
+      context 'the promotion has been redeemed' do
+        it 'returns false' do
+          expect(subject).to be_false
+        end
+      end
+      context 'the balance is above the promotion budget' do
+        let(:budget_room) { false }
+        it 'returns false' do
+          expect(subject).to be_false
+        end
       end
     end
-    context 'the promotion has been redeemed' do
-      let(:campaign_object) { double(budget_room?: true, redeemed?: false) }
+    context 'there is no campaign' do
       it 'returns false' do
-        expect(subject).to be_false
-      end
-    end
-    context 'the balance is above the promotion budget' do
-      let(:campaign_object) { double(budget_room?: false, redeemed?: true) }
-      it 'returns false' do
-        expect(subject).to be_false
+        expect(capsule_object).to_not be_redeemable
       end
     end
   end
