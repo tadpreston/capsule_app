@@ -38,7 +38,7 @@ class CapsuleForwarder
     create_link recipient unless registered? recipient
     new_capsule = initialize_from_original recipient
     capsule.capsule_forwards.create forward_id: new_capsule.id, user_id: new_capsule.recipients.first.id
-    copy_assets new_capsule
+    create_assets new_capsule
     capsules << new_capsule
   end
 
@@ -53,7 +53,7 @@ class CapsuleForwarder
     new_capsule
   end
 
-  def copy_assets new_capsule
+  def create_assets new_capsule
     new_capsule.assets.create media_type: '1', resource: FORWARD_IMAGE
   end
 

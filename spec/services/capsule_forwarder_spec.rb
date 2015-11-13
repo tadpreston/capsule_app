@@ -54,7 +54,7 @@ describe CapsuleForwarder do
     it 'has the forwarder as the author' do
       capsule_forwarder.capsules.each { |capsule| expect(capsule.user).to eq forwarder }
     end
-    it 'copies the assets' do
+    it 'creates the asset' do
       capsule_forwarder.capsules.each { |capsule| expect(capsule.assets).to_not be_empty }
     end
     it 'has the correct asset' do
