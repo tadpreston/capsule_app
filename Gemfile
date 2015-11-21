@@ -46,7 +46,9 @@ gem 'faker', '~> 1.3.0'
 group :development do
   gem 'spring', '~> 1.1.2'
   gem "annotate", "2.6.3"
+  gem 'pry'
   gem 'pry-rails'
+  gem 'pry-nav'
 end
 
 group :development, :test do
