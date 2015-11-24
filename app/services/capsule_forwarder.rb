@@ -36,20 +36,15 @@ class CapsuleForwarder
 
   def create_capsule_from_original recipient
     create_link recipient unless registered? recipient
-    new_capsule = initialize_from_original recipient
-    capsule.capsule_forwards.create forward_id: new_capsule.id, user_id: new_capsule.recipients.first.id
+    new_capsule = initialize_capsule recipient
     create_assets new_capsule
+    capsule.capsule_forwards.create forward_id: new_capsule.id, user_id: new_capsule.recipients.first.id
     capsules << new_capsule
   end
 
-  def initialize_from_original recipient
-    new_capsule = capsule.dup
-    new_capsule.user_id = user_id
-    new_capsule.recipients_attributes = [recipient]
-    new_capsule.start_date = start_date
-    new_capsule.comments_count = 0
-    new_capsule.comment = FORWARD_COMMENT
-    new_capsule.save
+  def initialize_capsule recipient
+    new_capsule = Capsule.create user_id: user_id, recipients_attributes: [recipient], start_date: Time.current,
+                  comment: FORWARD_COMMENT, payload_type: '1', campaign_id: capsule.campaign_id
     new_capsule
   end
 
