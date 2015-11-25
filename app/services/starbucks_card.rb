@@ -19,7 +19,7 @@ class StarbucksCard
       recipient = TangoRecipient.new(recipient_name, email)
       tango_email = TangoEmail.new("PinYada", "Your coffee, from PinYada", "Someone wants to make your day.")
       result = TangoCard.place_order(campaign.name, recipient, GIFT_CARD_SKU, GIFT_CARD_AMOUNT, tango_email)
-      Rails.logger result.to_s
+      Rails.logger.error result.to_s
       create_transaction result
       self
     else
