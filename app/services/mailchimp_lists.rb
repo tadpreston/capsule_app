@@ -15,7 +15,7 @@ class MailchimpLists
   end
 
   def subscribe
-    lists.subscribe list_id, { email: email }
+    lists.subscribe list_id, { email: email }, nil, 'html', false
   end
 
   def unsubscribe
