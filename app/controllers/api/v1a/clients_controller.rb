@@ -9,11 +9,11 @@ module API
       end
 
       def index
-        render json: Client.all, each_serializer: API::V1a::CapsuleSerializer
+        render json: Client.all, each_serializer: API::V1a::ClientSerializer
       end
 
       def show
-        render json: @client, serializer: API::V1a::CapsuleSerializer
+        render json: @client, serializer: API::V1a::ClientSerializer
       end
 
       def create
@@ -27,7 +27,7 @@ module API
 
       def update
         if @client.update_attributes(client_params.merge(updated_by: current_user.id))
-          render json: @client, serializer: API::V1a::CapsuleSerializer
+          render json: @client, serializer: API::V1a::ClientSerializer
         else
           render_client_errors
         end
