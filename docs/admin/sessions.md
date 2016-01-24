@@ -12,7 +12,7 @@ __Request Payload__
 ```json
 {
   "session" : {
-    "email" : "jimjones@gmail.com",
+    "email" : "homersimpson@gmail.com",
     "password" : "supersecret"
   }
 }
