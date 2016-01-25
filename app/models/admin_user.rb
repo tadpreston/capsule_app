@@ -17,4 +17,18 @@ class AdminUser < ActiveRecord::Base
 
   validates :email, uniqueness: true
   validates :password, length: { minimum: 6 }
+
+  def self.authenticate_user(email:, password:)
+    if user = find_by(email: email).try(:authenticate, password)
+      user.generate_auth_token
+      user.save
+      user
+    end
+  end
+
+  def generate_auth_token
+    begin
+      self.auth_token = SecureRandom.urlsafe_base64
+    end while AdminUser.exists?(auth_token: self.auth_token)
+  end
 end
