@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160121203605) do
+ActiveRecord::Schema.define(version: 20160125024644) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,7 +25,10 @@ ActiveRecord::Schema.define(version: 20160121203605) do
     t.string   "password_digest"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "auth_token"
   end
+
+  add_index "admin_users", ["auth_token"], name: "index_admin_users_on_auth_token", using: :btree
 
   create_table "assets", force: true do |t|
     t.string   "media_type"
