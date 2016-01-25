@@ -21,6 +21,7 @@ Rails.application.routes.draw do
     resources :sessions, only: [:new, :create, :destroy]
     resources :admin_users
     resources :users
+    resources :clients, only: [:index, :show, :create, :update, :destroy]
 
     root 'home#index'
   end
@@ -126,7 +127,6 @@ Rails.application.routes.draw do
       resources :password_resets
       resources :block_users, only: [:index, :create, :destroy]
       resources :categories, only: [:index, :show]
-      resources :clients, only: [:index, :show, :create, :update, :destroy]
 
       get 'profile/loadtest/(:id)', to: 'profile#loadtest', as: 'profile_loadtest'
       get 'profile/loadtest_jbuilder/(:id)', to: 'profile#loadtest_jbuilder', as: 'profile_loadtest_jbuilder'
