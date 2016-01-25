@@ -2,9 +2,6 @@ module Admin
   class SessionsController < Admin::ApplicationController
     skip_before_action :authorize
 
-    def new
-    end
-
     def create
       if user = AdminUser.find_by(email: params[:email]).try(:authenticate, params[:password])
         session[:user_id] = user.id
@@ -13,11 +10,6 @@ module Admin
         flash.now[:alert] = "Email or password is invalid"
         render action: :new
       end
-    end
-
-    def destroy
-      session[:user_id] = nil
-      redirect_to new_admin_session_path
     end
   end
 end

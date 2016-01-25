@@ -18,7 +18,7 @@ Rails.application.routes.draw do
   get 'reports/registrations', to: 'reports#registrations'
 
   namespace :admin do
-    resources :sessions, only: [:new, :create, :destroy]
+    resources :sessions, only: [:create]
     resources :admin_users
     resources :users
     resources :clients, only: [:index, :show, :create, :update, :destroy]
