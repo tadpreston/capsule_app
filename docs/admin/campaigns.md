@@ -105,12 +105,49 @@ __Request Payload__
 __Response__ 201 Created
 ```json
 {
-  "client" : {
-    "id" : 42,
-    "name" : "Cool People",
-    "email" : "cool@people.com",
-    "profile_image" : "http://somefancyurl.com"
+  "campaign" : {
+    "id": 42,
+    "name": "Cool Campaign",
+    "budget": 1000.00,
+    "assets": [
+      {
+        "id": 12,
+        "resource_path": "secureurl"
+      },
+      {
+        "id": 13,
+        "resource_path": "secureurl"
+      },
+      {
+        "id": 14,
+        "resource_path": "secureurl"
+      },
+      {
+        "id": 15,
+        "resource_path": "secureurl"
+      }
+    ],
+    "message_from": "this is a message from",
+    "message_to": "this is a message to"
   }
 }
 ```
 
+### [POST] `admin/campaigns/:campaign_id/pinit`
+
+__Details__
+  - This endpoint created Yadas for a campaign.
+
+__Validation Rules__
+  - `401 Not Authorized` if client tries to access `admin/clients` and has not been authorized
+  - `400 Bad Request` if client fails to provide required fields and valid values
+
+__Request Payload__
+```json
+{
+  "pinit": {
+    "unlock_at": "2016-02-04T07:30:00Z",
+    "user_ids" : [201, 10, 752, 3098]
+  }
+}
+```
