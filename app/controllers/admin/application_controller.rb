@@ -4,14 +4,28 @@ class Admin::ApplicationController < ActionController::Base
 
   before_action :authorize
 
+  rescue_from ActiveRecord::RecordNotFound do
+    render json: { error: 'Resource Not Found' }, status: 404
+  end
+
+  %i{index show new create edit update destroy}.each do |method|
+    define_method method do
+      render json: { error: 'Method Not Allowed' }, status: 405
+    end
+  end
+
   private
 
-    def current_user
-      @current_user ||= AdminUser.find(session[:user_id]) if session[:user_id]
-    end
-    helper_method :current_user
+  def current_user
+    @current_user ||= AdminUser.find_by(auth_token: auth_token) if auth_token
+  end
+  helper_method :current_user
 
-    def authorize
-      redirect_to new_admin_session_path, alert: "You need to authenticate" if current_user.nil?
-    end
+  def authorize
+    render json: { status: 'Not authorized' }, status: 401 unless current_user
+  end
+
+  def auth_token
+    request.headers['HTTP_PINYADA_ADMIN_AUTH_TOKEN']
+  end
 end
