@@ -28,7 +28,7 @@ class AdminUser < ActiveRecord::Base
 
   def generate_auth_token
     begin
-      self.auth_token = SecureRandom.urlsafe_base64
+      self.auth_token = SecureRandom.urlsafe_base64(32)
     end while AdminUser.exists?(auth_token: self.auth_token)
   end
 end
