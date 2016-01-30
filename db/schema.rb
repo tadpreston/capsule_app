@@ -183,6 +183,8 @@ ActiveRecord::Schema.define(version: 20160125024644) do
   create_table "clients", force: true do |t|
     t.integer  "user_id"
     t.string   "name"
+    t.string   "email"
+    t.string   "profile_image"
     t.integer  "created_by"
     t.integer  "updated_by"
     t.datetime "created_at"
