@@ -3,7 +3,7 @@ module Admin
     skip_before_action :authorize
 
     def create
-      if user = AdminUser.authenticate_user(email: params[:email], password: params[:password])
+      if user = AdminUser.authenticate_user(email: params[:session][:email], password: params[:session][:password])
         render json: { session: { auth_token: user.auth_token } }
       else
         render json: { status: 'Not Authenticated' }, status: 401
