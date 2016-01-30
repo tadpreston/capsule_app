@@ -11,12 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151104040457) do
+ActiveRecord::Schema.define(version: 20160125024644) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
-  enable_extension "pg_stat_statements"
   enable_extension "uuid-ossp"
 
   create_table "admin_users", force: true do |t|
@@ -26,7 +25,10 @@ ActiveRecord::Schema.define(version: 20151104040457) do
     t.string   "password_digest"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "auth_token"
   end
+
+  add_index "admin_users", ["auth_token"], name: "index_admin_users_on_auth_token", using: :btree
 
   create_table "assets", force: true do |t|
     t.string   "media_type"
@@ -177,6 +179,17 @@ ActiveRecord::Schema.define(version: 20151104040457) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "clients", force: true do |t|
+    t.integer  "user_id"
+    t.string   "name"
+    t.integer  "created_by"
+    t.integer  "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "clients", ["user_id"], name: "index_clients_on_user_id", using: :btree
 
   create_table "comments", force: true do |t|
     t.integer  "user_id"

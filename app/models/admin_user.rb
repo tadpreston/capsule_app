@@ -9,13 +9,26 @@
 #  password_digest :string(255)
 #  created_at      :datetime
 #  updated_at      :datetime
+#  auth_token      :string(255)
 #
 
 class AdminUser < ActiveRecord::Base
   has_secure_password
 
-  has_many :objections
-
   validates :email, uniqueness: true
-  validates :password, length: { minimum: 6 }
+  validates :password, length: { minimum: 6 }, unless: Proc.new { |admin_user| admin_user.password.blank? }
+
+  def self.authenticate_user(email:, password:)
+    if user = find_by(email: email).try(:authenticate, password)
+      user.generate_auth_token
+      user.save
+      user
+    end
+  end
+
+  def generate_auth_token
+    begin
+      self.auth_token = SecureRandom.urlsafe_base64(32)
+    end while AdminUser.exists?(auth_token: self.auth_token)
+  end
 end

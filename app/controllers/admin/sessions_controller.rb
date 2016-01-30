@@ -2,22 +2,12 @@ module Admin
   class SessionsController < Admin::ApplicationController
     skip_before_action :authorize
 
-    def new
-    end
-
     def create
-      if user = AdminUser.find_by(email: params[:email]).try(:authenticate, params[:password])
-        session[:user_id] = user.id
-        redirect_to admin_root_url, notice: "Logged In"
+      if user = AdminUser.authenticate_user(email: params[:session][:email], password: params[:session][:password])
+        render json: { session: { auth_token: user.auth_token } }
       else
-        flash.now[:alert] = "Email or password is invalid"
-        render action: :new
+        render json: { status: 'Not Authenticated' }, status: 401
       end
-    end
-
-    def destroy
-      session[:user_id] = nil
-      redirect_to new_admin_session_path
     end
   end
 end
