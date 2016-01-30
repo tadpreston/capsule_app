@@ -16,7 +16,7 @@ class AdminUser < ActiveRecord::Base
   has_secure_password
 
   validates :email, uniqueness: true
-  validates :password, length: { minimum: 6 }
+  validates :password, length: { minimum: 6 }, unless: Proc.new { |admin_user| admin_user.password.blank? }
 
   def self.authenticate_user(email:, password:)
     if user = find_by(email: email).try(:authenticate, password)
