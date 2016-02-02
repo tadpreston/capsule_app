@@ -16,16 +16,18 @@
 class Client < ActiveRecord::Base
   attr_accessor :password, :password_confirmation
 
-  before_create :create_user
+  after_save :associate_user
+
+  validates :email, presence: true
 
   belongs_to :user
 
   private
 
-  def create_user
-    unless user = User.find_by(email: email)
-      user = User.create email: email, password: password, password_confirmation: password_confirmation
+  def associate_user
+    unless associate_user = User.find_by(email: email)
+      associate_user = User.create email: email, password: password, password_confirmation: password_confirmation
     end
-    self.user_id = user.id
+    update_columns user_id: associate_user.id
   end
 end
