@@ -21,7 +21,9 @@ Rails.application.routes.draw do
     resources :sessions, only: [:create]
     resources :admin_users
     resources :users
-    resources :clients, only: [:index, :show, :create, :update, :destroy]
+    resources :clients, only: [:index, :show, :create, :update, :destroy] do
+      resources :campaigns
+    end
 
     root 'home#index'
   end
