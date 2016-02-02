@@ -14,6 +14,8 @@
 #
 
 class Campaign < ActiveRecord::Base
+  ATTRIBUTES = [:name, :description, :budget, :client_id]
+
   has_many :capsules
   has_many :campaign_transactions
   belongs_to :client
