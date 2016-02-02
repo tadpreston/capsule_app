@@ -1,6 +1,9 @@
 # Campaigns
 
-### [GET] `admin/campaigns`
+__Details__
+ - Campaigns is associated and needs to be referenced withing the context of a client.
+
+### [GET] `admin/clients/:client_id/campaigns`
 
 __Validation Rules__
  - `401 Not Authorized` if client tries to access `admin/campaign` and has not been authorized
@@ -11,17 +14,18 @@ __Response__ 200 OK
 {
   "campaigns" : [
     {
-      "id" : 42,
-      "name" : "Cool Campaign"
+      "id": 42,
+      "name": "Cool Campaign"
     }
   ]
 }
 ```
 
-### [GET] `admin/campaigns/:campaign_id`
+### [GET] `admin/clients/:client_id/campaigns/:campaign_id`
 
 __Validation Rules__
  - `401 Not Authorized` if client tries to access `admin/campaigns` and has not been authorized
+ - `404 Not Found` if `campaign_id` does not belong to the client
 
 __Response__ 200 OK
 
@@ -55,7 +59,7 @@ __Response__ 200 OK
 }
 ```
 
-### [POST] `admin/campaigns`
+### [POST] `admin/client/:client_id/campaigns`
 
 __Details__
   - The images for the campaign will be passed in through an assets array with the s3 location of the asset.
