@@ -24,6 +24,7 @@ __Response__ 200 OK
 
 __Validation Rules__
  - `401 Not Authorized` if client tries to access `admin/clients` and has not been authorized
+ - `404 Resource Not Found` if the client does not exist in the database
 
 __Response__ 200 OK
 
@@ -121,3 +122,8 @@ __Validation Rules__
   - `401 Not Authorized` if client tries to access `admin/clients` and has not been authorized
 
 __Response__ 200 Ok
+```json
+{
+  "status": "Deleted" 
+}
+```

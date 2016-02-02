@@ -14,8 +14,11 @@
 ActiveRecord::Schema.define(version: 20160125024644) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_trgm"
+  enable_extension "fuzzystrmatch"
   enable_extension "plpgsql"
   enable_extension "hstore"
+  enable_extension "pg_stat_statements"
   enable_extension "uuid-ossp"
 
   create_table "admin_users", force: true do |t|
@@ -183,6 +186,8 @@ ActiveRecord::Schema.define(version: 20160125024644) do
   create_table "clients", force: true do |t|
     t.integer  "user_id"
     t.string   "name"
+    t.string   "email"
+    t.string   "profile_image"
     t.integer  "created_by"
     t.integer  "updated_by"
     t.datetime "created_at"
