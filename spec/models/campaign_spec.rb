@@ -10,6 +10,7 @@
 #  updated_at  :datetime
 #  budget      :decimal(, )
 #  base_url    :string(255)
+#  client_id   :integer
 #
 
 require 'spec_helper'

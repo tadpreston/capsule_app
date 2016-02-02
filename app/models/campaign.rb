@@ -10,11 +10,13 @@
 #  updated_at  :datetime
 #  budget      :decimal(, )
 #  base_url    :string(255)
+#  client_id   :integer
 #
 
 class Campaign < ActiveRecord::Base
   has_many :capsules
   has_many :campaign_transactions
+  belongs_to :client
 
   def budget_room?
     spent < budget

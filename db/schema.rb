@@ -11,14 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160125024644) do
+ActiveRecord::Schema.define(version: 20160202144957) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pg_trgm"
-  enable_extension "fuzzystrmatch"
   enable_extension "plpgsql"
   enable_extension "hstore"
-  enable_extension "pg_stat_statements"
   enable_extension "uuid-ossp"
 
   create_table "admin_users", force: true do |t|
@@ -81,7 +78,10 @@ ActiveRecord::Schema.define(version: 20160125024644) do
     t.datetime "updated_at"
     t.decimal  "budget"
     t.string   "base_url"
+    t.integer  "client_id"
   end
+
+  add_index "campaigns", ["client_id"], name: "index_campaigns_on_client_id", using: :btree
 
   create_table "capsule_categories", force: true do |t|
     t.integer  "capsule_id"
