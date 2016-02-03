@@ -22,7 +22,7 @@ Rails.application.routes.draw do
     resources :admin_users
     resources :users
     resources :clients, only: [:index, :show, :create, :update, :destroy] do
-      resources :campaigns
+      resources :campaigns, only: [:index, :show, :create, :update, :destroy]
     end
 
     root 'home#index'
