@@ -79,6 +79,13 @@ ActiveRecord::Schema.define(version: 20160202144957) do
     t.decimal  "budget"
     t.string   "base_url"
     t.integer  "client_id"
+    t.string   "client_message"
+    t.string   "user_message"
+    t.string   "image_from_client"
+    t.string   "image_from_user"
+    t.string   "image_keep"
+    t.string   "image_forward"
+    t.string   "image_expired"
   end
 
   add_index "campaigns", ["client_id"], name: "index_campaigns_on_client_id", using: :btree
