@@ -11,7 +11,7 @@ class Admin::CampaignsController < Admin::ApplicationController
   end
 
   def create
-    campaign = Campaign.new client_params.merge(created_by: current_user.id, updated_by: current_user.id)
+    campaign = @client.campaigns.build client_params
     if campaign.save
       render json: campaign, serializer: Admin::CampaignSerializer, status: 201
     else
