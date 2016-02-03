@@ -19,6 +19,19 @@ class Admin::CampaignsController < Admin::ApplicationController
     end
   end
 
+  def update
+    if @campaign.update_attributes(client_params)
+      render json: @campaign, serializer: Admin::CampaignSerializer
+    else
+      render_campaign_errors
+    end
+  end
+
+  def destroy
+    @campaign.destroy
+    render json: { status: 'Deleted' }
+  end
+
   private
 
   def find_client
