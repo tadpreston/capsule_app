@@ -21,7 +21,7 @@
 #
 
 class Campaign < ActiveRecord::Base
-  ATTRIBUTES = [:name, :budget, :client_id, :client_message, :user_message, :image_from_client, :image_from_user, :image_keep, :image_forward, :image_expired, :updated_at, :created_at]
+  ATTRIBUTES = [:id, :name, :budget, :client_id, :client_message, :user_message, :image_from_client, :image_from_user, :image_keep, :image_forward, :image_expired, :updated_at, :created_at]
 
   has_many :capsules
   has_many :campaign_transactions
