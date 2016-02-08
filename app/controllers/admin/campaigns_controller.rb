@@ -11,7 +11,7 @@ class Admin::CampaignsController < Admin::ApplicationController
   end
 
   def create
-    campaign = @client.campaigns.build client_params
+    campaign = @client.campaigns.build campaign_params
     if campaign.save
       render json: campaign, serializer: Admin::CampaignSerializer, status: 201
     else
@@ -20,7 +20,7 @@ class Admin::CampaignsController < Admin::ApplicationController
   end
 
   def update
-    if @campaign.update_attributes(client_params)
+    if @campaign.update_attributes(campaign_params)
       render json: @campaign, serializer: Admin::CampaignSerializer
     else
       render_campaign_errors
