@@ -21,6 +21,7 @@ class Client < ActiveRecord::Base
   validates :email, presence: true
 
   belongs_to :user
+  has_many :campaigns
 
   private
 

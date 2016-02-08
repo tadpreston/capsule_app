@@ -1,6 +1,9 @@
 # Campaigns
 
-### [GET] `admin/campaigns`
+__Details__
+ - Campaigns is associated and needs to be referenced withing the context of a client.
+
+### [GET] `admin/clients/:client_id/campaigns`
 
 __Validation Rules__
  - `401 Not Authorized` if client tries to access `admin/campaign` and has not been authorized
@@ -10,18 +13,29 @@ __Response__ 200 OK
 ```json
 {
   "campaigns" : [
-    {
-      "id" : 42,
-      "name" : "Cool Campaign"
+     {
+      "id": 42,
+      "name": "Cool Campaign",
+      "budget": 1000.00,
+      "client_message": "Hello from the client...",
+      "user_message": "Hello from the user...",
+      "image_from_client": "somes3url",
+      "image_from_user": "somes3url",
+      "image_keep": "somes3url",
+      "image_forward": "somes3url",
+      "image_expired": "somes3url",
+      "updated_at": "2015-01-31 10:30:00Z",
+      "created_at": "2015-01-31 10:30:00Z"
     }
   ]
 }
 ```
 
-### [GET] `admin/campaigns/:campaign_id`
+### [GET] `admin/clients/:client_id/campaigns/:campaign_id`
 
 __Validation Rules__
  - `401 Not Authorized` if client tries to access `admin/campaigns` and has not been authorized
+ - `404 Not Found` if `campaign_id` does not belong to the client
 
 __Response__ 200 OK
 
@@ -31,31 +45,20 @@ __Response__ 200 OK
     "id": 42,
     "name": "Cool Campaign",
     "budget": 1000.00,
-    "assets": [
-      {
-        "id": 12,
-        "resource_path": "secureurl"
-      },
-      {
-        "id": 13,
-        "resource_path": "secureurl"
-      },
-      {
-        "id": 14,
-        "resource_path": "secureurl"
-      },
-      {
-        "id": 15,
-        "resource_path": "secureurl"
-      }
-    ],
-    "message_from": "this is a message from",
-    "message_to": "this is a message to"
+    "client_message": "Hello from the client...",
+    "user_message": "Hello from the user...",
+    "image_from_client": "somes3url",
+    "image_from_user": "somes3url",
+    "image_keep": "somes3url",
+    "image_forward": "somes3url",
+    "image_expired": "somes3url",
+    "updated_at": "2015-01-31 10:30:00Z",
+    "created_at": "2015-01-31 10:30:00Z"
   }
 }
 ```
 
-### [POST] `admin/campaigns`
+### [POST] `admin/client/:client_id/campaigns`
 
 __Details__
   - The images for the campaign will be passed in through an assets array with the s3 location of the asset.
@@ -65,7 +68,7 @@ __Validation Rules__
   - `401 Not Authorized` if client tries to access `admin/clients` and has not been authorized
   - `400 Bad Request` if client fails to provide required fields and valid values
     + Name is required
-    + Budget is required
+    + Budget is required and must be a number
 
 __Request Payload__
 ```json
@@ -73,42 +76,14 @@ __Request Payload__
   "campaign" : {
     "name": "Cool Campaign",
     "budget": 1000.00,
-    "assets": [
-      {
-        "id": 12,
-        "resource_path": "urlforfromclient",
-        "media_type": "1",
-        "metadata": { "image_type": 1 }
-      },
-      {
-        "id": 13,
-        "resource_path": "urlforfromuser",
-        "media_type": "1",
-        "metadata": { "image_type": 2 }
-      },
-      {
-        "id": 14,
-        "resource_path": "urlforkeep",
-        "media_type": "1",
-        "metadata": { "image_type": 3 }
-      },
-      {
-        "id": 15,
-        "resource_path": "urlforforward",
-        "media_type": "1",
-        "metadata": { "image_type": 4 }
-      },
-      {
-        "id": 16,
-        "resource_path": "urlforended",
-        "media_type": "1",
-        "metadata": { "image_type": 5 }
-      }
-    ],
-    "message_from": "this is a message from",
-    "message_to": "this is a message to"
+    "client_message": "Hello from the client...",
+    "user_message": "Hello from the user...",
+    "image_from_client": "somes3url",
+    "image_from_user": "somes3url",
+    "image_keep": "somes3url",
+    "image_forward": "somes3url",
+    "image_expired": "somes3url"
   }
-}
 }
 ```
 
@@ -119,38 +94,82 @@ __Response__ 201 Created
     "id": 42,
     "name": "Cool Campaign",
     "budget": 1000.00,
-    "assets": [
-      {
-        "id": 12,
-        "resource_path": "urlforfromclient",
-        "metadata": { "image_type": 1 }
-      },
-      {
-        "id": 13,
-        "resource_path": "urlforfromuser",
-        "metadata": { "image_type": 2 }
-      },
-      {
-        "id": 14,
-        "resource_path": "urlforkeep",
-        "metadata": { "image_type": 3 }
-      },
-      {
-        "id": 15,
-        "resource_path": "urlforforward",
-        "metadata": { "image_type": 4 }
-      },
-      {
-        "id": 16,
-        "resource_path": "urlforended",
-        "metadata": { "image_type": 5 }
-      }
-    ],
-    "message_from": "this is a message from",
-    "message_to": "this is a message to"
+    "client_message": "Hello from the client...",
+    "user_message": "Hello from the user...",
+    "image_from_client": "somes3url",
+    "image_from_user": "somes3url",
+    "image_keep": "somes3url",
+    "image_forward": "somes3url",
+    "image_expired": "somes3url",
+    "updated_at": "2015-01-31 10:30:00Z",
+    "created_at": "2015-01-31 10:30:00Z"
   }
 }
 ```
+
+### [PATCH] `admin/clients/:client_id/campaign/:campaign_id`
+
+__Details__
+  - Anyone of the payload attributes can be passed in to be updated.
+  - If updating the password, the password and the confirmation must be passed in.
+
+__Validation Rules__
+  - `401 Not Authorized` if client tries to access `admin/clients/:client_id/campaign` and has not been authorized
+  - `404 Not Found` if the campaign_id provided does not belong to the client
+  - `400 Bad Request` if client fails to provide required fields and valid values
+    + Name is required
+    + Budget is required and must be a number
+
+__Request Payload__
+```json
+{
+  "campaign" : {
+    "name": "Cool Campaign",
+    "budget": 1000.00,
+    "client_message": "Hello from the client...",
+    "user_message": "Hello from the user...",
+    "image_from_client": "somes3url",
+    "image_from_user": "somes3url",
+    "image_keep": "somes3url",
+    "image_forward": "somes3url",
+    "image_expired": "somes3url"
+  }
+}
+```
+
+__Response__ 201 Created
+```json
+{
+  "campaign" : {
+    "id": 42,
+    "name": "Cool Campaign",
+    "budget": 1000.00,
+    "client_message": "Hello from the client...",
+    "user_message": "Hello from the user...",
+    "image_from_client": "somes3url",
+    "image_from_user": "somes3url",
+    "image_keep": "somes3url",
+    "image_forward": "somes3url",
+    "image_expired": "somes3url",
+    "updated_at": "2015-01-31 10:30:00Z",
+    "created_at": "2015-01-31 10:30:00Z"
+  }
+}
+```
+
+### [DELETE] `/api/client/:client_id/campaign/:campaign_id`
+
+__Validation Rules__
+  - `401 Not Authorized` if client tries to access `admin/clients/:client_id/campaigns` and has not been authorized
+  - `404 Not Found` if the campaign_id provided does not belong to the client
+
+__Response__ 200 Ok
+```json
+{
+  "status": "Deleted" 
+}
+```
+
 
 ### [POST] `admin/campaigns/:campaign_id/pinit`
 
