@@ -74,7 +74,6 @@ __Request Payload__
 ```json
 {
   "campaign" : {
-    "id": 42,
     "name": "Cool Campaign",
     "budget": 1000.00,
     "client_message": "Hello from the client...",
@@ -125,7 +124,6 @@ __Request Payload__
 ```json
 {
   "campaign" : {
-    "id": 42,
     "name": "Cool Campaign",
     "budget": 1000.00,
     "client_message": "Hello from the client...",
