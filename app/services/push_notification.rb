@@ -1,12 +1,18 @@
 class PushNotification
+  attr_accessor :user_id, :message, :extra_data, :mode
 
-  def initialize device_token, user_mode='', other_data={}
-    device_token.blank? and raise ArgumentError
-    @client = ApnsClient.new device_token, user_mode, other_data
+  def initialize user_id, message, extra_data, mode
+    @user_id = user_id
+    @message = message
+    @extra_data = extra_data
+    @mode = mode
   end
 
-  def push message, badge=1
-    @client.push message, badge
+  def self.push(user_id:, message:, extra_data:, mode: '')
+    new(user_id, message, extra_data, mode).push
   end
 
+  def push
+    IosPush.push_message alert: message, user_id: user_id, other_data: extra_data
+  end
 end
