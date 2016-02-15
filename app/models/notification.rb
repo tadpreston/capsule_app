@@ -45,7 +45,7 @@ class Notification < ActiveRecord::Base
   def deliver_push_notification
     if pushable?
       PushNotification.push user_id: user_id,
-                            message: message,
+                            alert: message,
                             extra_data: { yada_id: capsule.id, yada_type: notification_type },
                             mode: mode
     end
