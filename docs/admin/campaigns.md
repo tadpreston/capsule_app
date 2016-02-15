@@ -157,7 +157,7 @@ __Response__ 201 Created
 }
 ```
 
-### [DELETE] `/api/client/:client_id/campaign/:campaign_id`
+### [DELETE] `/admin/clients/:client_id/campaign/:campaign_id`
 
 __Validation Rules__
   - `401 Not Authorized` if client tries to access `admin/clients/:client_id/campaigns` and has not been authorized
@@ -171,7 +171,7 @@ __Response__ 200 Ok
 ```
 
 
-### [POST] `admin/campaigns/:campaign_id/pinit`
+### [POST] `admin/clients/client_id:/campaigns/:campaign_id/pinit`
 
 __Details__
   - This endpoint created Yadas for a campaign.
@@ -190,10 +190,10 @@ __Request Payload__
 }
 ```
 
-### [GET] `admin/campaigns/user_search?q=somestring`
+### [GET] `admin/users?q=somestring`
 
 __Details__
-  - Search for a user by email or partial email address
+  - Search for a user by email or partial email address or by name
 
 __Response__ 200 OK
 ```json
