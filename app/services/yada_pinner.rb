@@ -14,9 +14,10 @@ class YadaPinner
 
   def pinit
     user_ids.map do |user_id|
-      yada = Capsule.new start_date: unlock_at, user_id: client.user_id, campaign_id: campaign.id, payload_type: 1,
+      yada = Capsule.new start_date: unlock_at, user_id: client.user_id, campaign_id: campaign.id, payload_type: '1',
         comment: campaign.client_message
       create_associations yada, user_id
+      yada
     end
   end
 
@@ -29,13 +30,11 @@ class YadaPinner
   end
 
   def create_and_associate_asset yada
-    asset = Asset.create resource: campaign.image_from_client, media_type: 1
-    yada.assets << asset
+    yada.assets.create media_type: '1', resource: campaign.image_from_client
   end
 
   def associate_recipient yada, user_id
-    recipient = User.find user_id
-    yada << recipient
+    yada.recipient_users.create user_id: user_id
   end
 
   def create_forward yada
