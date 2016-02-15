@@ -22,7 +22,9 @@ Rails.application.routes.draw do
     resources :admin_users
     resources :users
     resources :clients, only: [:index, :show, :create, :update, :destroy] do
-      resources :campaigns, only: [:index, :show, :create, :update, :destroy]
+      resources :campaigns, only: [:index, :show, :create, :update, :destroy] do
+        post :pinit
+      end
     end
 
     root 'home#index'
