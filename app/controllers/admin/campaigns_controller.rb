@@ -1,6 +1,6 @@
 class Admin::CampaignsController < Admin::ApplicationController
   before_action :find_client
-  before_action :find_campaign, only: [:show, :update, :destroy]
+  before_action :find_campaign, only: [:show, :update, :destroy, :pinit]
 
   def index
     render json: @client.campaigns, each_serializer: Admin::CampaignSerializer
@@ -30,6 +30,11 @@ class Admin::CampaignsController < Admin::ApplicationController
   def destroy
     @campaign.destroy
     render json: { status: 'Deleted' }
+  end
+
+  def pinit
+    yadas = YadaPinner.pinit client: @client, campaign: @campaign, unlock_at: params[:pinit][:unlock_at], user_ids: params[:pinit][:user_ids]
+    render json: yadas, each_serializer: Admin::YadaSerializer
   end
 
   private

@@ -34,6 +34,10 @@ class CapsuleForwarder
     @capsule ||= Capsule.find capsule_id
   end
 
+  def campaign
+    @campaign ||= capsule.campaign
+  end
+
   def create_capsule_from_original recipient
     create_link recipient unless registered? recipient
     new_capsule = initialize_capsule recipient
@@ -44,12 +48,12 @@ class CapsuleForwarder
 
   def initialize_capsule recipient
     new_capsule = Capsule.create user_id: user_id, recipients_attributes: [recipient], start_date: Time.current,
-                  comment: FORWARD_COMMENT, payload_type: '1', campaign_id: capsule.campaign_id
+      comment: campaign.user_message, payload_type: '1', campaign_id: capsule.campaign_id
     new_capsule
   end
 
   def create_assets new_capsule
-    new_capsule.assets.create media_type: '1', resource: FORWARD_IMAGE
+    new_capsule.assets.create media_type: '1', resource: campaign.image_from_user
   end
 
   def registered? recipient
