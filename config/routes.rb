@@ -19,7 +19,6 @@ Rails.application.routes.draw do
 
   namespace :admin do
     resources :sessions, only: [:create]
-    resources :admin_users
     resources :users
     resources :clients, only: [:index, :show, :create, :update, :destroy] do
       resources :campaigns, only: [:index, :show, :create, :update, :destroy] do
