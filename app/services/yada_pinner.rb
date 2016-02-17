@@ -14,7 +14,7 @@ class YadaPinner
 
   def pinit
     user_ids.map do |user_id|
-      yada = Capsule.new start_date: unlock_at, user_id: client.user_id, campaign_id: campaign.id, payload_type: '1',
+      yada = Capsule.create start_date: unlock_at, user_id: client.user_id, campaign_id: campaign.id, payload_type: '1',
         comment: campaign.client_message
       create_associations yada, user_id
       yada
@@ -38,6 +38,6 @@ class YadaPinner
   end
 
   def create_forward yada
-    CapsuleForward.create capsule_id: yada.id, user_id: campaign.user_id
+    CapsuleForward.create capsule_id: yada.id, user_id: yada.user_id
   end
 end

@@ -44,7 +44,7 @@ class Admin::CampaignsController < Admin::ApplicationController
   end
 
   def find_campaign
-    @campaign = @client.campaigns.find params[:id]
+    @campaign = @client.campaigns.find params[:campaign_id]
   end
 
   def campaign_params
