@@ -16,7 +16,7 @@
 class Client < ActiveRecord::Base
   attr_accessor :password, :password_confirmation
 
-  after_save :associate_user
+  after_create :associate_user
 
   validates :email, presence: true
 
@@ -28,9 +28,10 @@ class Client < ActiveRecord::Base
   def associate_user
     associate_user = User.find_by(email: email)
     if associate_user
-      update_columns user_id: associate_user.id
+      self.user_id = associate_user.id
     else
       create_user email: email, password: password, password_confirmation: password_confirmation
     end
+    save
   end
 end
