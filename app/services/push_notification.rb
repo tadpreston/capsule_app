@@ -5,7 +5,7 @@ class PushNotification
   DEFAULT_BADGE = 1
   DEFAULT_CAMPAIGN = 'pinyada_notification'
   TARGET_TYPE = :customer_id
-  APP_ID = ENV['LOCALYTICS_IOS_KEY']
+  APP_IDS = [ENV['LOCALYTICS_IOS_KEY'], ENV['LOCALYTICS_ANDROID_KEY']]
 
   def initialize alert, user_id, extra_data, mode, campaign, sound, badge
     @alert = alert
@@ -22,9 +22,13 @@ class PushNotification
   end
 
   def push
-    client.push_to_customers [message], APP_ID, campaign
-  rescue Localytics::Error => e
-    puts e.cause
+    begin
+      APP_IDS.each do |app_id|
+        client.push_to_customers [message.merge(is_ios?(app_id) ? ios_message : android_message)], app_id, campaign
+      end
+    rescue Localytics::Error => e
+      puts e.cause
+    end
   end
 
   private
@@ -37,7 +41,7 @@ class PushNotification
   end
 
   def message
-    { target: user_id.to_s, alert: alert }.merge(is_ios? ? ios_message : android_message)
+    { target: user_id.to_s, alert: alert }
   end
 
   def ios_message
@@ -53,7 +57,7 @@ class PushNotification
     { android: { extra: extra_data } }
   end
 
-  def is_ios?
-    true
+  def is_ios? app_id
+    ENV['LOCALYTICS_IOS_KEY'] == app_id
   end
 end
