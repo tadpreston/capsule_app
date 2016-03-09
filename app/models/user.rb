@@ -133,7 +133,7 @@ class User < ActiveRecord::Base
   end
 
   def has_device_token?
-    device_token
+    !device_token.nil?
   end
 
   def has_email?
